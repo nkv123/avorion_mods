@@ -40,7 +40,10 @@ highest priority is collecting the resources
 first, check if there is loot to collect
 then, if there's no loot, check if there is an asteroid to mine
 ## preparefortransfer
-its not working what it should do is go to the front of player ship 2 km out and approuch until range is 0 so that transfer of wares is possable.
+its not working
+what it should do is ordered ship
+1. go to the front of player ship 2 km out 
+1. approuch until range is 0 km, then go passive. After that transfer of cargo/crew/fighters between them is possable.
 
 ## turrets
 adds 12 cannons, lasers, railguns plasmagun, lightningguns, teslaguns, pulseguns turrets
