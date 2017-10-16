@@ -11,9 +11,38 @@ AILazyMineAll = {}
 local minedAsteroid = nil
 local minedLoot = nil
 local collectCounter = 0
+local canMine = false
 
 function AILazyMineAll.getUpdateInterval()
-  return 0.25
+  return 1
+end
+
+function AIMineAll.initialize()
+  if onServer() then
+    local ship = Entity()
+    if ship.numTurrets > 0 then
+      canMine = true
+    else
+      local hangar = Hangar()
+      local squads = {hangar:getSquads()}
+
+      for _, index in pairs(squads) do
+        local category = hangar:getSquadMainWeaponCategory(index)
+        if category == WeaponCategory.Mining then
+          canMine = true
+          break
+        end
+      end
+    end
+
+    if not canMine then
+      local player = Player(Entity().factionIndex)
+      if player then
+        player:sendChatMessage("Server", ChatMessageType.Error, "Your ship needs mining turrets or fighters to mine."%_T)
+      end
+      terminate()
+    end
+  end
 end
 
 -- this function will be executed every frame on the server only
