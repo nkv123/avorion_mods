@@ -57,7 +57,7 @@ added entitydbg.lua to stations
 
 
 # usage
-for turrets type /turrets in console
-for uturrets type /uturrets in console
-for upgrades type /upgrades in console
+* for turrets type /turrets in console
+* for uturrets type /uturrets in console
+* for upgrades type /upgrades in console
 
