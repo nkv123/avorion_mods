@@ -15,7 +15,7 @@ function execute(sender, commandName, ...)
 end
 
 function getDescription()
-  return "adds 12 mining salvage and 24 repair turrets"
+  return "adds 5 hyperspace, minining systems, tradeoverview, civiltcs, militarycts, scanboosters, radarboosters"
 end
 
 function getHelp()
@@ -62,7 +62,6 @@ function makeScannerbooster(sender)
      Player(sender):getInventory():add(system)
   end
 end
-
 
 function makeRadarbooster(sender)
   local system = SystemUpgradeTemplate("data/scripts/systems/radarbooster.lua", Rarity(RarityType.Legendary), seed)

@@ -42,14 +42,14 @@ function AILazyMineAll.findMinedLoot()
   for _, loot in pairs(loots) do
     if loot:isCollectable(ship) and distance2(loot.translationf, ship.translationf) < 150 * 150 then
       minedLoot = loot
-      print(ship.name .. " has found loot!!",logLevels.trace)
+     -- print(ship.name .. " has found loot!!",logLevels.trace)
       break
     end
   end
 
 end
 
--- check the sector for an asteroid that can be mined
+-- check the sector for an asteroid
 -- if there is one, assign minedAsteroid
 function AILazyMineAll.findMinedAsteroid()
 --    local radius = 20
@@ -77,7 +77,7 @@ function AILazyMineAll.findMinedAsteroid()
 
   if minedAsteroid then
     broadcastInvokeClientFunction("setMinedAsteroid", minedAsteroid.index)
-    print(ship.name .. " has found a asteroid!!", logLevels.trace)
+  --  print(ship.name .. " has found a asteroid!!", logLevels.trace)
   else
     local player = Player(Entity().factionIndex)
     if player then
@@ -97,7 +97,7 @@ end
 
 function AILazyMineAll.updateMining(timeStep)
 
-  -- highest priority is collecting the resources
+  -- highest priority is mining
   if not valid(minedAsteroid) and not valid(minedLoot) then
 
     -- first, check if there is an asteroid to mine

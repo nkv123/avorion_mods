@@ -79,7 +79,7 @@ function AIMineAll.findMinedLoot()
 
 end
 
--- check the sector for an asteroid that can be mined
+-- check the sector for an asteroid
 -- if there is one, assign minedAsteroid
 function AIMineAll.findMinedAsteroid()
 --    local radius = 20

@@ -305,7 +305,7 @@ function execute(sender, commandName, ...)
 end
 
 function getDescription()
-  return "adds 12 cannons lasers rail and plasma turrets"
+  return "adds 12 cannons, lasers, railguns plasmagun, lightningguns, teslaguns, pulseguns turrets"
 end
 
 function getHelp()

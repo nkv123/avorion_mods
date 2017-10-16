@@ -160,7 +160,7 @@ function execute(sender, commandName, ...)
 end
 
 function getDescription()
-  return "adds 12 mining salvage and 24 repair turrets"
+  return "adds 12 mining, salvage, 12 hull repair, 12 shield repair turrets"
 end
 
 function getHelp()

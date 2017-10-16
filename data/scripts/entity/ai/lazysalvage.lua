@@ -12,9 +12,37 @@ AILasySalvage = {}
 local minedWreckage = nil
 local minedLoot = nil
 local collectCounter = 0
+local canSalvage = false
 
 function AILasySalvage.getUpdateInterval()
   return 1
+end
+function AILasySalvage.initialize()
+    if onServer() then
+        local ship = Entity()
+        if ship.numTurrets > 0 then
+            canSalvage = true
+        else
+            local hangar = Hangar()
+            local squads = {hangar:getSquads()}
+
+            for _, index in pairs(squads) do
+                local category = hangar:getSquadMainWeaponCategory(index)
+                if category == WeaponCategory.Salvaging or category == WeaponCategory.Armed then
+                    canSalvage = true
+                    break
+                end
+            end
+        end
+
+        if not canSalvage then
+            local player = Player(Entity().factionIndex)
+            if player then
+                player:sendChatMessage("Server", ChatMessageType.Error, "Your ship needs turrets or combat or salvaging fighters to salvage."%_T)
+            end
+            terminate()
+        end
+    end
 end
 
 -- this function will be executed every frame on the server only
@@ -40,7 +68,7 @@ function AILasySalvage.findMinedLoot()
   for _, loot in pairs(loots) do
     if loot:isCollectable(ship) and distance2(loot.translationf, ship.translationf) < 150 * 150 then
       minedLoot = loot
-      print(ship.name .. " has found loot!!",logLevels.trace)
+ --     print(ship.name .. " has found loot!!",logLevels.trace)
       break
     end
   end
@@ -77,7 +105,7 @@ function AILasySalvage.findMinedWreckage()
 
   if minedWreckage then
     broadcastInvokeClientFunction("setMinedWreckage", minedWreckage.index)
-    print(ship.name .. " has found a wreckage!!", logLevels.trace)
+  --  print(ship.name .. " has found a wreckage!!", logLevels.trace)
   else
     local player = Player(Entity().factionIndex)
     if player then
