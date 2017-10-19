@@ -1,0 +1,1495 @@
+<html>
+<head>
+<title> Alliance [Server]</title>
+<link rel="stylesheet" href="stylesheet.css"/>
+</head>
+<body>
+<div class="maincentered">
+<div class="maincontent">
+<h1 class="documentationheader">Avorion Script API Documentation</h1>
+<div class="sitemap">
+<div class="headerlisting">
+<a href="index.html">Home</a>
+<a href="Functions.html">Functions</a>
+</div></div>
+<div class="floatleft">
+<div class="codecontainer">
+<table>
+<tr>
+<td>
+<a class="type" href="Alliance [Server].html">Alliance [Server]</a>
+<a class="function" href="#Alliance">Alliance</a>
+</td>
+</tr>
+<tr><td><br/></td></tr>
+<tr><td><span class="docheader">Properties</span></td></tr>
+<tr><td>
+<a href="#numShips">numShips</a>
+</td></tr>
+<tr><td>
+<a href="#leader">leader</a>
+</td></tr>
+<tr><td>
+<a href="#newMemberRank">newMemberRank</a>
+</td></tr>
+<tr><td>
+<a class="inheritedproperty" href="#money">money</a>
+</td></tr>
+<tr><td>
+<a class="inheritedproperty" href="#name">name</a>
+</td></tr>
+<tr><td>
+<a class="inheritedproperty" href="#index">index</a>
+</td></tr>
+<tr><td>
+<a class="inheritedproperty" href="#isPlayer">isPlayer</a>
+</td></tr>
+<tr><td>
+<a class="inheritedproperty" href="#isAlliance">isAlliance</a>
+</td></tr>
+<tr><td>
+<a class="inheritedproperty" href="#isAIFaction">isAIFaction</a>
+</td></tr>
+<tr><td>
+<a class="inheritedproperty" href="#color1">color1</a>
+</td></tr>
+<tr><td>
+<a class="inheritedproperty" href="#color2">color2</a>
+</td></tr>
+<tr><td>
+<a class="inheritedproperty" href="#color3">color3</a>
+</td></tr>
+<tr><td>
+<a class="inheritedproperty" href="#initialRelations">initialRelations</a>
+</td></tr>
+<tr><td>
+<a class="inheritedproperty" href="#initialRelationsToPlayer">initialRelationsToPlayer</a>
+</td></tr>
+<tr><td>
+<a class="inheritedproperty" href="#infiniteResources">infiniteResources</a>
+</td></tr>
+<tr><td>
+<a class="inheritedproperty" href="#staticRelationsToPlayers">staticRelationsToPlayers</a>
+</td></tr>
+<tr><td>
+<a class="inheritedproperty" href="#staticRelationsToAI">staticRelationsToAI</a>
+</td></tr>
+<tr><td>
+<a class="inheritedproperty" href="#staticRelationsToAll">staticRelationsToAll</a>
+</td></tr>
+<tr><td><br/></td></tr>
+<tr><td><span class="docheader;">Member Functions</span></td></tr>
+<tr><td>
+<a class="code" href="#contains">contains</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#getMemberRank">getMemberRank</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#getRank">getRank</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#rankExists">rankExists</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#getMemberLocation">getMemberLocation</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#hasPrivilege">hasPrivilege</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#addRank">addRank</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#removeRank">removeRank</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#moveRank">moveRank</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#setMemberRank">setMemberRank</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#addRankPrivilege">addRankPrivilege</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#removeRankPrivilege">removeRankPrivilege</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#ownsShip">ownsShip</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#getShipNames">getShipNames</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#getShipCargo">getShipCargo</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#getShipPaymentTime">getShipPaymentTime</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#getShipCrew">getShipCrew</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#getShipPayment">getShipPayment</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#getShipPlan">getShipPlan</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#getShipPosition">getShipPosition</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#getShipType">getShipType</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#resolveScriptPath">resolveScriptPath</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#invokeFunction">invokeFunction</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#addScript">addScript</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#addScriptOnce">addScriptOnce</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#removeScript">removeScript</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#getScripts">getScripts</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#hasScript">hasScript</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#sendChatMessage">sendChatMessage</a>
+</td></tr>
+<tr>
+<td>
+<a class="inheritedcode" href="#getRelations">getRelations</a>
+</td>
+</tr>
+<tr>
+<td>
+<a class="inheritedcode" href="#knowsFaction">knowsFaction</a>
+</td>
+</tr>
+<tr>
+<td>
+<a class="inheritedcode" href="#getHomeSectorCoordinates">getHomeSectorCoordinates</a>
+</td>
+</tr>
+<tr>
+<td>
+<a class="inheritedcode" href="#setHomeSectorCoordinates">setHomeSectorCoordinates</a>
+</td>
+</tr>
+<tr>
+<td>
+<a class="inheritedcode" href="#pay">pay</a>
+</td>
+</tr>
+<tr>
+<td>
+<a class="inheritedcode" href="#payMoney">payMoney</a>
+</td>
+</tr>
+<tr>
+<td>
+<a class="inheritedcode" href="#payResource">payResource</a>
+</td>
+</tr>
+<tr>
+<td>
+<a class="inheritedcode" href="#receive">receive</a>
+</td>
+</tr>
+<tr>
+<td>
+<a class="inheritedcode" href="#receiveMoney">receiveMoney</a>
+</td>
+</tr>
+<tr>
+<td>
+<a class="inheritedcode" href="#receiveResource">receiveResource</a>
+</td>
+</tr>
+<tr>
+<td>
+<a class="inheritedcode" href="#canPay">canPay</a>
+</td>
+</tr>
+<tr>
+<td>
+<a class="inheritedcode" href="#canPayMoney">canPayMoney</a>
+</td>
+</tr>
+<tr>
+<td>
+<a class="inheritedcode" href="#canPayResource">canPayResource</a>
+</td>
+</tr>
+<tr>
+<td>
+<a class="inheritedcode" href="#setResources">setResources</a>
+</td>
+</tr>
+<tr>
+<td>
+<a class="inheritedcode" href="#getResources">getResources</a>
+</td>
+</tr>
+<tr>
+<td>
+<a class="inheritedcode" href="#getInventory">getInventory</a>
+</td>
+</tr>
+<tr>
+<td>
+<a class="inheritedcode" href="#getLanguage">getLanguage</a>
+</td>
+</tr>
+<tr>
+<td>
+<a class="inheritedcode" href="#getShipStyle">getShipStyle</a>
+</td>
+</tr>
+<tr>
+<td>
+<a class="inheritedcode" href="#getStationStyle">getStationStyle</a>
+</td>
+</tr>
+<tr>
+<td>
+<a class="inheritedcode" href="#getShipStyleNames">getShipStyleNames</a>
+</td>
+</tr>
+<tr>
+<td>
+<a class="inheritedcode" href="#getStationStyleNames">getStationStyleNames</a>
+</td>
+</tr>
+<tr>
+<td>
+<a class="inheritedcode" href="#createShipStyle">createShipStyle</a>
+</td>
+</tr>
+<tr>
+<td>
+<a class="inheritedcode" href="#createStationStyle">createStationStyle</a>
+</td>
+</tr>
+<tr>
+<td>
+<a class="inheritedcode" href="#setStaticRelationsToFaction">setStaticRelationsToFaction</a>
+</td>
+</tr>
+<tr>
+<td>
+<a class="inheritedcode" href="#hasStaticRelationsToFaction">hasStaticRelationsToFaction</a>
+</td>
+</tr>
+<tr>
+<td>
+<a class="inheritedcode" href="#getValue">getValue</a>
+</td>
+</tr>
+<tr>
+<td>
+<a class="inheritedcode" href="#getValues">getValues</a>
+</td>
+</tr>
+<tr>
+<td>
+<a class="inheritedcode" href="#setValue">setValue</a>
+</td>
+</tr>
+<tr>
+<td>
+<a class="inheritedcode" href="#setTrait">setTrait</a>
+</td>
+</tr>
+<tr>
+<td>
+<a class="inheritedcode" href="#getTrait">getTrait</a>
+</td>
+</tr>
+<tr>
+<td>
+<a class="inheritedcode" href="#getTraits">getTraits</a>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="floatright">
+<h1>Alliance [Server] : <a href="Faction [Server].html">Faction [Server]</a></h1>
+<p>
+<span class="warning">This object is only available on the server.</span>
+</p>
+<div id="Alliance", class="codecontainer">
+<div id="Alliance", class="function">
+<p>
+<span class="keyword">function </span> Alliance(<span class="type">var</span> <span class="parameter"></span>) <br/>
+</p>
+</div>
+<div id="Alliance", class="">
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+A new instance of Alliance
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="Properties", class="codecontainer">
+<div id="numShips">
+<table style="width:100%;"><tr>
+<td><span class="keyword">property</span> <span class="type">var </span> numShips</td><td align="right"><span>[read-only]</span></td></tr></table>
+</div>
+<div id="leader">
+<table style="width:100%;"><tr>
+<td><span class="keyword">property</span> <span class="type">int </span> leader</td><td align="right"></td></tr></table>
+</div>
+<div id="newMemberRank">
+<table style="width:100%;"><tr>
+<td><span class="keyword">property</span> <span class="type">string </span> newMemberRank</td><td align="right"></td></tr></table>
+</div>
+<div id="money">
+<table style="width:100%;"><tr>
+<td><span class="keyword">property</span> <span class="type">int </span> money</td><td align="right"></td></tr></table>
+</div>
+<div id="name">
+<table style="width:100%;"><tr>
+<td><span class="keyword">property</span> <span class="type">var </span> name</td><td align="right"><span>[read-only]</span></td></tr></table>
+</div>
+<div id="index">
+<table style="width:100%;"><tr>
+<td><span class="keyword">property</span> <span class="type">var </span> index</td><td align="right"><span>[read-only]</span></td></tr></table>
+</div>
+<div id="isPlayer">
+<table style="width:100%;"><tr>
+<td><span class="keyword">property</span> <span class="type">var </span> isPlayer</td><td align="right"><span>[read-only]</span></td></tr></table>
+</div>
+<div id="isAlliance">
+<table style="width:100%;"><tr>
+<td><span class="keyword">property</span> <span class="type">var </span> isAlliance</td><td align="right"><span>[read-only]</span></td></tr></table>
+</div>
+<div id="isAIFaction">
+<table style="width:100%;"><tr>
+<td><span class="keyword">property</span> <span class="type">var </span> isAIFaction</td><td align="right"><span>[read-only]</span></td></tr></table>
+</div>
+<div id="color1">
+<table style="width:100%;"><tr>
+<td><span class="keyword">property</span> <span class="type">var </span> color1</td><td align="right"><span>[read-only]</span></td></tr></table>
+</div>
+<div id="color2">
+<table style="width:100%;"><tr>
+<td><span class="keyword">property</span> <span class="type">var </span> color2</td><td align="right"><span>[read-only]</span></td></tr></table>
+</div>
+<div id="color3">
+<table style="width:100%;"><tr>
+<td><span class="keyword">property</span> <span class="type">var </span> color3</td><td align="right"><span>[read-only]</span></td></tr></table>
+</div>
+<div id="initialRelations">
+<table style="width:100%;"><tr>
+<td><span class="keyword">property</span> <span class="type">int </span> initialRelations</td><td align="right"></td></tr></table>
+</div>
+<div id="initialRelationsToPlayer">
+<table style="width:100%;"><tr>
+<td><span class="keyword">property</span> <span class="type">int </span> initialRelationsToPlayer</td><td align="right"></td></tr></table>
+</div>
+<div id="infiniteResources">
+<table style="width:100%;"><tr>
+<td><span class="keyword">property</span> <span class="type">bool </span> infiniteResources</td><td align="right"></td></tr></table>
+</div>
+<div id="staticRelationsToPlayers">
+<table style="width:100%;"><tr>
+<td><span class="keyword">property</span> <span class="type">bool </span> staticRelationsToPlayers</td><td align="right"></td></tr></table>
+</div>
+<div id="staticRelationsToAI">
+<table style="width:100%;"><tr>
+<td><span class="keyword">property</span> <span class="type">bool </span> staticRelationsToAI</td><td align="right"></td></tr></table>
+</div>
+<div id="staticRelationsToAll">
+<table style="width:100%;"><tr>
+<td><span class="keyword">property</span> <span class="type">bool </span> staticRelationsToAll</td><td align="right"></td></tr></table>
+</div>
+</div>
+<div id="contains", class="codecontainer">
+<div id="contains", class="function">
+<p>
+<span class="keyword">function var</span> contains(<span class="type">int</span> <span class="parameter"></span>) <br/>
+</p>
+</div>
+<div id="contains", class="">
+</p>
+</div>
+</div>
+<div id="getMemberRank", class="codecontainer">
+<div id="getMemberRank", class="function">
+<p>
+<span class="keyword">function var</span> getMemberRank(<span class="type">int</span> <span class="parameter"></span>) <br/>
+</p>
+</div>
+<div id="getMemberRank", class="">
+</p>
+</div>
+</div>
+<div id="getRank", class="codecontainer">
+<div id="getRank", class="function">
+<p>
+<span class="keyword">function var</span> getRank(<span class="type">string</span> <span class="parameter"></span>) <br/>
+</p>
+</div>
+<div id="getRank", class="">
+</p>
+</div>
+</div>
+<div id="rankExists", class="codecontainer">
+<div id="rankExists", class="function">
+<p>
+<span class="keyword">function var</span> rankExists(<span class="type">string</span> <span class="parameter"></span>) <br/>
+</p>
+</div>
+<div id="rankExists", class="">
+</p>
+</div>
+</div>
+<div id="getMemberLocation", class="codecontainer">
+<div id="getMemberLocation", class="function">
+<p>
+<span class="keyword">function var</span> getMemberLocation(<span class="type">int</span> <span class="parameter"></span>) <br/>
+</p>
+</div>
+<div id="getMemberLocation", class="">
+</p>
+</div>
+</div>
+<div id="hasPrivilege", class="codecontainer">
+<div id="hasPrivilege", class="function">
+<p>
+<span class="keyword">function var</span> hasPrivilege(<span class="type">int</span> <span class="parameter"></span>, <span class="type">int</span> <span class="parameter"></span>) <br/>
+</p>
+</div>
+<div id="hasPrivilege", class="">
+</p>
+</div>
+</div>
+<div id="addRank", class="codecontainer">
+<div id="addRank", class="function">
+<p>
+<span class="keyword">function </span> addRank(<span class="type">string</span> <span class="parameter"></span>, <span class="type">string</span> <span class="parameter"></span>) <br/>
+</p>
+</div>
+<div id="addRank", class="">
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="removeRank", class="codecontainer">
+<div id="removeRank", class="function">
+<p>
+<span class="keyword">function </span> removeRank(<span class="type">string</span> <span class="parameter"></span>) <br/>
+</p>
+</div>
+<div id="removeRank", class="">
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="moveRank", class="codecontainer">
+<div id="moveRank", class="function">
+<p>
+<span class="keyword">function </span> moveRank(<span class="type">string</span> <span class="parameter"></span>, <span class="type">string</span> <span class="parameter"></span>) <br/>
+</p>
+</div>
+<div id="moveRank", class="">
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="setMemberRank", class="codecontainer">
+<div id="setMemberRank", class="function">
+<p>
+<span class="keyword">function </span> setMemberRank(<span class="type">int</span> <span class="parameter"></span>, <span class="type">string</span> <span class="parameter"></span>) <br/>
+</p>
+</div>
+<div id="setMemberRank", class="">
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="addRankPrivilege", class="codecontainer">
+<div id="addRankPrivilege", class="function">
+<p>
+<span class="keyword">function </span> addRankPrivilege(<span class="type">string</span> <span class="parameter"></span>, <span class="type">int</span> <span class="parameter"></span>) <br/>
+</p>
+</div>
+<div id="addRankPrivilege", class="">
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="removeRankPrivilege", class="codecontainer">
+<div id="removeRankPrivilege", class="function">
+<p>
+<span class="keyword">function </span> removeRankPrivilege(<span class="type">string</span> <span class="parameter"></span>, <span class="type">int</span> <span class="parameter"></span>) <br/>
+</p>
+</div>
+<div id="removeRankPrivilege", class="">
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="ownsShip", class="codecontainer">
+<div id="ownsShip", class="function">
+<p>
+<span class="keyword">function var</span> ownsShip(<span class="type">string</span> <span class="parameter"></span>) <br/>
+</p>
+</div>
+<div id="ownsShip", class="">
+</p>
+</div>
+</div>
+<div id="getShipNames", class="codecontainer">
+<div id="getShipNames", class="function">
+<p>
+<span class="keyword">function var</span> getShipNames() <br/>
+</p>
+</div>
+<div id="getShipNames", class="">
+</p>
+</div>
+</div>
+<div id="getShipCargo", class="codecontainer">
+<div id="getShipCargo", class="function">
+<p>
+<span class="keyword">function var</span> getShipCargo(<span class="type">string</span> <span class="parameter"></span>) <br/>
+</p>
+</div>
+<div id="getShipCargo", class="">
+</p>
+</div>
+</div>
+<div id="getShipPaymentTime", class="codecontainer">
+<div id="getShipPaymentTime", class="function">
+<p>
+<span class="keyword">function var</span> getShipPaymentTime(<span class="type">string</span> <span class="parameter"></span>) <br/>
+</p>
+</div>
+<div id="getShipPaymentTime", class="">
+</p>
+</div>
+</div>
+<div id="getShipCrew", class="codecontainer">
+<div id="getShipCrew", class="function">
+<p>
+<span class="keyword">function var</span> getShipCrew(<span class="type">string</span> <span class="parameter"></span>) <br/>
+</p>
+</div>
+<div id="getShipCrew", class="">
+</p>
+</div>
+</div>
+<div id="getShipPayment", class="codecontainer">
+<div id="getShipPayment", class="function">
+<p>
+<span class="keyword">function var</span> getShipPayment(<span class="type">string</span> <span class="parameter"></span>) <br/>
+</p>
+</div>
+<div id="getShipPayment", class="">
+</p>
+</div>
+</div>
+<div id="getShipPlan", class="codecontainer">
+<div id="getShipPlan", class="function">
+<p>
+<span class="keyword">function var</span> getShipPlan(<span class="type">string</span> <span class="parameter"></span>) <br/>
+</p>
+</div>
+<div id="getShipPlan", class="">
+</p>
+</div>
+</div>
+<div id="getShipPosition", class="codecontainer">
+<div id="getShipPosition", class="function">
+<p>
+<span class="keyword">function var</span> getShipPosition(<span class="type">string</span> <span class="parameter"></span>) <br/>
+</p>
+</div>
+<div id="getShipPosition", class="">
+</p>
+</div>
+</div>
+<div id="getShipType", class="codecontainer">
+<div id="getShipType", class="function">
+<p>
+<span class="keyword">function var</span> getShipType(<span class="type">string</span> <span class="parameter"></span>) <br/>
+</p>
+</div>
+<div id="getShipType", class="">
+</p>
+</div>
+</div>
+<div id="resolveScriptPath", class="codecontainer">
+<div id="resolveScriptPath", class="function">
+<p>
+<span class="keyword">function var</span> resolveScriptPath(<span class="type">string</span> <span class="parameter">path</span>) <br/>
+</p>
+</div>
+<div id="resolveScriptPath", class="">
+</p>
+</div>
+</div>
+<div id="invokeFunction", class="codecontainer">
+<div id="invokeFunction", class="function">
+<p>
+<span class="keyword">function var...</span> invokeFunction(<span class="type">string</span> <span class="parameter">script</span>, <span class="type">string</span> <span class="parameter">functionName</span>, <span class="type">var...</span> <span class="parameter">arguments</span>) <br/>
+</p>
+</div>
+<div id="invokeFunction", class="">
+</p>
+</div>
+</div>
+<div id="addScript", class="codecontainer">
+<div id="addScript", class="function">
+<p>
+<span class="keyword">function var</span> addScript(<span class="type">string</span> <span class="parameter">scriptPath</span>, <span class="type">var...</span> <span class="parameter">arguments</span>) <br/>
+</p>
+</div>
+<div id="addScript", class="">
+</p>
+</div>
+</div>
+<div id="addScriptOnce", class="codecontainer">
+<div id="addScriptOnce", class="function">
+<p>
+<span class="keyword">function var</span> addScriptOnce(<span class="type">string</span> <span class="parameter">scriptPath</span>, <span class="type">var...</span> <span class="parameter">arguments</span>) <br/>
+</p>
+</div>
+<div id="addScriptOnce", class="">
+</p>
+</div>
+</div>
+<div id="removeScript", class="codecontainer">
+<div id="removeScript", class="function">
+<p>
+<span class="keyword">function </span> removeScript(<span class="type">var</span> <span class="parameter">script</span>) <br/>
+</p>
+</div>
+<div id="removeScript", class="">
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="getScripts", class="codecontainer">
+<div id="getScripts", class="function">
+<p>
+<span class="keyword">function table&lt;int, string&gt;</span> getScripts() <br/>
+</p>
+</div>
+<div id="getScripts", class="">
+</p>
+</div>
+</div>
+<div id="hasScript", class="codecontainer">
+<div id="hasScript", class="function">
+<p>
+<span class="keyword">function var</span> hasScript(<span class="type">string</span> <span class="parameter">name</span>) <br/>
+</p>
+</div>
+<div id="hasScript", class="">
+</p>
+</div>
+</div>
+<div id="sendChatMessage", class="codecontainer">
+<div id="sendChatMessage", class="function">
+<p>
+<span class="keyword">function </span> sendChatMessage(<span class="type">string</span> <span class="parameter">sender</span>, <span class="type">int</span> <span class="parameter">messageType</span>, <span class="type">string</span> <span class="parameter">message</span>, <span class="type">string...</span> <span class="parameter">arguments</span>) <br/>
+</p>
+</div>
+<div id="sendChatMessage", class="">
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="getRelations", class="codecontainer">
+<div id="getRelations", class="function">
+<p>
+<span class="keyword">function var</span> getRelations(<span class="type">int</span> <span class="parameter"></span>) <br/>
+</p>
+</div>
+<div id="getRelations", class="">
+<p>
+<span class="inheritedcode">Inherited from <a href="Faction [Server].html">Faction [Server]</a></span>
+
+</p>
+</p>
+</div>
+</div>
+<div id="knowsFaction", class="codecontainer">
+<div id="knowsFaction", class="function">
+<p>
+<span class="keyword">function var</span> knowsFaction(<span class="type">int</span> <span class="parameter"></span>) <br/>
+</p>
+</div>
+<div id="knowsFaction", class="">
+<p>
+<span class="inheritedcode">Inherited from <a href="Faction [Server].html">Faction [Server]</a></span>
+
+</p>
+</p>
+</div>
+</div>
+<div id="getHomeSectorCoordinates", class="codecontainer">
+<div id="getHomeSectorCoordinates", class="function">
+<p>
+<span class="keyword">function var</span> getHomeSectorCoordinates() <br/>
+</p>
+</div>
+<div id="getHomeSectorCoordinates", class="">
+<p>
+<span class="inheritedcode">Inherited from <a href="Faction [Server].html">Faction [Server]</a></span>
+
+</p>
+</p>
+</div>
+</div>
+<div id="setHomeSectorCoordinates", class="codecontainer">
+<div id="setHomeSectorCoordinates", class="function">
+<p>
+<span class="keyword">function </span> setHomeSectorCoordinates(<span class="type">int</span> <span class="parameter"></span>, <span class="type">int</span> <span class="parameter"></span>) <br/>
+</p>
+</div>
+<div id="setHomeSectorCoordinates", class="">
+<p>
+<span class="inheritedcode">Inherited from <a href="Faction [Server].html">Faction [Server]</a></span>
+
+</p>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="pay", class="codecontainer">
+<div id="pay", class="function">
+<p>
+<span class="keyword">function </span> pay(<span class="type">int64_t</span> <span class="parameter"></span>, <span class="type">int64_t...</span> <span class="parameter"></span>) <br/>
+</p>
+</div>
+<div id="pay", class="">
+<p>
+<span class="inheritedcode">Inherited from <a href="Faction [Server].html">Faction [Server]</a></span>
+
+</p>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="payMoney", class="codecontainer">
+<div id="payMoney", class="function">
+<p>
+<span class="keyword">function </span> payMoney(<span class="type">int64_t</span> <span class="parameter"></span>) <br/>
+</p>
+</div>
+<div id="payMoney", class="">
+<p>
+<span class="inheritedcode">Inherited from <a href="Faction [Server].html">Faction [Server]</a></span>
+
+</p>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="payResource", class="codecontainer">
+<div id="payResource", class="function">
+<p>
+<span class="keyword">function </span> payResource(<span class="type">Material</span> <span class="parameter"></span>, <span class="type">int64_t</span> <span class="parameter"></span>) <br/>
+</p>
+</div>
+<div id="payResource", class="">
+<p>
+<span class="inheritedcode">Inherited from <a href="Faction [Server].html">Faction [Server]</a></span>
+
+</p>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="receive", class="codecontainer">
+<div id="receive", class="function">
+<p>
+<span class="keyword">function </span> receive(<span class="type">int64_t</span> <span class="parameter"></span>, <span class="type">int64_t...</span> <span class="parameter"></span>) <br/>
+</p>
+</div>
+<div id="receive", class="">
+<p>
+<span class="inheritedcode">Inherited from <a href="Faction [Server].html">Faction [Server]</a></span>
+
+</p>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="receiveMoney", class="codecontainer">
+<div id="receiveMoney", class="function">
+<p>
+<span class="keyword">function </span> receiveMoney(<span class="type">int64_t</span> <span class="parameter"></span>) <br/>
+</p>
+</div>
+<div id="receiveMoney", class="">
+<p>
+<span class="inheritedcode">Inherited from <a href="Faction [Server].html">Faction [Server]</a></span>
+
+</p>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="receiveResource", class="codecontainer">
+<div id="receiveResource", class="function">
+<p>
+<span class="keyword">function </span> receiveResource(<span class="type">Material</span> <span class="parameter"></span>, <span class="type">int64_t</span> <span class="parameter"></span>) <br/>
+</p>
+</div>
+<div id="receiveResource", class="">
+<p>
+<span class="inheritedcode">Inherited from <a href="Faction [Server].html">Faction [Server]</a></span>
+
+</p>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="canPay", class="codecontainer">
+<div id="canPay", class="function">
+<p>
+<span class="keyword">function var</span> canPay(<span class="type">int64_t</span> <span class="parameter"></span>, <span class="type">int64_t...</span> <span class="parameter"></span>) <br/>
+</p>
+</div>
+<div id="canPay", class="">
+<p>
+<span class="inheritedcode">Inherited from <a href="Faction [Server].html">Faction [Server]</a></span>
+
+</p>
+</p>
+</div>
+</div>
+<div id="canPayMoney", class="codecontainer">
+<div id="canPayMoney", class="function">
+<p>
+<span class="keyword">function var</span> canPayMoney(<span class="type">int64_t</span> <span class="parameter"></span>) <br/>
+</p>
+</div>
+<div id="canPayMoney", class="">
+<p>
+<span class="inheritedcode">Inherited from <a href="Faction [Server].html">Faction [Server]</a></span>
+
+</p>
+</p>
+</div>
+</div>
+<div id="canPayResource", class="codecontainer">
+<div id="canPayResource", class="function">
+<p>
+<span class="keyword">function var</span> canPayResource(<span class="type">Material</span> <span class="parameter"></span>, <span class="type">int64_t</span> <span class="parameter"></span>) <br/>
+</p>
+</div>
+<div id="canPayResource", class="">
+<p>
+<span class="inheritedcode">Inherited from <a href="Faction [Server].html">Faction [Server]</a></span>
+
+</p>
+</p>
+</div>
+</div>
+<div id="setResources", class="codecontainer">
+<div id="setResources", class="function">
+<p>
+<span class="keyword">function </span> setResources(<span class="type">int64_t...</span> <span class="parameter"></span>) <br/>
+</p>
+</div>
+<div id="setResources", class="">
+<p>
+<span class="inheritedcode">Inherited from <a href="Faction [Server].html">Faction [Server]</a></span>
+
+</p>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="getResources", class="codecontainer">
+<div id="getResources", class="function">
+<p>
+<span class="keyword">function var</span> getResources() <br/>
+</p>
+</div>
+<div id="getResources", class="">
+<p>
+<span class="inheritedcode">Inherited from <a href="Faction [Server].html">Faction [Server]</a></span>
+
+</p>
+</p>
+</div>
+</div>
+<div id="getInventory", class="codecontainer">
+<div id="getInventory", class="function">
+<p>
+<span class="keyword">function Inventory</span> getInventory() <br/>
+</p>
+</div>
+<div id="getInventory", class="">
+<p>
+<span class="inheritedcode">Inherited from <a href="Faction [Server].html">Faction [Server]</a></span>
+
+</p>
+</p>
+</div>
+</div>
+<div id="getLanguage", class="codecontainer">
+<div id="getLanguage", class="function">
+<p>
+<span class="keyword">function Language</span> getLanguage() <br/>
+</p>
+</div>
+<div id="getLanguage", class="">
+<p>
+<span class="inheritedcode">Inherited from <a href="Faction [Server].html">Faction [Server]</a></span>
+
+</p>
+</p>
+</div>
+</div>
+<div id="getShipStyle", class="codecontainer">
+<div id="getShipStyle", class="function">
+<p>
+<span class="keyword">function var</span> getShipStyle(<span class="type">string</span> <span class="parameter"></span>) <br/>
+</p>
+</div>
+<div id="getShipStyle", class="">
+<p>
+<span class="inheritedcode">Inherited from <a href="Faction [Server].html">Faction [Server]</a></span>
+
+</p>
+</p>
+</div>
+</div>
+<div id="getStationStyle", class="codecontainer">
+<div id="getStationStyle", class="function">
+<p>
+<span class="keyword">function var</span> getStationStyle(<span class="type">string</span> <span class="parameter"></span>) <br/>
+</p>
+</div>
+<div id="getStationStyle", class="">
+<p>
+<span class="inheritedcode">Inherited from <a href="Faction [Server].html">Faction [Server]</a></span>
+
+</p>
+</p>
+</div>
+</div>
+<div id="getShipStyleNames", class="codecontainer">
+<div id="getShipStyleNames", class="function">
+<p>
+<span class="keyword">function var</span> getShipStyleNames() <br/>
+</p>
+</div>
+<div id="getShipStyleNames", class="">
+<p>
+<span class="inheritedcode">Inherited from <a href="Faction [Server].html">Faction [Server]</a></span>
+
+</p>
+</p>
+</div>
+</div>
+<div id="getStationStyleNames", class="codecontainer">
+<div id="getStationStyleNames", class="function">
+<p>
+<span class="keyword">function var</span> getStationStyleNames() <br/>
+</p>
+</div>
+<div id="getStationStyleNames", class="">
+<p>
+<span class="inheritedcode">Inherited from <a href="Faction [Server].html">Faction [Server]</a></span>
+
+</p>
+</p>
+</div>
+</div>
+<div id="createShipStyle", class="codecontainer">
+<div id="createShipStyle", class="function">
+<p>
+<span class="keyword">function var</span> createShipStyle(<span class="type">string</span> <span class="parameter"></span>) <br/>
+</p>
+</div>
+<div id="createShipStyle", class="">
+<p>
+<span class="inheritedcode">Inherited from <a href="Faction [Server].html">Faction [Server]</a></span>
+
+</p>
+</p>
+</div>
+</div>
+<div id="createStationStyle", class="codecontainer">
+<div id="createStationStyle", class="function">
+<p>
+<span class="keyword">function var</span> createStationStyle(<span class="type">string</span> <span class="parameter"></span>) <br/>
+</p>
+</div>
+<div id="createStationStyle", class="">
+<p>
+<span class="inheritedcode">Inherited from <a href="Faction [Server].html">Faction [Server]</a></span>
+
+</p>
+</p>
+</div>
+</div>
+<div id="setStaticRelationsToFaction", class="codecontainer">
+<div id="setStaticRelationsToFaction", class="function">
+<p>
+<span class="keyword">function </span> setStaticRelationsToFaction(<span class="type">int</span> <span class="parameter"></span>, <span class="type">bool</span> <span class="parameter"></span>) <br/>
+</p>
+</div>
+<div id="setStaticRelationsToFaction", class="">
+<p>
+<span class="inheritedcode">Inherited from <a href="Faction [Server].html">Faction [Server]</a></span>
+
+</p>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="hasStaticRelationsToFaction", class="codecontainer">
+<div id="hasStaticRelationsToFaction", class="function">
+<p>
+<span class="keyword">function var</span> hasStaticRelationsToFaction(<span class="type">int</span> <span class="parameter"></span>) <br/>
+</p>
+</div>
+<div id="hasStaticRelationsToFaction", class="">
+<p>
+<span class="inheritedcode">Inherited from <a href="Faction [Server].html">Faction [Server]</a></span>
+
+</p>
+</p>
+</div>
+</div>
+<div id="getValue", class="codecontainer">
+<div id="getValue", class="function">
+<p>
+<span class="keyword">function var</span> getValue(<span class="type">string</span> <span class="parameter">key</span>) <br/>
+</p>
+</div>
+<div id="getValue", class="">
+<p>
+Retrieves a custom value saved in the entity with the given key <span class="inheritedcode">Inherited from <a href="Faction [Server].html">Faction [Server]</a></span>
+
+</p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">key</span>
+A string that serves as the name of the value <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+The value if the key exists, otherwise nil 
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="getValues", class="codecontainer">
+<div id="getValues", class="function">
+<p>
+<span class="keyword">function table&lt;string, var&gt;</span> getValues() <br/>
+</p>
+</div>
+<div id="getValues", class="">
+<p>
+Retrieves all key-value pairs of custom values <span class="inheritedcode">Inherited from <a href="Faction [Server].html">Faction [Server]</a></span>
+
+</p>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+A table containing all custom key-value pairs 
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="setValue", class="codecontainer">
+<div id="setValue", class="function">
+<p>
+<span class="keyword">function </span> setValue(<span class="type">string</span> <span class="parameter">key</span>, <span class="type">var</span> <span class="parameter">value</span>) <br/>
+</p>
+</div>
+<div id="setValue", class="">
+<p>
+Sets a custom value <span class="inheritedcode">Inherited from <a href="Faction [Server].html">Faction [Server]</a></span>
+
+</p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">key</span>
+A string that serves as the name of the value <br/>
+<span class="parameter">value</span>
+The value to save. Must be bool, number, string or nil. If nil is given, the value will be deleted. <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="setTrait", class="codecontainer">
+<div id="setTrait", class="function">
+<p>
+<span class="keyword">function </span> setTrait(<span class="type">string</span> <span class="parameter">trait</span>, <span class="type">float</span> <span class="parameter">value</span>) <br/>
+</p>
+</div>
+<div id="setTrait", class="">
+<p>
+Sets a trait value associated with a key <span class="inheritedcode">Inherited from <a href="Faction [Server].html">Faction [Server]</a></span>
+
+</p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">trait</span>
+The name of the trait <br/>
+<span class="parameter">value</span>
+The value of the trait, should be between -1 and 1 <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="getTrait", class="codecontainer">
+<div id="getTrait", class="function">
+<p>
+<span class="keyword">function float</span> getTrait(<span class="type">string</span> <span class="parameter">trait</span>) <br/>
+</p>
+</div>
+<div id="getTrait", class="">
+<p>
+Retrieves a trait value associated with a key <span class="inheritedcode">Inherited from <a href="Faction [Server].html">Faction [Server]</a></span>
+
+</p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">trait</span>
+The name of the trait <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+The trait value associated with the key 
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="getTraits", class="codecontainer">
+<div id="getTraits", class="function">
+<p>
+<span class="keyword">function table&lt;string, float&gt;</span> getTraits() <br/>
+</p>
+</div>
+<div id="getTraits", class="">
+<p>
+Retrieves all key-value trait pairs of the faction <span class="inheritedcode">Inherited from <a href="Faction [Server].html">Faction [Server]</a></span>
+
+</p>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+A table containing all custom key-value pairs 
+</p>
+</div>
+</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sitemap">
+<div class="headerlisting">
+<span class="docheader">Overview</span>
+<br><a href="index.html">Home</a>
+<a href="Functions.html">Functions</a>
+</div><div class="headerlisting">
+<span class="docheader">Callbacks</span>
+<br><a href="Callbacks.html"> Callbacks</a>
+<a href="ClientSector Callbacks.html">ClientSector  Callbacks</a>
+<a href="Entity Callbacks.html">Entity  Callbacks</a>
+<a href="Galaxy Callbacks.html">Galaxy  Callbacks</a>
+<a href="Player Callbacks.html">Player  Callbacks</a>
+<a href="Sector Callbacks.html">Sector  Callbacks</a>
+<a href="Server Callbacks.html">Server  Callbacks</a>
+<a href="Turret Callbacks.html">Turret  Callbacks</a>
+</div><div class="headerlisting">
+<span class="docheader">Common Components</span>
+<br><a href="Hangar.html">Hangar</a>
+<a href="BspTree.html">BspTree</a>
+<a href="DeletionTimer.html">DeletionTimer</a>
+<a href="Engine.html">Engine</a>
+<a href="Weapons.html">Weapons</a>
+<a href="FighterAI.html">FighterAI</a>
+<a href="Physics.html">Physics</a>
+<a href="Plan.html">Plan</a>
+<a href="ShipAI.html">ShipAI</a>
+<a href="Velocity.html">Velocity</a>
+<a href="InteractionText.html">InteractionText</a>
+<a href="EnergySystem.html">EnergySystem</a>
+<a href="WormHole.html">WormHole</a>
+</div><div class="headerlisting">
+<span class="docheader">Common Objects</span>
+<br><a href="Tooltip.html">Tooltip</a>
+<a href="TooltipLine.html">TooltipLine</a>
+<a href="QuadTree.html">QuadTree</a>
+<a href="Uuid.html">Uuid</a>
+<a href="Timer.html">Timer</a>
+<a href="Profiler.html">Profiler</a>
+<a href="Ray.html">Ray</a>
+<a href="Color.html">Color</a>
+<a href="Box.html">Box</a>
+<a href="vec2.html">vec2</a>
+<a href="vec3.html">vec3</a>
+<a href="vec4.html">vec4</a>
+<a href="dvec2.html">dvec2</a>
+<a href="dvec3.html">dvec3</a>
+<a href="dvec4.html">dvec4</a>
+<a href="ivec2.html">ivec2</a>
+<a href="ivec3.html">ivec3</a>
+<a href="ivec4.html">ivec4</a>
+<a href="Rect.html">Rect</a>
+<a href="Matrix.html">Matrix</a>
+<a href="Sphere.html">Sphere</a>
+<a href="Seed.html">Seed</a>
+<a href="Random.html">Random</a>
+<a href="FighterTemplate.html">FighterTemplate</a>
+<a href="VanillaInventoryItem.html">VanillaInventoryItem</a>
+<a href="Rarity.html">Rarity</a>
+<a href="PlanetSpecifics.html">PlanetSpecifics</a>
+<a href="CraftStyle.html">CraftStyle</a>
+<a href="BlockPlanBlock.html">BlockPlanBlock</a>
+<a href="BlockPlan.html">BlockPlan</a>
+<a href="EntityDescriptor.html">EntityDescriptor</a>
+<a href="Language.html">Language</a>
+<a href="Inventory.html">Inventory</a>
+<a href="PlanBspTree.html">PlanBspTree</a>
+<a href="Weapon.html">Weapon</a>
+<a href="Crew.html">Crew</a>
+<a href="CrewProfession.html">CrewProfession</a>
+<a href="CrewMan.html">CrewMan</a>
+<a href="TurretTemplate.html">TurretTemplate</a>
+<a href="InventoryTurret.html">InventoryTurret</a>
+<a href="AllianceRank.html">AllianceRank</a>
+<a href="TradingGood.html">TradingGood</a>
+<a href="AllianceMember.html">AllianceMember</a>
+<a href="Entity.html">Entity</a>
+<a href="Mail.html">Mail</a>
+<a href="Material.html">Material</a>
+<a href="SystemUpgradeTemplate.html">SystemUpgradeTemplate</a>
+<a href="PlayerId.html">PlayerId</a>
+</div><div class="headerlisting">
+<span class="docheader">Client Components</span>
+<br><a href="EntityIcon.html">EntityIcon</a>
+<a href="EntityTooltip.html">EntityTooltip</a>
+<a href="ScriptUI.html">ScriptUI</a>
+</div><div class="headerlisting">
+<span class="docheader">Client Objects</span>
+<br><a href="InventorySelectionItem.html">InventorySelectionItem</a>
+<a href="TooltipRenderer.html">TooltipRenderer</a>
+<a href="InputWindow.html">InputWindow</a>
+<a href="PlanSelectionItem.html">PlanSelectionItem</a>
+<a href="SelectionItem.html">SelectionItem</a>
+<a href="InventoryReferenceSelectionItem.html">InventoryReferenceSelectionItem</a>
+<a href="Alliance [Client].html">Alliance [Client]</a>
+<a href="Planet.html">Planet</a>
+<a href="Sector [Client].html">Sector [Client]</a>
+<a href="Galaxy [Client].html">Galaxy [Client]</a>
+<a href="Achievements.html">Achievements</a>
+<a href="Player [Client].html">Player [Client]</a>
+<a href="GalaxyMap.html">GalaxyMap</a>
+<a href="Faction [Client].html">Faction [Client]</a>
+<a href="Mouse.html">Mouse</a>
+<a href="Keyboard.html">Keyboard</a>
+<a href="LaserFX.html">LaserFX</a>
+</div><div class="headerlisting">
+<span class="docheader">Client UI Objects</span>
+<br><a href="Line.html">Line</a>
+<a href="UIOrganizer.html">UIOrganizer</a>
+<a href="UIVerticalLister.html">UIVerticalLister</a>
+<a href="UIHorizontalSplitter.html">UIHorizontalSplitter</a>
+<a href="UIVerticalSplitter.html">UIVerticalSplitter</a>
+<a href="UIHorizontalMultiSplitter.html">UIHorizontalMultiSplitter</a>
+<a href="UIVerticalMultiSplitter.html">UIVerticalMultiSplitter</a>
+<a href="UIArbitraryVerticalSplitter.html">UIArbitraryVerticalSplitter</a>
+<a href="Tab.html">Tab</a>
+<a href="TabbedWindow.html">TabbedWindow</a>
+<a href="StatisticsBar.html">StatisticsBar</a>
+<a href="ComboBox.html">ComboBox</a>
+<a href="MultiLineTextBox.html">MultiLineTextBox</a>
+<a href="InventorySelection.html">InventorySelection</a>
+<a href="UIElement.html">UIElement</a>
+<a href="PlanDisplayer.html">PlanDisplayer</a>
+<a href="ListBoxEx.html">ListBoxEx</a>
+<a href="ListBox.html">ListBox</a>
+<a href="Window.html">Window</a>
+<a href="ScrollFrame.html">ScrollFrame</a>
+<a href="Slider.html">Slider</a>
+<a href="Frame.html">Frame</a>
+<a href="TextBox.html">TextBox</a>
+<a href="Selection.html">Selection</a>
+<a href="CheckBox.html">CheckBox</a>
+<a href="Label.html">Label</a>
+<a href="TextField.html">TextField</a>
+<a href="Button.html">Button</a>
+<a href="Picture.html">Picture</a>
+<a href="UIRenderer.html">UIRenderer</a>
+<a href="NumbersBar.html">NumbersBar</a>
+<a href="UIContainer.html">UIContainer</a>
+</div><div class="headerlisting">
+<span class="docheader">Server Components</span>
+<br><a href="WreckageCreator.html">WreckageCreator</a>
+<a href="EntityTransferrer.html">EntityTransferrer</a>
+<a href="FighterController.html">FighterController</a>
+<a href="Loot.html">Loot</a>
+</div><div class="headerlisting">
+<span class="docheader">Server Objects</span>
+<br><a href="Sector [Server].html">Sector [Server]</a>
+<a href="Server.html">Server</a>
+<a href="Galaxy [Server].html">Galaxy [Server]</a>
+<a href="Alliance [Server].html">Alliance [Server]</a>
+<a href="Faction [Server].html">Faction [Server]</a>
+<a href="Player [Server].html">Player [Server]</a>
+</div><div class="lastheaderlisting">
+<span class="docheader">Enums</span>
+<br><a href="Enums.html#SoundType">SoundType</a>
+<a href="Enums.html#FontType">FontType</a>
+<a href="Enums.html#Difficulty">Difficulty</a>
+<a href="Enums.html#ChatMessageType">ChatMessageType</a>
+<a href="Enums.html#ComponentType">ComponentType</a>
+<a href="Enums.html#WeaponCategory">WeaponCategory</a>
+<a href="Enums.html#RarityType">RarityType</a>
+<a href="Enums.html#MoonType">MoonType</a>
+<a href="Enums.html#PlanetType">PlanetType</a>
+<a href="Enums.html#AlliancePrivilege">AlliancePrivilege</a>
+<a href="Enums.html#BlockType">BlockType</a>
+<a href="Enums.html#InventoryItemType">InventoryItemType</a>
+<a href="Enums.html#WeaponType">WeaponType</a>
+<a href="Enums.html#CrewProfessionType">CrewProfessionType</a>
+<a href="Enums.html#DamageType">DamageType</a>
+<a href="Enums.html#StatsBonuses">StatsBonuses</a>
+<a href="Enums.html#EntityType">EntityType</a>
+<a href="Enums.html#AIState">AIState</a>
+<a href="Enums.html#MaterialType">MaterialType</a>
+<a href="Enums.html#FighterOrders">FighterOrders</a>
+</div></div>
+<div class="disclaimer">
+<p>This is the official documentation for the scripting API of Avorion. This documentation is automatically generated and <strong>not</strong> necessarily complete. Depending on the context in which functions exist, some documentation such as descriptions, return values or variable names or types may be missing.</p>
+<p>Work in Progress. Documentation of Avorion Version: Beta 0.14.5 r9490</p>
+</div>
+<div class="footer">
+<p align="center">Work in Progress.</p>
+<p align="center">Copyright &copy; 2017 Konstantin Kronfeldner, Boxelware. All rights reserved.</p>
+</div>
+</div>
+</body>
+</html>

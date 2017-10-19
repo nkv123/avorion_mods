@@ -1,0 +1,1314 @@
+<html>
+<head>
+<title> Sector [Server]</title>
+<link rel="stylesheet" href="stylesheet.css"/>
+</head>
+<body>
+<div class="maincentered">
+<div class="maincontent">
+<h1 class="documentationheader">Avorion Script API Documentation</h1>
+<div class="sitemap">
+<div class="headerlisting">
+<a href="index.html">Home</a>
+<a href="Functions.html">Functions</a>
+</div></div>
+<div class="floatleft">
+<div class="codecontainer">
+<table>
+<tr>
+<td>
+<a class="type" href="Sector [Server].html">Sector [Server]</a>
+<a class="function" href="#Sector">Sector</a>
+</td>
+</tr>
+<tr><td><br/></td></tr>
+<tr><td><span class="docheader">Properties</span></td></tr>
+<tr><td>
+<a href="#seed">seed</a>
+</td></tr>
+<tr><td>
+<a href="#name">name</a>
+</td></tr>
+<tr><td>
+<a href="#numPlayers">numPlayers</a>
+</td></tr>
+<tr><td>
+<a href="#numEntities">numEntities</a>
+</td></tr>
+<tr><td>
+<a href="#pvpDamage">pvpDamage</a>
+</td></tr>
+<tr><td><br/></td></tr>
+<tr><td><span class="docheader;">Member Functions</span></td></tr>
+<tr><td>
+<a class="code" href="#createStation">createStation</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#createShip">createShip</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#createAsteroid">createAsteroid</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#createWreckage">createWreckage</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#createObject">createObject</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#createWormHole">createWormHole</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#createEntity">createEntity</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#resendEntity">resendEntity</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#dropBundle">dropBundle</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#dropMoney">dropMoney</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#dropResources">dropResources</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#dropCargo">dropCargo</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#dropColor">dropColor</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#dropRandomColor">dropRandomColor</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#dropTurret">dropTurret</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#dropSectorTurret">dropSectorTurret</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#dropUpgrade">dropUpgrade</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#deleteEntity">deleteEntity</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#deleteEntityJumped">deleteEntityJumped</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#collectGarbage">collectGarbage</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#resolveScriptPath">resolveScriptPath</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#invokeFunction">invokeFunction</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#addScript">addScript</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#addScriptOnce">addScriptOnce</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#removeScript">removeScript</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#hasScript">hasScript</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#getScripts">getScripts</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#hasEnemies">hasEnemies</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#getPresentFactions">getPresentFactions</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#registerCallback">registerCallback</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#unregisterCallback">unregisterCallback</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#getCoordinates">getCoordinates</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#getEntity">getEntity</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#getEntityByFactionAndName">getEntityByFactionAndName</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#getEnemies">getEnemies</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#getEntities">getEntities</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#getEntitiesByType">getEntitiesByType</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#getEntitiesByScript">getEntitiesByScript</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#getEntitiesByComponent">getEntitiesByComponent</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#getEntitiesByComponents">getEntitiesByComponents</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#getEntitiesByLocation">getEntitiesByLocation</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#getEntitiesByFaction">getEntitiesByFaction</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#getPlayers">getPlayers</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#broadcastChatMessage">broadcastChatMessage</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#getValue">getValue</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#getValues">getValues</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#setValue">setValue</a>
+</td></tr>
+</table>
+</div>
+</div>
+<div class="floatright">
+<h1>Sector [Server]</h1>
+<p>
+<span class="warning">This object is only available on the server.</span>
+</p>
+<div id="Sector", class="codecontainer">
+<div id="Sector", class="function">
+<p>
+<span class="keyword">function </span> Sector() <br/>
+</p>
+</div>
+<div id="Sector", class="">
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+A new instance of Sector
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="Properties", class="codecontainer">
+<div id="seed">
+<table style="width:100%;"><tr>
+<td><span class="keyword">property</span> <span class="type">Seed </span> seed</td><td align="right"><span>[read-only]</span></td></tr></table>
+</div>
+<div id="name">
+<table style="width:100%;"><tr>
+<td><span class="keyword">property</span> <span class="type">string </span> name</td><td align="right"><span>[read-only]</span></td></tr></table>
+</div>
+<div id="numPlayers">
+<table style="width:100%;"><tr>
+<td><span class="keyword">property</span> <span class="type">var </span> numPlayers</td><td align="right"><span>[read-only]</span></td></tr></table>
+</div>
+<div id="numEntities">
+<table style="width:100%;"><tr>
+<td><span class="keyword">property</span> <span class="type">int </span> numEntities</td><td align="right"><span>[read-only]</span></td></tr></table>
+</div>
+<div id="pvpDamage">
+<table style="width:100%;"><tr>
+<td><span class="keyword">property</span> <span class="type">bool </span> pvpDamage</td><td align="right"></td></tr></table>
+</div>
+</div>
+<div id="createStation", class="codecontainer">
+<div id="createStation", class="function">
+<p>
+<span class="keyword">function Entity</span> createStation(<span class="type">Faction</span> <span class="parameter">faction</span>, <span class="type">BlockPlan</span> <span class="parameter">plan</span>, <span class="type">Matrix</span> <span class="parameter">position</span>, <span class="type">string...</span> <span class="parameter">scripts</span>) <br/>
+</p>
+</div>
+<div id="createStation", class="">
+<p>
+Convenience function to create a station. Creates a new station in the sector. A random name will be assigned in case of an AI station. This entity will have all components required for a default station. 
+</p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">faction</span>
+The faction the station will belong to <br/>
+<span class="parameter">plan</span>
+The plan of the station <br/>
+<span class="parameter">position</span>
+The position of the station <br/>
+<span class="parameter">scripts</span>
+An arbitrary number of script paths can be passed here, which will be added to the station in the order they are give. <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+An entity representing the new station 
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="createShip", class="codecontainer">
+<div id="createShip", class="function">
+<p>
+<span class="keyword">function Entity</span> createShip(<span class="type">Faction</span> <span class="parameter">faction</span>, <span class="type">string</span> <span class="parameter">name</span>, <span class="type">BlockPlan</span> <span class="parameter">plan</span>, <span class="type">Matrix</span> <span class="parameter">position</span>) <br/>
+</p>
+</div>
+<div id="createShip", class="">
+<p>
+Convenience function to create a ship. Creates a new ship in the sector. This entity will have all components required for a default ship. 
+</p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">faction</span>
+The faction the ship will belong to <br/>
+<span class="parameter">name</span>
+The name of the ship, pass "" for a random name <br/>
+<span class="parameter">plan</span>
+The plan of the ship <br/>
+<span class="parameter">position</span>
+The position of the ship <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+An entity representing the new ship 
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="createAsteroid", class="codecontainer">
+<div id="createAsteroid", class="function">
+<p>
+<span class="keyword">function Entity</span> createAsteroid(<span class="type">BlockPlan</span> <span class="parameter">plan</span>, <span class="type">bool</span> <span class="parameter">mineable</span>, <span class="type">Matrix</span> <span class="parameter">position</span>) <br/>
+</p>
+</div>
+<div id="createAsteroid", class="">
+<p>
+Convenience function to create an asteroid. Creates a new asteroid in the sector. This entity will have all components required for a default asteroid. 
+</p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">plan</span>
+The plan of the asteroid <br/>
+<span class="parameter">resources</span>
+1 if the asteroid should have mineable resources, 0 if not <br/>
+<span class="parameter">material</span>
+The material of the asteroid and its resources <br/>
+<span class="parameter">position</span>
+The position of the asteroid <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+An entity representing the new asteroid 
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="createWreckage", class="codecontainer">
+<div id="createWreckage", class="function">
+<p>
+<span class="keyword">function Entity</span> createWreckage(<span class="type">BlockPlan</span> <span class="parameter">plan</span>, <span class="type">Matrix</span> <span class="parameter">position</span>) <br/>
+</p>
+</div>
+<div id="createWreckage", class="">
+<p>
+Convenience function to create a wreckage. Creates a new wreckage in the sector. This entity will have all components required for a default wreckage. 
+</p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">plan</span>
+The plan of the wreckage <br/>
+<span class="parameter">position</span>
+The position of the wreckage <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+An entity representing the new wreckage 
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="createObject", class="codecontainer">
+<div id="createObject", class="function">
+<p>
+<span class="keyword">function Entity</span> createObject(<span class="type">BlockPlan</span> <span class="parameter">plan</span>, <span class="type">Matrix</span> <span class="parameter">position</span>) <br/>
+</p>
+</div>
+<div id="createObject", class="">
+<p>
+Convenience function to create a default object. Creates a new default object in the sector. This object has basic components for appearance and physics simulation, such as a plan, velocity and physics 
+</p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">plan</span>
+The plan of the object <br/>
+<span class="parameter">position</span>
+The position of the object <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+An entity representing the new object 
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="createWormHole", class="codecontainer">
+<div id="createWormHole", class="function">
+<p>
+<span class="keyword">function Entity</span> createWormHole(<span class="type">int</span> <span class="parameter">x</span>, <span class="type">int</span> <span class="parameter">y</span>, <span class="type">Color</span> <span class="parameter">color</span>, <span class="type">float</span> <span class="parameter">size</span>) <br/>
+</p>
+</div>
+<div id="createWormHole", class="">
+<p>
+Convenience function to create a wormhole. Creates a new wormhole in the sector. This entity will have all components required for a default wormhole. 
+</p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">x</span>
+The destination sector's X coordinate <br/>
+<span class="parameter">y</span>
+The destination sector's Y coordinate <br/>
+<span class="parameter">color</span>
+The color of the wormhole <br/>
+<span class="parameter">size</span>
+The size of the wormhole <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+An entity representing the new wormhole 
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="createEntity", class="codecontainer">
+<div id="createEntity", class="function">
+<p>
+<span class="keyword">function Entity</span> createEntity(<span class="type">EntityDescriptor</span> <span class="parameter">descriptor</span>) <br/>
+</p>
+</div>
+<div id="createEntity", class="">
+<p>
+Creates a new arbitrary entity in the sector 
+</p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">descriptor</span>
+A descriptor representing the entity to create <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+The new entity 
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="resendEntity", class="codecontainer">
+<div id="resendEntity", class="function">
+<p>
+<span class="keyword">function </span> resendEntity(<span class="type">Entity</span> <span class="parameter">entity</span>) <br/>
+</p>
+</div>
+<div id="resendEntity", class="">
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="dropBundle", class="codecontainer">
+<div id="dropBundle", class="function">
+<p>
+<span class="keyword">function </span> dropBundle(<span class="type">vec3</span> <span class="parameter">position</span>, <span class="type">Faction [or nil]</span> <span class="parameter">reservedFor</span>, <span class="type">Faction [or nil]</span> <span class="parameter">deniedFor</span>, <span class="type">int</span> <span class="parameter">money</span>, <span class="type">int64_t...</span> <span class="parameter">resources</span>) <br/>
+</p>
+</div>
+<div id="dropBundle", class="">
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="dropMoney", class="codecontainer">
+<div id="dropMoney", class="function">
+<p>
+<span class="keyword">function Entity</span> dropMoney(<span class="type">vec3</span> <span class="parameter">position</span>, <span class="type">Faction [or nil]</span> <span class="parameter">reservedFor</span>, <span class="type">Faction [or nil]</span> <span class="parameter">deniedFor</span>, <span class="type">int</span> <span class="parameter">amount</span>) <br/>
+</p>
+</div>
+<div id="dropMoney", class="">
+</p>
+</div>
+</div>
+<div id="dropResources", class="codecontainer">
+<div id="dropResources", class="function">
+<p>
+<span class="keyword">function Entity</span> dropResources(<span class="type">vec3</span> <span class="parameter">position</span>, <span class="type">Faction [or nil]</span> <span class="parameter">reservedFor</span>, <span class="type">Faction [or nil]</span> <span class="parameter">deniedFor</span>, <span class="type">Material</span> <span class="parameter">material</span>, <span class="type">int</span> <span class="parameter">amount</span>) <br/>
+</p>
+</div>
+<div id="dropResources", class="">
+</p>
+</div>
+</div>
+<div id="dropCargo", class="codecontainer">
+<div id="dropCargo", class="function">
+<p>
+<span class="keyword">function Entity</span> dropCargo(<span class="type">vec3</span> <span class="parameter">position</span>, <span class="type">Faction [or nil]</span> <span class="parameter">reservedFor</span>, <span class="type">Faction [or nil]</span> <span class="parameter">deniedFor</span>, <span class="type">TradingGood</span> <span class="parameter">good</span>, <span class="type">int</span> <span class="parameter">owner</span>, <span class="type">int</span> <span class="parameter">amount</span>) <br/>
+</p>
+</div>
+<div id="dropCargo", class="">
+</p>
+</div>
+</div>
+<div id="dropColor", class="codecontainer">
+<div id="dropColor", class="function">
+<p>
+<span class="keyword">function Entity</span> dropColor(<span class="type">vec3</span> <span class="parameter">position</span>, <span class="type">Faction [or nil]</span> <span class="parameter">reservedFor</span>, <span class="type">Faction [or nil]</span> <span class="parameter">deniedFor</span>, <span class="type">Color</span> <span class="parameter">color</span>) <br/>
+</p>
+</div>
+<div id="dropColor", class="">
+</p>
+</div>
+</div>
+<div id="dropRandomColor", class="codecontainer">
+<div id="dropRandomColor", class="function">
+<p>
+<span class="keyword">function Entity</span> dropRandomColor(<span class="type">vec3</span> <span class="parameter">position</span>, <span class="type">Faction [or nil]</span> <span class="parameter">reservedFor</span>, <span class="type">Faction [or nil]</span> <span class="parameter">deniedFor</span>) <br/>
+</p>
+</div>
+<div id="dropRandomColor", class="">
+</p>
+</div>
+</div>
+<div id="dropTurret", class="codecontainer">
+<div id="dropTurret", class="function">
+<p>
+<span class="keyword">function Entity</span> dropTurret(<span class="type">vec3</span> <span class="parameter">position</span>, <span class="type">Faction [or nil]</span> <span class="parameter">reservedFor</span>, <span class="type">Faction [or nil]</span> <span class="parameter">deniedFor</span>, <span class="type">TurretTemplate</span> <span class="parameter">desc</span>) <br/>
+</p>
+</div>
+<div id="dropTurret", class="">
+</p>
+</div>
+</div>
+<div id="dropSectorTurret", class="codecontainer">
+<div id="dropSectorTurret", class="function">
+<p>
+<span class="keyword">function Entity</span> dropSectorTurret(<span class="type">vec3</span> <span class="parameter">position</span>, <span class="type">Faction [or nil]</span> <span class="parameter">reservedFor</span>, <span class="type">Faction [or nil]</span> <span class="parameter">deniedFor</span>) <br/>
+</p>
+</div>
+<div id="dropSectorTurret", class="">
+</p>
+</div>
+</div>
+<div id="dropUpgrade", class="codecontainer">
+<div id="dropUpgrade", class="function">
+<p>
+<span class="keyword">function Entity</span> dropUpgrade(<span class="type">vec3</span> <span class="parameter">position</span>, <span class="type">Faction [or nil]</span> <span class="parameter">reservedFor</span>, <span class="type">Faction [or nil]</span> <span class="parameter">deniedFor</span>, <span class="type">SystemUpgradeTemplate</span> <span class="parameter">upgrade</span>) <br/>
+</p>
+</div>
+<div id="dropUpgrade", class="">
+</p>
+</div>
+</div>
+<div id="deleteEntity", class="codecontainer">
+<div id="deleteEntity", class="function">
+<p>
+<span class="keyword">function </span> deleteEntity(<span class="type">Entity</span> <span class="parameter">entity</span>) <br/>
+</p>
+</div>
+<div id="deleteEntity", class="">
+<p>
+Sets an entity for deletion. The entity is not deleted right away, but will be marked for deletion and will be deleted at the end of the current frame. 
+</p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">entity</span>
+The entity to delete <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="deleteEntityJumped", class="codecontainer">
+<div id="deleteEntityJumped", class="function">
+<p>
+<span class="keyword">function </span> deleteEntityJumped(<span class="type">Entity</span> <span class="parameter">entity</span>) <br/>
+</p>
+</div>
+<div id="deleteEntityJumped", class="">
+<p>
+Sets an entity for deletion. The entity is not deleted right away, but will be marked for deletion and will be deleted at the end of the current frame. This function also creates a hyperspace animation when deleting the entity. 
+</p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">entity</span>
+The entity to delete <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="collectGarbage", class="codecontainer">
+<div id="collectGarbage", class="function">
+<p>
+<span class="keyword">function </span> collectGarbage(<span class="type">var</span> <span class="parameter">entity</span>) <br/>
+</p>
+</div>
+<div id="collectGarbage", class="">
+<p>
+Immediately deletes all entities in the sector that are set for deletion. <b>Don't call this function from an entity script.</b> Only call this if you know what you're doing. 
+</p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">entity</span>
+The entity to delete <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="resolveScriptPath", class="codecontainer">
+<div id="resolveScriptPath", class="function">
+<p>
+<span class="keyword">function string</span> resolveScriptPath(<span class="type">string</span> <span class="parameter">path</span>) <br/>
+</p>
+</div>
+<div id="resolveScriptPath", class="">
+</p>
+</div>
+</div>
+<div id="invokeFunction", class="codecontainer">
+<div id="invokeFunction", class="function">
+<p>
+<span class="keyword">function var...</span> invokeFunction(<span class="type">string</span> <span class="parameter">script</span>, <span class="type">string</span> <span class="parameter">functionName</span>, <span class="type">var...</span> <span class="parameter">arguments</span>) <br/>
+</p>
+</div>
+<div id="invokeFunction", class="">
+</p>
+</div>
+</div>
+<div id="addScript", class="codecontainer">
+<div id="addScript", class="function">
+<p>
+<span class="keyword">function int</span> addScript(<span class="type">string</span> <span class="parameter">scriptPath</span>, <span class="type">var...</span> <span class="parameter">arguments</span>) <br/>
+</p>
+</div>
+<div id="addScript", class="">
+</p>
+</div>
+</div>
+<div id="addScriptOnce", class="codecontainer">
+<div id="addScriptOnce", class="function">
+<p>
+<span class="keyword">function int</span> addScriptOnce(<span class="type">string</span> <span class="parameter">scriptPath</span>, <span class="type">var...</span> <span class="parameter">arguments</span>) <br/>
+</p>
+</div>
+<div id="addScriptOnce", class="">
+</p>
+</div>
+</div>
+<div id="removeScript", class="codecontainer">
+<div id="removeScript", class="function">
+<p>
+<span class="keyword">function </span> removeScript(<span class="type">var</span> <span class="parameter">script</span>) <br/>
+</p>
+</div>
+<div id="removeScript", class="">
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="hasScript", class="codecontainer">
+<div id="hasScript", class="function">
+<p>
+<span class="keyword">function bool</span> hasScript(<span class="type">string</span> <span class="parameter">name</span>) <br/>
+</p>
+</div>
+<div id="hasScript", class="">
+</p>
+</div>
+</div>
+<div id="getScripts", class="codecontainer">
+<div id="getScripts", class="function">
+<p>
+<span class="keyword">function table&lt;int, string&gt;</span> getScripts() <br/>
+</p>
+</div>
+<div id="getScripts", class="">
+</p>
+</div>
+</div>
+<div id="hasEnemies", class="codecontainer">
+<div id="hasEnemies", class="function">
+<p>
+<span class="keyword">function bool</span> hasEnemies(<span class="type">int</span> <span class="parameter">factionIndex</span>) <br/>
+</p>
+</div>
+<div id="hasEnemies", class="">
+<p>
+Checks if the given faction has any enemy ships or objects in the sector 
+</p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">factionIndex</span>
+The index of the faction <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+true if there are enemies present, false otherwise 
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="getPresentFactions", class="codecontainer">
+<div id="getPresentFactions", class="function">
+<p>
+<span class="keyword">function int...</span> getPresentFactions() <br/>
+</p>
+</div>
+<div id="getPresentFactions", class="">
+<p>
+Returns all indices of all present factions 
+</p>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+a list of int indices of all present factions 
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="registerCallback", class="codecontainer">
+<div id="registerCallback", class="function">
+<p>
+<span class="keyword">function </span> registerCallback(<span class="type">string</span> <span class="parameter">callbackName</span>, <span class="type">string</span> <span class="parameter">functionName</span>) <br/>
+</p>
+</div>
+<div id="registerCallback", class="">
+<p>
+Register a callback in the sector. The callback receiver has to be inside the sector for the registration to succeed. The callback will be removed if the receiver leaves the sector or gets destroyed, or the sector gets unloaded. 
+</p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">callbackName</span>
+The name of the callback <br/>
+<span class="parameter">functionName</span>
+The name of the function that will be executed in the script when the callback happens <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="unregisterCallback", class="codecontainer">
+<div id="unregisterCallback", class="function">
+<p>
+<span class="keyword">function </span> unregisterCallback(<span class="type">string</span> <span class="parameter">callbackName</span>, <span class="type">string</span> <span class="parameter">functionName</span>) <br/>
+</p>
+</div>
+<div id="unregisterCallback", class="">
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="getCoordinates", class="codecontainer">
+<div id="getCoordinates", class="function">
+<p>
+<span class="keyword">function int, int</span> getCoordinates() <br/>
+</p>
+</div>
+<div id="getCoordinates", class="">
+<p>
+Access the x, y coordinates of the sector 
+</p>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+2 return values: x, y coordinates of the sector 
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="getEntity", class="codecontainer">
+<div id="getEntity", class="function">
+<p>
+<span class="keyword">function Entity</span> getEntity(<span class="type">Uuid</span> <span class="parameter">index</span>) <br/>
+</p>
+</div>
+<div id="getEntity", class="">
+<p>
+Find an entity by index in the sector. <br/> Complexity: O(logn) 
+</p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">index</span>
+The index of the entity <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+The entity or nil if not found 
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="getEntityByFactionAndName", class="codecontainer">
+<div id="getEntityByFactionAndName", class="function">
+<p>
+<span class="keyword">function Entity</span> getEntityByFactionAndName(<span class="type">int</span> <span class="parameter">factionIndex</span>, <span class="type">string</span> <span class="parameter">name</span>) <br/>
+</p>
+</div>
+<div id="getEntityByFactionAndName", class="">
+</p>
+</div>
+</div>
+<div id="getEnemies", class="codecontainer">
+<div id="getEnemies", class="function">
+<p>
+<span class="keyword">function Entity...</span> getEnemies(<span class="type">int</span> <span class="parameter">factionIndex</span>) <br/>
+</p>
+</div>
+<div id="getEnemies", class="">
+<p>
+Returns all enemies of the given faction in the sector. Enemies are determined as ships of factions where relations are below -40.000 
+</p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">factionIndex</span>
+The faction index of the faction whose enemy ships are to be queried <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+Multiple return values: All detected enemies in the sector 
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="getEntities", class="codecontainer">
+<div id="getEntities", class="function">
+<p>
+<span class="keyword">function Entity...</span> getEntities() <br/>
+</p>
+</div>
+<div id="getEntities", class="">
+<p>
+Returns all entities in the sector 
+</p>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+Multiple return values: All entities in the sector 
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="getEntitiesByType", class="codecontainer">
+<div id="getEntitiesByType", class="function">
+<p>
+<span class="keyword">function Entity...</span> getEntitiesByType(<span class="type">int</span> <span class="parameter">type</span>) <br/>
+</p>
+</div>
+<div id="getEntitiesByType", class="">
+<p>
+Returns all entities in the sector that have a specific type 
+</p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">type</span>
+The desired entity type (See enum EntityType) <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+Multiple return values: All matching entities in the sector 
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="getEntitiesByScript", class="codecontainer">
+<div id="getEntitiesByScript", class="function">
+<p>
+<span class="keyword">function Entity...</span> getEntitiesByScript(<span class="type">string</span> <span class="parameter">script</span>) <br/>
+</p>
+</div>
+<div id="getEntitiesByScript", class="">
+<p>
+Returns all entities in the sector that have a specific script attached to them 
+</p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">script</span>
+The script that is to check for. This operation checks if the given script name is contained in the actual script name. <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+Multiple return values: All matching entities in the sector 
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="getEntitiesByComponent", class="codecontainer">
+<div id="getEntitiesByComponent", class="function">
+<p>
+<span class="keyword">function Entity...</span> getEntitiesByComponent(<span class="type">int</span> <span class="parameter">type</span>) <br/>
+</p>
+</div>
+<div id="getEntitiesByComponent", class="">
+<p>
+Returns all entities in the sector that have a specific component 
+</p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">type</span>
+The desired component type (See enum ComponentType) <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+Multiple return values: All matching entities in the sector 
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="getEntitiesByComponents", class="codecontainer">
+<div id="getEntitiesByComponents", class="function">
+<p>
+<span class="keyword">function Entity...</span> getEntitiesByComponents(<span class="type">ComponentType...</span> <span class="parameter">types</span>) <br/>
+</p>
+</div>
+<div id="getEntitiesByComponents", class="">
+<p>
+Returns all entities in the sector that have a specific set of components 
+</p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">types</span>
+The desired set of component types (See enum ComponentType) <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+Multiple return values: All matching entities in the sector 
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="getEntitiesByLocation", class="codecontainer">
+<div id="getEntitiesByLocation", class="function">
+<p>
+<span class="keyword">function Entity...</span> getEntitiesByLocation(<span class="type">Sphere</span> <span class="parameter">sphere</span>) <br/>
+</p>
+</div>
+<div id="getEntitiesByLocation", class="">
+<p>
+Returns all entities in the sector whose bounding spheres intersect with the given sphere. <b>Entities without a bounding sphere component will not be considered.</b> <br/> Complexity: O(logn) 
+</p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">sphere</span>
+The intersected sphere <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+Multiple return values: All matching entities in the sector 
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="getEntitiesByFaction", class="codecontainer">
+<div id="getEntitiesByFaction", class="function">
+<p>
+<span class="keyword">function Entity...</span> getEntitiesByFaction(<span class="type">int</span> <span class="parameter">factionIndex</span>) <br/>
+</p>
+</div>
+<div id="getEntitiesByFaction", class="">
+<p>
+Returns all entities in the sector that belong to the given faction Complexity: O(n) 
+</p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">factionIndex</span>
+The desired faction <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+Multiple return values: All matching entities in the sector 
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="getPlayers", class="codecontainer">
+<div id="getPlayers", class="function">
+<p>
+<span class="keyword">function Player...</span> getPlayers() <br/>
+</p>
+</div>
+<div id="getPlayers", class="">
+<p>
+Returns all players that are currently in the sector 
+</p>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+Multiple return values: All players in the sector 
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="broadcastChatMessage", class="codecontainer">
+<div id="broadcastChatMessage", class="function">
+<p>
+<span class="keyword">function </span> broadcastChatMessage(<span class="type">string</span> <span class="parameter">sender</span>, <span class="type">int</span> <span class="parameter">messageType</span>, <span class="type">string</span> <span class="parameter">message</span>, <span class="type">string...</span> <span class="parameter">arguments</span>) <br/>
+</p>
+</div>
+<div id="broadcastChatMessage", class="">
+<p>
+Broadcast a chat message to all players that are currently in the sector. 
+</p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">message</span>
+The message that will be sent <br/>
+<span class="parameter">sender</span>
+The sender that will be displayed for the chat message <br/>
+<span class="parameter">messageType</span>
+The type of chat message, 0 = Normal, 1 = Error, 2 = Warning, 3 = Info <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="getValue", class="codecontainer">
+<div id="getValue", class="function">
+<p>
+<span class="keyword">function var</span> getValue(<span class="type">string</span> <span class="parameter">key</span>) <br/>
+</p>
+</div>
+<div id="getValue", class="">
+<p>
+Retrieves a custom value saved in the entity with the given key 
+</p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">key</span>
+A string that serves as the name of the value <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+The value if the key exists, otherwise nil 
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="getValues", class="codecontainer">
+<div id="getValues", class="function">
+<p>
+<span class="keyword">function table&lt;string, var&gt;</span> getValues() <br/>
+</p>
+</div>
+<div id="getValues", class="">
+<p>
+Retrieves all key-value pairs of custom values of the entity 
+</p>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+A table containing all custom key-value pairs 
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="setValue", class="codecontainer">
+<div id="setValue", class="function">
+<p>
+<span class="keyword">function </span> setValue(<span class="type">string</span> <span class="parameter">key</span>, <span class="type">var</span> <span class="parameter">value</span>) <br/>
+</p>
+</div>
+<div id="setValue", class="">
+<p>
+Sets a custom value 
+</p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">key</span>
+A string that serves as the name of the value <br/>
+<span class="parameter">value</span>
+The value to save. Must be bool, number, string or nil. If nil is given, the value will be deleted. <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sitemap">
+<div class="headerlisting">
+<span class="docheader">Overview</span>
+<br><a href="index.html">Home</a>
+<a href="Functions.html">Functions</a>
+</div><div class="headerlisting">
+<span class="docheader">Callbacks</span>
+<br><a href="Callbacks.html"> Callbacks</a>
+<a href="ClientSector Callbacks.html">ClientSector  Callbacks</a>
+<a href="Entity Callbacks.html">Entity  Callbacks</a>
+<a href="Galaxy Callbacks.html">Galaxy  Callbacks</a>
+<a href="Player Callbacks.html">Player  Callbacks</a>
+<a href="Sector Callbacks.html">Sector  Callbacks</a>
+<a href="Server Callbacks.html">Server  Callbacks</a>
+<a href="Turret Callbacks.html">Turret  Callbacks</a>
+</div><div class="headerlisting">
+<span class="docheader">Common Components</span>
+<br><a href="Hangar.html">Hangar</a>
+<a href="BspTree.html">BspTree</a>
+<a href="DeletionTimer.html">DeletionTimer</a>
+<a href="Engine.html">Engine</a>
+<a href="Weapons.html">Weapons</a>
+<a href="FighterAI.html">FighterAI</a>
+<a href="Physics.html">Physics</a>
+<a href="Plan.html">Plan</a>
+<a href="ShipAI.html">ShipAI</a>
+<a href="Velocity.html">Velocity</a>
+<a href="InteractionText.html">InteractionText</a>
+<a href="EnergySystem.html">EnergySystem</a>
+<a href="WormHole.html">WormHole</a>
+</div><div class="headerlisting">
+<span class="docheader">Common Objects</span>
+<br><a href="Tooltip.html">Tooltip</a>
+<a href="TooltipLine.html">TooltipLine</a>
+<a href="QuadTree.html">QuadTree</a>
+<a href="Uuid.html">Uuid</a>
+<a href="Timer.html">Timer</a>
+<a href="Profiler.html">Profiler</a>
+<a href="Ray.html">Ray</a>
+<a href="Color.html">Color</a>
+<a href="Box.html">Box</a>
+<a href="vec2.html">vec2</a>
+<a href="vec3.html">vec3</a>
+<a href="vec4.html">vec4</a>
+<a href="dvec2.html">dvec2</a>
+<a href="dvec3.html">dvec3</a>
+<a href="dvec4.html">dvec4</a>
+<a href="ivec2.html">ivec2</a>
+<a href="ivec3.html">ivec3</a>
+<a href="ivec4.html">ivec4</a>
+<a href="Rect.html">Rect</a>
+<a href="Matrix.html">Matrix</a>
+<a href="Sphere.html">Sphere</a>
+<a href="Seed.html">Seed</a>
+<a href="Random.html">Random</a>
+<a href="FighterTemplate.html">FighterTemplate</a>
+<a href="VanillaInventoryItem.html">VanillaInventoryItem</a>
+<a href="Rarity.html">Rarity</a>
+<a href="PlanetSpecifics.html">PlanetSpecifics</a>
+<a href="CraftStyle.html">CraftStyle</a>
+<a href="BlockPlanBlock.html">BlockPlanBlock</a>
+<a href="BlockPlan.html">BlockPlan</a>
+<a href="EntityDescriptor.html">EntityDescriptor</a>
+<a href="Language.html">Language</a>
+<a href="Inventory.html">Inventory</a>
+<a href="PlanBspTree.html">PlanBspTree</a>
+<a href="Weapon.html">Weapon</a>
+<a href="Crew.html">Crew</a>
+<a href="CrewProfession.html">CrewProfession</a>
+<a href="CrewMan.html">CrewMan</a>
+<a href="TurretTemplate.html">TurretTemplate</a>
+<a href="InventoryTurret.html">InventoryTurret</a>
+<a href="AllianceRank.html">AllianceRank</a>
+<a href="TradingGood.html">TradingGood</a>
+<a href="AllianceMember.html">AllianceMember</a>
+<a href="Entity.html">Entity</a>
+<a href="Mail.html">Mail</a>
+<a href="Material.html">Material</a>
+<a href="SystemUpgradeTemplate.html">SystemUpgradeTemplate</a>
+<a href="PlayerId.html">PlayerId</a>
+</div><div class="headerlisting">
+<span class="docheader">Client Components</span>
+<br><a href="EntityIcon.html">EntityIcon</a>
+<a href="EntityTooltip.html">EntityTooltip</a>
+<a href="ScriptUI.html">ScriptUI</a>
+</div><div class="headerlisting">
+<span class="docheader">Client Objects</span>
+<br><a href="InventorySelectionItem.html">InventorySelectionItem</a>
+<a href="TooltipRenderer.html">TooltipRenderer</a>
+<a href="InputWindow.html">InputWindow</a>
+<a href="PlanSelectionItem.html">PlanSelectionItem</a>
+<a href="SelectionItem.html">SelectionItem</a>
+<a href="InventoryReferenceSelectionItem.html">InventoryReferenceSelectionItem</a>
+<a href="Alliance [Client].html">Alliance [Client]</a>
+<a href="Planet.html">Planet</a>
+<a href="Sector [Client].html">Sector [Client]</a>
+<a href="Galaxy [Client].html">Galaxy [Client]</a>
+<a href="Achievements.html">Achievements</a>
+<a href="Player [Client].html">Player [Client]</a>
+<a href="GalaxyMap.html">GalaxyMap</a>
+<a href="Faction [Client].html">Faction [Client]</a>
+<a href="Mouse.html">Mouse</a>
+<a href="Keyboard.html">Keyboard</a>
+<a href="LaserFX.html">LaserFX</a>
+</div><div class="headerlisting">
+<span class="docheader">Client UI Objects</span>
+<br><a href="Line.html">Line</a>
+<a href="UIOrganizer.html">UIOrganizer</a>
+<a href="UIVerticalLister.html">UIVerticalLister</a>
+<a href="UIHorizontalSplitter.html">UIHorizontalSplitter</a>
+<a href="UIVerticalSplitter.html">UIVerticalSplitter</a>
+<a href="UIHorizontalMultiSplitter.html">UIHorizontalMultiSplitter</a>
+<a href="UIVerticalMultiSplitter.html">UIVerticalMultiSplitter</a>
+<a href="UIArbitraryVerticalSplitter.html">UIArbitraryVerticalSplitter</a>
+<a href="Tab.html">Tab</a>
+<a href="TabbedWindow.html">TabbedWindow</a>
+<a href="StatisticsBar.html">StatisticsBar</a>
+<a href="ComboBox.html">ComboBox</a>
+<a href="MultiLineTextBox.html">MultiLineTextBox</a>
+<a href="InventorySelection.html">InventorySelection</a>
+<a href="UIElement.html">UIElement</a>
+<a href="PlanDisplayer.html">PlanDisplayer</a>
+<a href="ListBoxEx.html">ListBoxEx</a>
+<a href="ListBox.html">ListBox</a>
+<a href="Window.html">Window</a>
+<a href="ScrollFrame.html">ScrollFrame</a>
+<a href="Slider.html">Slider</a>
+<a href="Frame.html">Frame</a>
+<a href="TextBox.html">TextBox</a>
+<a href="Selection.html">Selection</a>
+<a href="CheckBox.html">CheckBox</a>
+<a href="Label.html">Label</a>
+<a href="TextField.html">TextField</a>
+<a href="Button.html">Button</a>
+<a href="Picture.html">Picture</a>
+<a href="UIRenderer.html">UIRenderer</a>
+<a href="NumbersBar.html">NumbersBar</a>
+<a href="UIContainer.html">UIContainer</a>
+</div><div class="headerlisting">
+<span class="docheader">Server Components</span>
+<br><a href="WreckageCreator.html">WreckageCreator</a>
+<a href="EntityTransferrer.html">EntityTransferrer</a>
+<a href="FighterController.html">FighterController</a>
+<a href="Loot.html">Loot</a>
+</div><div class="headerlisting">
+<span class="docheader">Server Objects</span>
+<br><a href="Sector [Server].html">Sector [Server]</a>
+<a href="Server.html">Server</a>
+<a href="Galaxy [Server].html">Galaxy [Server]</a>
+<a href="Alliance [Server].html">Alliance [Server]</a>
+<a href="Faction [Server].html">Faction [Server]</a>
+<a href="Player [Server].html">Player [Server]</a>
+</div><div class="lastheaderlisting">
+<span class="docheader">Enums</span>
+<br><a href="Enums.html#SoundType">SoundType</a>
+<a href="Enums.html#FontType">FontType</a>
+<a href="Enums.html#Difficulty">Difficulty</a>
+<a href="Enums.html#ChatMessageType">ChatMessageType</a>
+<a href="Enums.html#ComponentType">ComponentType</a>
+<a href="Enums.html#WeaponCategory">WeaponCategory</a>
+<a href="Enums.html#RarityType">RarityType</a>
+<a href="Enums.html#MoonType">MoonType</a>
+<a href="Enums.html#PlanetType">PlanetType</a>
+<a href="Enums.html#AlliancePrivilege">AlliancePrivilege</a>
+<a href="Enums.html#BlockType">BlockType</a>
+<a href="Enums.html#InventoryItemType">InventoryItemType</a>
+<a href="Enums.html#WeaponType">WeaponType</a>
+<a href="Enums.html#CrewProfessionType">CrewProfessionType</a>
+<a href="Enums.html#DamageType">DamageType</a>
+<a href="Enums.html#StatsBonuses">StatsBonuses</a>
+<a href="Enums.html#EntityType">EntityType</a>
+<a href="Enums.html#AIState">AIState</a>
+<a href="Enums.html#MaterialType">MaterialType</a>
+<a href="Enums.html#FighterOrders">FighterOrders</a>
+</div></div>
+<div class="disclaimer">
+<p>This is the official documentation for the scripting API of Avorion. This documentation is automatically generated and <strong>not</strong> necessarily complete. Depending on the context in which functions exist, some documentation such as descriptions, return values or variable names or types may be missing.</p>
+<p>Work in Progress. Documentation of Avorion Version: Beta 0.14.5 r9490</p>
+</div>
+<div class="footer">
+<p align="center">Work in Progress.</p>
+<p align="center">Copyright &copy; 2017 Konstantin Kronfeldner, Boxelware. All rights reserved.</p>
+</div>
+</div>
+</body>
+</html>

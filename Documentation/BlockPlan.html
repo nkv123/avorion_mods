@@ -1,0 +1,781 @@
+<html>
+<head>
+<title> BlockPlan</title>
+<link rel="stylesheet" href="stylesheet.css"/>
+</head>
+<body>
+<div class="maincentered">
+<div class="maincontent">
+<h1 class="documentationheader">Avorion Script API Documentation</h1>
+<div class="sitemap">
+<div class="headerlisting">
+<a href="index.html">Home</a>
+<a href="Functions.html">Functions</a>
+</div></div>
+<div class="floatleft">
+<div class="codecontainer">
+<table>
+<tr>
+<td>
+<a class="type" href="BlockPlan.html">BlockPlan</a>
+<a class="function" href="#BlockPlan">BlockPlan</a>
+</td>
+</tr>
+<tr><td><br/></td></tr>
+<tr><td><span class="docheader">Properties</span></td></tr>
+<tr><td>
+<a href="#root">root</a>
+</td></tr>
+<tr><td>
+<a href="#rootIndex">rootIndex</a>
+</td></tr>
+<tr><td>
+<a href="#numBlocks">numBlocks</a>
+</td></tr>
+<tr><td>
+<a href="#radius">radius</a>
+</td></tr>
+<tr><td>
+<a href="#durability">durability</a>
+</td></tr>
+<tr><td>
+<a href="#volume">volume</a>
+</td></tr>
+<tr><td>
+<a href="#centerOfMass">centerOfMass</a>
+</td></tr>
+<tr><td>
+<a href="#accumulatingHealth">accumulatingHealth</a>
+</td></tr>
+<tr><td>
+<a href="#convex">convex</a>
+</td></tr>
+<tr><td><br/></td></tr>
+<tr><td><span class="docheader;">Member Functions</span></td></tr>
+<tr><td>
+<a class="code" href="#scale">scale</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#displace">displace</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#center">center</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#rotate">rotate</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#mirror">mirror</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#resetDurability">resetDurability</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#addBlock">addBlock</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#addPlan">addPlan</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#addPlanDisplaced">addPlanDisplaced</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#removeBlock">removeBlock</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#deleteSubTree">deleteSubTree</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#divide">divide</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#exists">exists</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#empty">empty</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#propertiesEqual">propertiesEqual</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#setBlockColor">setBlockColor</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#setBlockType">setBlockType</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#setMaterial">setMaterial</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#setColor">setColor</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#getBoundingSphere">getBoundingSphere</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#getBlock">getBlock</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#getNthBlock">getNthBlock</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#getNthIndex">getNthIndex</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#getBlockIndices">getBlockIndices</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#getBoundingBox">getBoundingBox</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#getMoneyValue">getMoneyValue</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#getResourceValue">getResourceValue</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#getUndamagedMoneyValue">getUndamagedMoneyValue</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#getUndamagedResourceValue">getUndamagedResourceValue</a>
+</td></tr>
+</table>
+</div>
+</div>
+<div class="floatright">
+<h1>BlockPlan</h1>
+<div id="BlockPlan", class="codecontainer">
+<div id="BlockPlan", class="function">
+<p>
+<span class="keyword">function </span> BlockPlan() <br/>
+</p>
+</div>
+<div id="BlockPlan", class="">
+<p>
+This is the default constructor of BlockPlan. No further arguments are required.
+</p>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+A new instance of BlockPlan
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="Properties", class="codecontainer">
+<div id="root">
+<table style="width:100%;"><tr>
+<td><span class="keyword">property</span> <span class="type">BlockPlanBlock </span> root</td><td align="right"><span>[read-only]</span></td></tr></table>
+</div>
+<div id="rootIndex">
+<table style="width:100%;"><tr>
+<td><span class="keyword">property</span> <span class="type">var </span> rootIndex</td><td align="right"><span>[read-only]</span></td></tr></table>
+</div>
+<div id="numBlocks">
+<table style="width:100%;"><tr>
+<td><span class="keyword">property</span> <span class="type">var </span> numBlocks</td><td align="right"><span>[read-only]</span></td></tr></table>
+</div>
+<div id="radius">
+<table style="width:100%;"><tr>
+<td><span class="keyword">property</span> <span class="type">var </span> radius</td><td align="right"><span>[read-only]</span></td></tr></table>
+</div>
+<div id="durability">
+<table style="width:100%;"><tr>
+<td><span class="keyword">property</span> <span class="type">double </span> durability</td><td align="right"><span>[read-only]</span></td></tr></table>
+</div>
+<div id="volume">
+<table style="width:100%;"><tr>
+<td><span class="keyword">property</span> <span class="type">var </span> volume</td><td align="right"><span>[read-only]</span></td></tr></table>
+</div>
+<div id="centerOfMass">
+<table style="width:100%;"><tr>
+<td><span class="keyword">property</span> <span class="type">var </span> centerOfMass</td><td align="right"><span>[read-only]</span></td></tr></table>
+</div>
+<div id="accumulatingHealth">
+<table style="width:100%;"><tr>
+<td><span class="keyword">property</span> <span class="type">bool </span> accumulatingHealth</td><td align="right"></td></tr></table>
+</div>
+<div id="convex">
+<table style="width:100%;"><tr>
+<td><span class="keyword">property</span> <span class="type">bool </span> convex</td><td align="right"></td></tr></table>
+</div>
+</div>
+<div id="scale", class="codecontainer">
+<div id="scale", class="function">
+<p>
+<span class="keyword">function </span> scale(<span class="type">vec3</span> <span class="parameter"></span>) <br/>
+</p>
+</div>
+<div id="scale", class="">
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="displace", class="codecontainer">
+<div id="displace", class="function">
+<p>
+<span class="keyword">function </span> displace(<span class="type">vec3</span> <span class="parameter"></span>) <br/>
+</p>
+</div>
+<div id="displace", class="">
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="center", class="codecontainer">
+<div id="center", class="function">
+<p>
+<span class="keyword">function </span> center() <br/>
+</p>
+</div>
+<div id="center", class="">
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="rotate", class="codecontainer">
+<div id="rotate", class="function">
+<p>
+<span class="keyword">function </span> rotate(<span class="type">vec3</span> <span class="parameter">axis</span>, <span class="type">int</span> <span class="parameter">dir</span>) <br/>
+</p>
+</div>
+<div id="rotate", class="">
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="mirror", class="codecontainer">
+<div id="mirror", class="function">
+<p>
+<span class="keyword">function </span> mirror(<span class="type">vec3</span> <span class="parameter">axis</span>, <span class="type">vec3</span> <span class="parameter">mirrorCenter</span>) <br/>
+</p>
+</div>
+<div id="mirror", class="">
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="resetDurability", class="codecontainer">
+<div id="resetDurability", class="function">
+<p>
+<span class="keyword">function </span> resetDurability() <br/>
+</p>
+</div>
+<div id="resetDurability", class="">
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="addBlock", class="codecontainer">
+<div id="addBlock", class="function">
+<p>
+<span class="keyword">function int</span> addBlock(<span class="type">vec3</span> <span class="parameter">position</span>, <span class="type">vec3</span> <span class="parameter">size</span>, <span class="type">int</span> <span class="parameter">parentIndex</span>, <span class="type">int</span> <span class="parameter">index</span>, <span class="type">Color</span> <span class="parameter">color</span>, <span class="type">Material</span> <span class="parameter">material</span>, <span class="type">Matrix</span> <span class="parameter">orientation</span>, <span class="type">int</span> <span class="parameter">blockIndex</span>) <br/>
+</p>
+</div>
+<div id="addBlock", class="">
+<p>
+Add a new block to an existing plan. 
+</p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">position</span>
+The position of the new <br/>
+<span class="parameter">size</span>
+The size of the new block <br/>
+<span class="parameter">parentIndex</span>
+The parent index of the block the new block will be attached to. This parameter will be ignored when there are no blocks in the plan. <br/>
+<span class="parameter">index</span>
+The index of the new block. Use -1 to assign an index automatically (recommended) <br/>
+<span class="parameter">color</span>
+The color of the new block <br/>
+<span class="parameter">material</span>
+The material of the new block <br/>
+<span class="parameter">orientation</span>
+The orientation of the new block <br/>
+<span class="parameter">blockIndex</span>
+The type of the new block, must be a valid block type. See enum BlockType <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+Returns the index of the new block on success, nil otherwise. 
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="addPlan", class="codecontainer">
+<div id="addPlan", class="function">
+<p>
+<span class="keyword">function var</span> addPlan(<span class="type">int</span> <span class="parameter">parentIndex</span>, <span class="type">BlockPlan</span> <span class="parameter">other</span>, <span class="type">int</span> <span class="parameter">otherBlock</span>) <br/>
+</p>
+</div>
+<div id="addPlan", class="">
+</p>
+</div>
+</div>
+<div id="addPlanDisplaced", class="codecontainer">
+<div id="addPlanDisplaced", class="function">
+<p>
+<span class="keyword">function var</span> addPlanDisplaced(<span class="type">int</span> <span class="parameter">parentIndex</span>, <span class="type">BlockPlan</span> <span class="parameter">other</span>, <span class="type">int</span> <span class="parameter">otherBlock</span>, <span class="type">vec3</span> <span class="parameter">delta</span>) <br/>
+</p>
+</div>
+<div id="addPlanDisplaced", class="">
+</p>
+</div>
+</div>
+<div id="removeBlock", class="codecontainer">
+<div id="removeBlock", class="function">
+<p>
+<span class="keyword">function </span> removeBlock(<span class="type">int</span> <span class="parameter"></span>) <br/>
+</p>
+</div>
+<div id="removeBlock", class="">
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="deleteSubTree", class="codecontainer">
+<div id="deleteSubTree", class="function">
+<p>
+<span class="keyword">function </span> deleteSubTree(<span class="type">int</span> <span class="parameter"></span>) <br/>
+</p>
+</div>
+<div id="deleteSubTree", class="">
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="divide", class="codecontainer">
+<div id="divide", class="function">
+<p>
+<span class="keyword">function BlockPlan...</span> divide(<span class="type">int</span> <span class="parameter">blockIndex</span>) <br/>
+</p>
+</div>
+<div id="divide", class="">
+</p>
+</div>
+</div>
+<div id="exists", class="codecontainer">
+<div id="exists", class="function">
+<p>
+<span class="keyword">function bool</span> exists(<span class="type">int</span> <span class="parameter">index</span>) <br/>
+</p>
+</div>
+<div id="exists", class="">
+</p>
+</div>
+</div>
+<div id="empty", class="codecontainer">
+<div id="empty", class="function">
+<p>
+<span class="keyword">function var</span> empty() <br/>
+</p>
+</div>
+<div id="empty", class="">
+</p>
+</div>
+</div>
+<div id="propertiesEqual", class="codecontainer">
+<div id="propertiesEqual", class="function">
+<p>
+<span class="keyword">function var</span> propertiesEqual(<span class="type">BlockPlan</span> <span class="parameter"></span>) <br/>
+</p>
+</div>
+<div id="propertiesEqual", class="">
+</p>
+</div>
+</div>
+<div id="setBlockColor", class="codecontainer">
+<div id="setBlockColor", class="function">
+<p>
+<span class="keyword">function </span> setBlockColor(<span class="type">int</span> <span class="parameter">index</span>, <span class="type">Color</span> <span class="parameter">color</span>) <br/>
+</p>
+</div>
+<div id="setBlockColor", class="">
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="setBlockType", class="codecontainer">
+<div id="setBlockType", class="function">
+<p>
+<span class="keyword">function </span> setBlockType(<span class="type">int</span> <span class="parameter"></span>, <span class="type">int</span> <span class="parameter"></span>) <br/>
+</p>
+</div>
+<div id="setBlockType", class="">
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="setMaterial", class="codecontainer">
+<div id="setMaterial", class="function">
+<p>
+<span class="keyword">function </span> setMaterial(<span class="type">Material</span> <span class="parameter"></span>) <br/>
+</p>
+</div>
+<div id="setMaterial", class="">
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="setColor", class="codecontainer">
+<div id="setColor", class="function">
+<p>
+<span class="keyword">function </span> setColor(<span class="type">Color</span> <span class="parameter"></span>) <br/>
+</p>
+</div>
+<div id="setColor", class="">
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="getBoundingSphere", class="codecontainer">
+<div id="getBoundingSphere", class="function">
+<p>
+<span class="keyword">function var</span> getBoundingSphere() <br/>
+</p>
+</div>
+<div id="getBoundingSphere", class="">
+</p>
+</div>
+</div>
+<div id="getBlock", class="codecontainer">
+<div id="getBlock", class="function">
+<p>
+<span class="keyword">function BlockPlanBlock</span> getBlock(<span class="type">int</span> <span class="parameter">index</span>) <br/>
+</p>
+</div>
+<div id="getBlock", class="">
+</p>
+</div>
+</div>
+<div id="getNthBlock", class="codecontainer">
+<div id="getNthBlock", class="function">
+<p>
+<span class="keyword">function BlockPlanBlock</span> getNthBlock(<span class="type">int</span> <span class="parameter">n</span>) <br/>
+</p>
+</div>
+<div id="getNthBlock", class="">
+</p>
+</div>
+</div>
+<div id="getNthIndex", class="codecontainer">
+<div id="getNthIndex", class="function">
+<p>
+<span class="keyword">function var</span> getNthIndex(<span class="type">int</span> <span class="parameter">n</span>) <br/>
+</p>
+</div>
+<div id="getNthIndex", class="">
+</p>
+</div>
+</div>
+<div id="getBlockIndices", class="codecontainer">
+<div id="getBlockIndices", class="function">
+<p>
+<span class="keyword">function int...</span> getBlockIndices() <br/>
+</p>
+</div>
+<div id="getBlockIndices", class="">
+</p>
+</div>
+</div>
+<div id="getBoundingBox", class="codecontainer">
+<div id="getBoundingBox", class="function">
+<p>
+<span class="keyword">function var</span> getBoundingBox() <br/>
+</p>
+</div>
+<div id="getBoundingBox", class="">
+</p>
+</div>
+</div>
+<div id="getMoneyValue", class="codecontainer">
+<div id="getMoneyValue", class="function">
+<p>
+<span class="keyword">function double</span> getMoneyValue() <br/>
+</p>
+</div>
+<div id="getMoneyValue", class="">
+</p>
+</div>
+</div>
+<div id="getResourceValue", class="codecontainer">
+<div id="getResourceValue", class="function">
+<p>
+<span class="keyword">function double...</span> getResourceValue() <br/>
+</p>
+</div>
+<div id="getResourceValue", class="">
+</p>
+</div>
+</div>
+<div id="getUndamagedMoneyValue", class="codecontainer">
+<div id="getUndamagedMoneyValue", class="function">
+<p>
+<span class="keyword">function double</span> getUndamagedMoneyValue() <br/>
+</p>
+</div>
+<div id="getUndamagedMoneyValue", class="">
+</p>
+</div>
+</div>
+<div id="getUndamagedResourceValue", class="codecontainer">
+<div id="getUndamagedResourceValue", class="function">
+<p>
+<span class="keyword">function double...</span> getUndamagedResourceValue() <br/>
+</p>
+</div>
+<div id="getUndamagedResourceValue", class="">
+</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sitemap">
+<div class="headerlisting">
+<span class="docheader">Overview</span>
+<br><a href="index.html">Home</a>
+<a href="Functions.html">Functions</a>
+</div><div class="headerlisting">
+<span class="docheader">Callbacks</span>
+<br><a href="Callbacks.html"> Callbacks</a>
+<a href="ClientSector Callbacks.html">ClientSector  Callbacks</a>
+<a href="Entity Callbacks.html">Entity  Callbacks</a>
+<a href="Galaxy Callbacks.html">Galaxy  Callbacks</a>
+<a href="Player Callbacks.html">Player  Callbacks</a>
+<a href="Sector Callbacks.html">Sector  Callbacks</a>
+<a href="Server Callbacks.html">Server  Callbacks</a>
+<a href="Turret Callbacks.html">Turret  Callbacks</a>
+</div><div class="headerlisting">
+<span class="docheader">Common Components</span>
+<br><a href="Hangar.html">Hangar</a>
+<a href="BspTree.html">BspTree</a>
+<a href="DeletionTimer.html">DeletionTimer</a>
+<a href="Engine.html">Engine</a>
+<a href="Weapons.html">Weapons</a>
+<a href="FighterAI.html">FighterAI</a>
+<a href="Physics.html">Physics</a>
+<a href="Plan.html">Plan</a>
+<a href="ShipAI.html">ShipAI</a>
+<a href="Velocity.html">Velocity</a>
+<a href="InteractionText.html">InteractionText</a>
+<a href="EnergySystem.html">EnergySystem</a>
+<a href="WormHole.html">WormHole</a>
+</div><div class="headerlisting">
+<span class="docheader">Common Objects</span>
+<br><a href="Tooltip.html">Tooltip</a>
+<a href="TooltipLine.html">TooltipLine</a>
+<a href="QuadTree.html">QuadTree</a>
+<a href="Uuid.html">Uuid</a>
+<a href="Timer.html">Timer</a>
+<a href="Profiler.html">Profiler</a>
+<a href="Ray.html">Ray</a>
+<a href="Color.html">Color</a>
+<a href="Box.html">Box</a>
+<a href="vec2.html">vec2</a>
+<a href="vec3.html">vec3</a>
+<a href="vec4.html">vec4</a>
+<a href="dvec2.html">dvec2</a>
+<a href="dvec3.html">dvec3</a>
+<a href="dvec4.html">dvec4</a>
+<a href="ivec2.html">ivec2</a>
+<a href="ivec3.html">ivec3</a>
+<a href="ivec4.html">ivec4</a>
+<a href="Rect.html">Rect</a>
+<a href="Matrix.html">Matrix</a>
+<a href="Sphere.html">Sphere</a>
+<a href="Seed.html">Seed</a>
+<a href="Random.html">Random</a>
+<a href="FighterTemplate.html">FighterTemplate</a>
+<a href="VanillaInventoryItem.html">VanillaInventoryItem</a>
+<a href="Rarity.html">Rarity</a>
+<a href="PlanetSpecifics.html">PlanetSpecifics</a>
+<a href="CraftStyle.html">CraftStyle</a>
+<a href="BlockPlanBlock.html">BlockPlanBlock</a>
+<a href="BlockPlan.html">BlockPlan</a>
+<a href="EntityDescriptor.html">EntityDescriptor</a>
+<a href="Language.html">Language</a>
+<a href="Inventory.html">Inventory</a>
+<a href="PlanBspTree.html">PlanBspTree</a>
+<a href="Weapon.html">Weapon</a>
+<a href="Crew.html">Crew</a>
+<a href="CrewProfession.html">CrewProfession</a>
+<a href="CrewMan.html">CrewMan</a>
+<a href="TurretTemplate.html">TurretTemplate</a>
+<a href="InventoryTurret.html">InventoryTurret</a>
+<a href="AllianceRank.html">AllianceRank</a>
+<a href="TradingGood.html">TradingGood</a>
+<a href="AllianceMember.html">AllianceMember</a>
+<a href="Entity.html">Entity</a>
+<a href="Mail.html">Mail</a>
+<a href="Material.html">Material</a>
+<a href="SystemUpgradeTemplate.html">SystemUpgradeTemplate</a>
+<a href="PlayerId.html">PlayerId</a>
+</div><div class="headerlisting">
+<span class="docheader">Client Components</span>
+<br><a href="EntityIcon.html">EntityIcon</a>
+<a href="EntityTooltip.html">EntityTooltip</a>
+<a href="ScriptUI.html">ScriptUI</a>
+</div><div class="headerlisting">
+<span class="docheader">Client Objects</span>
+<br><a href="InventorySelectionItem.html">InventorySelectionItem</a>
+<a href="TooltipRenderer.html">TooltipRenderer</a>
+<a href="InputWindow.html">InputWindow</a>
+<a href="PlanSelectionItem.html">PlanSelectionItem</a>
+<a href="SelectionItem.html">SelectionItem</a>
+<a href="InventoryReferenceSelectionItem.html">InventoryReferenceSelectionItem</a>
+<a href="Alliance [Client].html">Alliance [Client]</a>
+<a href="Planet.html">Planet</a>
+<a href="Sector [Client].html">Sector [Client]</a>
+<a href="Galaxy [Client].html">Galaxy [Client]</a>
+<a href="Achievements.html">Achievements</a>
+<a href="Player [Client].html">Player [Client]</a>
+<a href="GalaxyMap.html">GalaxyMap</a>
+<a href="Faction [Client].html">Faction [Client]</a>
+<a href="Mouse.html">Mouse</a>
+<a href="Keyboard.html">Keyboard</a>
+<a href="LaserFX.html">LaserFX</a>
+</div><div class="headerlisting">
+<span class="docheader">Client UI Objects</span>
+<br><a href="Line.html">Line</a>
+<a href="UIOrganizer.html">UIOrganizer</a>
+<a href="UIVerticalLister.html">UIVerticalLister</a>
+<a href="UIHorizontalSplitter.html">UIHorizontalSplitter</a>
+<a href="UIVerticalSplitter.html">UIVerticalSplitter</a>
+<a href="UIHorizontalMultiSplitter.html">UIHorizontalMultiSplitter</a>
+<a href="UIVerticalMultiSplitter.html">UIVerticalMultiSplitter</a>
+<a href="UIArbitraryVerticalSplitter.html">UIArbitraryVerticalSplitter</a>
+<a href="Tab.html">Tab</a>
+<a href="TabbedWindow.html">TabbedWindow</a>
+<a href="StatisticsBar.html">StatisticsBar</a>
+<a href="ComboBox.html">ComboBox</a>
+<a href="MultiLineTextBox.html">MultiLineTextBox</a>
+<a href="InventorySelection.html">InventorySelection</a>
+<a href="UIElement.html">UIElement</a>
+<a href="PlanDisplayer.html">PlanDisplayer</a>
+<a href="ListBoxEx.html">ListBoxEx</a>
+<a href="ListBox.html">ListBox</a>
+<a href="Window.html">Window</a>
+<a href="ScrollFrame.html">ScrollFrame</a>
+<a href="Slider.html">Slider</a>
+<a href="Frame.html">Frame</a>
+<a href="TextBox.html">TextBox</a>
+<a href="Selection.html">Selection</a>
+<a href="CheckBox.html">CheckBox</a>
+<a href="Label.html">Label</a>
+<a href="TextField.html">TextField</a>
+<a href="Button.html">Button</a>
+<a href="Picture.html">Picture</a>
+<a href="UIRenderer.html">UIRenderer</a>
+<a href="NumbersBar.html">NumbersBar</a>
+<a href="UIContainer.html">UIContainer</a>
+</div><div class="headerlisting">
+<span class="docheader">Server Components</span>
+<br><a href="WreckageCreator.html">WreckageCreator</a>
+<a href="EntityTransferrer.html">EntityTransferrer</a>
+<a href="FighterController.html">FighterController</a>
+<a href="Loot.html">Loot</a>
+</div><div class="headerlisting">
+<span class="docheader">Server Objects</span>
+<br><a href="Sector [Server].html">Sector [Server]</a>
+<a href="Server.html">Server</a>
+<a href="Galaxy [Server].html">Galaxy [Server]</a>
+<a href="Alliance [Server].html">Alliance [Server]</a>
+<a href="Faction [Server].html">Faction [Server]</a>
+<a href="Player [Server].html">Player [Server]</a>
+</div><div class="lastheaderlisting">
+<span class="docheader">Enums</span>
+<br><a href="Enums.html#SoundType">SoundType</a>
+<a href="Enums.html#FontType">FontType</a>
+<a href="Enums.html#Difficulty">Difficulty</a>
+<a href="Enums.html#ChatMessageType">ChatMessageType</a>
+<a href="Enums.html#ComponentType">ComponentType</a>
+<a href="Enums.html#WeaponCategory">WeaponCategory</a>
+<a href="Enums.html#RarityType">RarityType</a>
+<a href="Enums.html#MoonType">MoonType</a>
+<a href="Enums.html#PlanetType">PlanetType</a>
+<a href="Enums.html#AlliancePrivilege">AlliancePrivilege</a>
+<a href="Enums.html#BlockType">BlockType</a>
+<a href="Enums.html#InventoryItemType">InventoryItemType</a>
+<a href="Enums.html#WeaponType">WeaponType</a>
+<a href="Enums.html#CrewProfessionType">CrewProfessionType</a>
+<a href="Enums.html#DamageType">DamageType</a>
+<a href="Enums.html#StatsBonuses">StatsBonuses</a>
+<a href="Enums.html#EntityType">EntityType</a>
+<a href="Enums.html#AIState">AIState</a>
+<a href="Enums.html#MaterialType">MaterialType</a>
+<a href="Enums.html#FighterOrders">FighterOrders</a>
+</div></div>
+<div class="disclaimer">
+<p>This is the official documentation for the scripting API of Avorion. This documentation is automatically generated and <strong>not</strong> necessarily complete. Depending on the context in which functions exist, some documentation such as descriptions, return values or variable names or types may be missing.</p>
+<p>Work in Progress. Documentation of Avorion Version: Beta 0.14.5 r9490</p>
+</div>
+<div class="footer">
+<p align="center">Work in Progress.</p>
+<p align="center">Copyright &copy; 2017 Konstantin Kronfeldner, Boxelware. All rights reserved.</p>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,1164 @@
+<html>
+<head>
+<title> Avorion Documentation</title>
+<link rel="stylesheet" href="stylesheet.css"/>
+</head>
+<body>
+<div class="maincentered">
+<div class="maincontent">
+<h1 class="documentationheader">Avorion Script API Documentation</h1>
+<div class="disclaimer">
+<p>This is the official documentation for the scripting API of Avorion. This documentation is automatically generated and <strong>not</strong> necessarily complete. Depending on the context in which functions exist, some documentation such as descriptions, return values or variable names or types may be missing.</p>
+<p>Work in Progress. Documentation of Avorion Version: Beta 0.14.5 r9490</p>
+</div>
+<div class="sitemap">
+<div class="headerlisting">
+<span class="docheader">Overview</span>
+<br><a href="index.html">Home</a>
+<a href="Functions.html">Functions</a>
+</div><div class="headerlisting">
+<span class="docheader">Callbacks</span>
+<br><a href="Callbacks.html"> Callbacks</a>
+<a href="ClientSector Callbacks.html">ClientSector  Callbacks</a>
+<a href="Entity Callbacks.html">Entity  Callbacks</a>
+<a href="Galaxy Callbacks.html">Galaxy  Callbacks</a>
+<a href="Player Callbacks.html">Player  Callbacks</a>
+<a href="Sector Callbacks.html">Sector  Callbacks</a>
+<a href="Server Callbacks.html">Server  Callbacks</a>
+<a href="Turret Callbacks.html">Turret  Callbacks</a>
+</div><div class="headerlisting">
+<span class="docheader">Common Components</span>
+<br><a href="Hangar.html">Hangar</a>
+<a href="BspTree.html">BspTree</a>
+<a href="DeletionTimer.html">DeletionTimer</a>
+<a href="Engine.html">Engine</a>
+<a href="Weapons.html">Weapons</a>
+<a href="FighterAI.html">FighterAI</a>
+<a href="Physics.html">Physics</a>
+<a href="Plan.html">Plan</a>
+<a href="ShipAI.html">ShipAI</a>
+<a href="Velocity.html">Velocity</a>
+<a href="InteractionText.html">InteractionText</a>
+<a href="EnergySystem.html">EnergySystem</a>
+<a href="WormHole.html">WormHole</a>
+</div><div class="headerlisting">
+<span class="docheader">Common Objects</span>
+<br><a href="Tooltip.html">Tooltip</a>
+<a href="TooltipLine.html">TooltipLine</a>
+<a href="QuadTree.html">QuadTree</a>
+<a href="Uuid.html">Uuid</a>
+<a href="Timer.html">Timer</a>
+<a href="Profiler.html">Profiler</a>
+<a href="Ray.html">Ray</a>
+<a href="Color.html">Color</a>
+<a href="Box.html">Box</a>
+<a href="vec2.html">vec2</a>
+<a href="vec3.html">vec3</a>
+<a href="vec4.html">vec4</a>
+<a href="dvec2.html">dvec2</a>
+<a href="dvec3.html">dvec3</a>
+<a href="dvec4.html">dvec4</a>
+<a href="ivec2.html">ivec2</a>
+<a href="ivec3.html">ivec3</a>
+<a href="ivec4.html">ivec4</a>
+<a href="Rect.html">Rect</a>
+<a href="Matrix.html">Matrix</a>
+<a href="Sphere.html">Sphere</a>
+<a href="Seed.html">Seed</a>
+<a href="Random.html">Random</a>
+<a href="FighterTemplate.html">FighterTemplate</a>
+<a href="VanillaInventoryItem.html">VanillaInventoryItem</a>
+<a href="Rarity.html">Rarity</a>
+<a href="PlanetSpecifics.html">PlanetSpecifics</a>
+<a href="CraftStyle.html">CraftStyle</a>
+<a href="BlockPlanBlock.html">BlockPlanBlock</a>
+<a href="BlockPlan.html">BlockPlan</a>
+<a href="EntityDescriptor.html">EntityDescriptor</a>
+<a href="Language.html">Language</a>
+<a href="Inventory.html">Inventory</a>
+<a href="PlanBspTree.html">PlanBspTree</a>
+<a href="Weapon.html">Weapon</a>
+<a href="Crew.html">Crew</a>
+<a href="CrewProfession.html">CrewProfession</a>
+<a href="CrewMan.html">CrewMan</a>
+<a href="TurretTemplate.html">TurretTemplate</a>
+<a href="InventoryTurret.html">InventoryTurret</a>
+<a href="AllianceRank.html">AllianceRank</a>
+<a href="TradingGood.html">TradingGood</a>
+<a href="AllianceMember.html">AllianceMember</a>
+<a href="Entity.html">Entity</a>
+<a href="Mail.html">Mail</a>
+<a href="Material.html">Material</a>
+<a href="SystemUpgradeTemplate.html">SystemUpgradeTemplate</a>
+<a href="PlayerId.html">PlayerId</a>
+</div><div class="headerlisting">
+<span class="docheader">Client Components</span>
+<br><a href="EntityIcon.html">EntityIcon</a>
+<a href="EntityTooltip.html">EntityTooltip</a>
+<a href="ScriptUI.html">ScriptUI</a>
+</div><div class="headerlisting">
+<span class="docheader">Client Objects</span>
+<br><a href="InventorySelectionItem.html">InventorySelectionItem</a>
+<a href="TooltipRenderer.html">TooltipRenderer</a>
+<a href="InputWindow.html">InputWindow</a>
+<a href="PlanSelectionItem.html">PlanSelectionItem</a>
+<a href="SelectionItem.html">SelectionItem</a>
+<a href="InventoryReferenceSelectionItem.html">InventoryReferenceSelectionItem</a>
+<a href="Alliance [Client].html">Alliance [Client]</a>
+<a href="Planet.html">Planet</a>
+<a href="Sector [Client].html">Sector [Client]</a>
+<a href="Galaxy [Client].html">Galaxy [Client]</a>
+<a href="Achievements.html">Achievements</a>
+<a href="Player [Client].html">Player [Client]</a>
+<a href="GalaxyMap.html">GalaxyMap</a>
+<a href="Faction [Client].html">Faction [Client]</a>
+<a href="Mouse.html">Mouse</a>
+<a href="Keyboard.html">Keyboard</a>
+<a href="LaserFX.html">LaserFX</a>
+</div><div class="headerlisting">
+<span class="docheader">Client UI Objects</span>
+<br><a href="Line.html">Line</a>
+<a href="UIOrganizer.html">UIOrganizer</a>
+<a href="UIVerticalLister.html">UIVerticalLister</a>
+<a href="UIHorizontalSplitter.html">UIHorizontalSplitter</a>
+<a href="UIVerticalSplitter.html">UIVerticalSplitter</a>
+<a href="UIHorizontalMultiSplitter.html">UIHorizontalMultiSplitter</a>
+<a href="UIVerticalMultiSplitter.html">UIVerticalMultiSplitter</a>
+<a href="UIArbitraryVerticalSplitter.html">UIArbitraryVerticalSplitter</a>
+<a href="Tab.html">Tab</a>
+<a href="TabbedWindow.html">TabbedWindow</a>
+<a href="StatisticsBar.html">StatisticsBar</a>
+<a href="ComboBox.html">ComboBox</a>
+<a href="MultiLineTextBox.html">MultiLineTextBox</a>
+<a href="InventorySelection.html">InventorySelection</a>
+<a href="UIElement.html">UIElement</a>
+<a href="PlanDisplayer.html">PlanDisplayer</a>
+<a href="ListBoxEx.html">ListBoxEx</a>
+<a href="ListBox.html">ListBox</a>
+<a href="Window.html">Window</a>
+<a href="ScrollFrame.html">ScrollFrame</a>
+<a href="Slider.html">Slider</a>
+<a href="Frame.html">Frame</a>
+<a href="TextBox.html">TextBox</a>
+<a href="Selection.html">Selection</a>
+<a href="CheckBox.html">CheckBox</a>
+<a href="Label.html">Label</a>
+<a href="TextField.html">TextField</a>
+<a href="Button.html">Button</a>
+<a href="Picture.html">Picture</a>
+<a href="UIRenderer.html">UIRenderer</a>
+<a href="NumbersBar.html">NumbersBar</a>
+<a href="UIContainer.html">UIContainer</a>
+</div><div class="headerlisting">
+<span class="docheader">Server Components</span>
+<br><a href="WreckageCreator.html">WreckageCreator</a>
+<a href="EntityTransferrer.html">EntityTransferrer</a>
+<a href="FighterController.html">FighterController</a>
+<a href="Loot.html">Loot</a>
+</div><div class="headerlisting">
+<span class="docheader">Server Objects</span>
+<br><a href="Sector [Server].html">Sector [Server]</a>
+<a href="Server.html">Server</a>
+<a href="Galaxy [Server].html">Galaxy [Server]</a>
+<a href="Alliance [Server].html">Alliance [Server]</a>
+<a href="Faction [Server].html">Faction [Server]</a>
+<a href="Player [Server].html">Player [Server]</a>
+</div><div class="lastheaderlisting">
+<span class="docheader">Enums</span>
+<br><a href="Enums.html#SoundType">SoundType</a>
+<a href="Enums.html#FontType">FontType</a>
+<a href="Enums.html#Difficulty">Difficulty</a>
+<a href="Enums.html#ChatMessageType">ChatMessageType</a>
+<a href="Enums.html#ComponentType">ComponentType</a>
+<a href="Enums.html#WeaponCategory">WeaponCategory</a>
+<a href="Enums.html#RarityType">RarityType</a>
+<a href="Enums.html#MoonType">MoonType</a>
+<a href="Enums.html#PlanetType">PlanetType</a>
+<a href="Enums.html#AlliancePrivilege">AlliancePrivilege</a>
+<a href="Enums.html#BlockType">BlockType</a>
+<a href="Enums.html#InventoryItemType">InventoryItemType</a>
+<a href="Enums.html#WeaponType">WeaponType</a>
+<a href="Enums.html#CrewProfessionType">CrewProfessionType</a>
+<a href="Enums.html#DamageType">DamageType</a>
+<a href="Enums.html#StatsBonuses">StatsBonuses</a>
+<a href="Enums.html#EntityType">EntityType</a>
+<a href="Enums.html#AIState">AIState</a>
+<a href="Enums.html#MaterialType">MaterialType</a>
+<a href="Enums.html#FighterOrders">FighterOrders</a>
+</div></div>
+<div class="floatanywhere">
+<div class="codecontainer">
+<p class="floatheadline">Objects<p>
+<table>
+<tr><td>
+<a class="keyword" href="Tooltip.html">Tooltip</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="TooltipLine.html">TooltipLine</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Sector [Server].html">Sector [Server]</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Server.html">Server</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Galaxy [Server].html">Galaxy [Server]</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Alliance [Server].html">Alliance [Server]</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Faction [Server].html">Faction [Server]</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Player [Server].html">Player [Server]</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Line.html">Line</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="UIOrganizer.html">UIOrganizer</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="UIVerticalLister.html">UIVerticalLister</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="UIHorizontalSplitter.html">UIHorizontalSplitter</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="UIVerticalSplitter.html">UIVerticalSplitter</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="UIHorizontalMultiSplitter.html">UIHorizontalMultiSplitter</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="UIVerticalMultiSplitter.html">UIVerticalMultiSplitter</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="UIArbitraryVerticalSplitter.html">UIArbitraryVerticalSplitter</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Tab.html">Tab</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="TabbedWindow.html">TabbedWindow</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="StatisticsBar.html">StatisticsBar</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="ComboBox.html">ComboBox</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="MultiLineTextBox.html">MultiLineTextBox</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="InventorySelection.html">InventorySelection</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="UIElement.html">UIElement</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="PlanDisplayer.html">PlanDisplayer</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="ListBoxEx.html">ListBoxEx</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="ListBox.html">ListBox</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Window.html">Window</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="ScrollFrame.html">ScrollFrame</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="InventorySelectionItem.html">InventorySelectionItem</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Slider.html">Slider</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="TooltipRenderer.html">TooltipRenderer</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="InputWindow.html">InputWindow</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Frame.html">Frame</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="TextBox.html">TextBox</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="PlanSelectionItem.html">PlanSelectionItem</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="SelectionItem.html">SelectionItem</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Selection.html">Selection</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="CheckBox.html">CheckBox</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Label.html">Label</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="TextField.html">TextField</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Button.html">Button</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="InventoryReferenceSelectionItem.html">InventoryReferenceSelectionItem</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Picture.html">Picture</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="UIRenderer.html">UIRenderer</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="NumbersBar.html">NumbersBar</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="UIContainer.html">UIContainer</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Alliance [Client].html">Alliance [Client]</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Planet.html">Planet</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Sector [Client].html">Sector [Client]</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Galaxy [Client].html">Galaxy [Client]</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Achievements.html">Achievements</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Player [Client].html">Player [Client]</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="GalaxyMap.html">GalaxyMap</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Faction [Client].html">Faction [Client]</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Mouse.html">Mouse</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Keyboard.html">Keyboard</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="LaserFX.html">LaserFX</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="QuadTree.html">QuadTree</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Uuid.html">Uuid</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Timer.html">Timer</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Profiler.html">Profiler</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Ray.html">Ray</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Color.html">Color</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Box.html">Box</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="vec2.html">vec2</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="vec3.html">vec3</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="vec4.html">vec4</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="dvec2.html">dvec2</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="dvec3.html">dvec3</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="dvec4.html">dvec4</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="ivec2.html">ivec2</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="ivec3.html">ivec3</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="ivec4.html">ivec4</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Rect.html">Rect</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Matrix.html">Matrix</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Sphere.html">Sphere</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Seed.html">Seed</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Random.html">Random</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="FighterTemplate.html">FighterTemplate</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="VanillaInventoryItem.html">VanillaInventoryItem</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Rarity.html">Rarity</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="PlanetSpecifics.html">PlanetSpecifics</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="CraftStyle.html">CraftStyle</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="BlockPlanBlock.html">BlockPlanBlock</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="BlockPlan.html">BlockPlan</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="EntityDescriptor.html">EntityDescriptor</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Language.html">Language</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Inventory.html">Inventory</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="PlanBspTree.html">PlanBspTree</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Weapon.html">Weapon</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Crew.html">Crew</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="CrewProfession.html">CrewProfession</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="CrewMan.html">CrewMan</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="TurretTemplate.html">TurretTemplate</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="InventoryTurret.html">InventoryTurret</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="AllianceRank.html">AllianceRank</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="TradingGood.html">TradingGood</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="AllianceMember.html">AllianceMember</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Entity.html">Entity</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Mail.html">Mail</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Material.html">Material</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="SystemUpgradeTemplate.html">SystemUpgradeTemplate</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="PlayerId.html">PlayerId</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="WreckageCreator.html">WreckageCreator</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="EntityTransferrer.html">EntityTransferrer</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="FighterController.html">FighterController</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Loot.html">Loot</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="EntityIcon.html">EntityIcon</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="EntityTooltip.html">EntityTooltip</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="ScriptUI.html">ScriptUI</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Hangar.html">Hangar</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="BspTree.html">BspTree</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="DeletionTimer.html">DeletionTimer</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Engine.html">Engine</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Weapons.html">Weapons</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="FighterAI.html">FighterAI</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Physics.html">Physics</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Plan.html">Plan</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="ShipAI.html">ShipAI</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Velocity.html">Velocity</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="InteractionText.html">InteractionText</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="EnergySystem.html">EnergySystem</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="WormHole.html">WormHole</a>
+</td></tr>
+</table>
+</div>
+</div>
+<div class="floatanywhere">
+<div class="codecontainer">
+<p class="floatheadline"> Functions <p>
+<table>
+<tr><td>
+<a class="keyword" href="Functions.html#onServer">onServer</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#onClient">onClient</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#invokeClientFunction">invokeClientFunction</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#broadcastInvokeClientFunction">broadcastInvokeClientFunction</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#async">async</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#getWorkshopShips">getWorkshopShips</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#getSavedShips">getSavedShips</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#playSound">playSound</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#play3DSound">play3DSound</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#displayMissionAccomplishedText">displayMissionAccomplishedText</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#registerBoss">registerBoss</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#unregisterBoss">unregisterBoss</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#setBossHealth">setBossHealth</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#setBossHealthColor">setBossHealthColor</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#displayChatMessage">displayChatMessage</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#invokeServerFunction">invokeServerFunction</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#onServer">onServer</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#onClient">onClient</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#async">async</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#copy">copy</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#valid">valid</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#terminate">terminate</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#getReadableValue">getReadableValue</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#deferredCallback">deferredCallback</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#systemTimeMs">systemTimeMs</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#systemTime">systemTime</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#appTimeMs">appTimeMs</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#appTime">appTime</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#getGlobal">getGlobal</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#setGlobal">setGlobal</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#print">print</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#printlog">printlog</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#writeTrace">writeTrace</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#createMonetaryString">createMonetaryString</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#async">async</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#getParentFaction">getParentFaction</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#getPlayerCraft">getPlayerCraft</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#getParentFaction">getParentFaction</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#drawText">drawText</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#drawTextRect">drawTextRect</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#drawRect">drawRect</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#drawBorder">drawBorder</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#drawTurretTooltip">drawTurretTooltip</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#drawFighterTooltip">drawFighterTooltip</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#drawDebugSphere">drawDebugSphere</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#drawDebugBox">drawDebugBox</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#drawDebugLine">drawDebugLine</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#projectPoint">projectPoint</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#getResolution">getResolution</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#GetLocalizedString">GetLocalizedString</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#ColorHSV">ColorHSV</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#ColorARGB">ColorARGB</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#ColorRGB">ColorRGB</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#ColorInt">ColorInt</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#dot">dot</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#cross">cross</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#normalize">normalize</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#normalize_ip">normalize_ip</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#length">length</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#length2">length2</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#distance">distance</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#distance2">distance2</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#MatrixLookUp">MatrixLookUp</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#MatrixLookUpRight">MatrixLookUpRight</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#MatrixLookUpPosition">MatrixLookUpPosition</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#translate">translate</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#scale">scale</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#rotate">rotate</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#lookAt">lookAt</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#perspective">perspective</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#SeedStr">SeedStr</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#makeFastHash">makeFastHash</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#makeHash">makeHash</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#makeHash64">makeHash64</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#GenerateFighterTemplate">GenerateFighterTemplate</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#GenerateStationStyle">GenerateStationStyle</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#GenerateShipStyle">GenerateShipStyle</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#GeneratePlanFromStyle">GeneratePlanFromStyle</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#GeneratePlanFromFile">GeneratePlanFromFile</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#LoadPlanFromFile">LoadPlanFromFile</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#CorrectInefficiencies">CorrectInefficiencies</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#StationDescriptor">StationDescriptor</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#ShipDescriptor">ShipDescriptor</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#DroneDescriptor">DroneDescriptor</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#AsteroidDescriptor">AsteroidDescriptor</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#FighterDescriptor">FighterDescriptor</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#WreckageDescriptor">WreckageDescriptor</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#TurretDescriptor">TurretDescriptor</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#WormholeDescriptor">WormholeDescriptor</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#CargoLootDescriptor">CargoLootDescriptor</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#CrewLootDescriptor">CrewLootDescriptor</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#ColorLootDescriptor">ColorLootDescriptor</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#TurretLootDescriptor">TurretLootDescriptor</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#MoneyLootDescriptor">MoneyLootDescriptor</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#ResourceLootDescriptor">ResourceLootDescriptor</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#SystemUpgradeLootDescriptor">SystemUpgradeLootDescriptor</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#CreateTemplateFromTurret">CreateTemplateFromTurret</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#GenerateTurretTemplate">GenerateTurretTemplate</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#ColorPalette">ColorPalette</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#getSectorSeed">getSectorSeed</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#getGameSeed">getGameSeed</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#getParentEntity">getParentEntity</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#NumMaterials">NumMaterials</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#IsValidMaterial">IsValidMaterial</a>
+</td></tr>
+</table>
+</div>
+</div>
+<div class="floatanywhere">
+<div class="codecontainer">
+<p class="floatheadline">Enums<p>
+<table>
+<tr><td>
+<a class="keyword" href="Enums.html#SoundType">SoundType</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Enums.html#FontType">FontType</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Enums.html#Difficulty">Difficulty</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Enums.html#ChatMessageType">ChatMessageType</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Enums.html#ComponentType">ComponentType</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Enums.html#WeaponCategory">WeaponCategory</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Enums.html#RarityType">RarityType</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Enums.html#MoonType">MoonType</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Enums.html#PlanetType">PlanetType</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Enums.html#AlliancePrivilege">AlliancePrivilege</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Enums.html#BlockType">BlockType</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Enums.html#InventoryItemType">InventoryItemType</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Enums.html#WeaponType">WeaponType</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Enums.html#CrewProfessionType">CrewProfessionType</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Enums.html#DamageType">DamageType</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Enums.html#StatsBonuses">StatsBonuses</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Enums.html#EntityType">EntityType</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Enums.html#AIState">AIState</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Enums.html#MaterialType">MaterialType</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Enums.html#FighterOrders">FighterOrders</a>
+</td></tr>
+</table>
+</div>
+</div>
+<div class="floatanywhere">
+<div class="codecontainer">
+<p class="floatheadline">Callbacks<p>
+<table>
+<tr><td>
+<a class="keyword" href="Callbacks.html"></a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="ClientSector Callbacks.html">ClientSector </a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Entity Callbacks.html">Entity </a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Galaxy Callbacks.html">Galaxy </a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Player Callbacks.html">Player </a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Sector Callbacks.html">Sector </a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Server Callbacks.html">Server </a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Turret Callbacks.html">Turret </a>
+</td></tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sitemap">
+<div class="headerlisting">
+<span class="docheader">Overview</span>
+<br><a href="index.html">Home</a>
+<a href="Functions.html">Functions</a>
+</div><div class="headerlisting">
+<span class="docheader">Callbacks</span>
+<br><a href="Callbacks.html"> Callbacks</a>
+<a href="ClientSector Callbacks.html">ClientSector  Callbacks</a>
+<a href="Entity Callbacks.html">Entity  Callbacks</a>
+<a href="Galaxy Callbacks.html">Galaxy  Callbacks</a>
+<a href="Player Callbacks.html">Player  Callbacks</a>
+<a href="Sector Callbacks.html">Sector  Callbacks</a>
+<a href="Server Callbacks.html">Server  Callbacks</a>
+<a href="Turret Callbacks.html">Turret  Callbacks</a>
+</div><div class="headerlisting">
+<span class="docheader">Common Components</span>
+<br><a href="Hangar.html">Hangar</a>
+<a href="BspTree.html">BspTree</a>
+<a href="DeletionTimer.html">DeletionTimer</a>
+<a href="Engine.html">Engine</a>
+<a href="Weapons.html">Weapons</a>
+<a href="FighterAI.html">FighterAI</a>
+<a href="Physics.html">Physics</a>
+<a href="Plan.html">Plan</a>
+<a href="ShipAI.html">ShipAI</a>
+<a href="Velocity.html">Velocity</a>
+<a href="InteractionText.html">InteractionText</a>
+<a href="EnergySystem.html">EnergySystem</a>
+<a href="WormHole.html">WormHole</a>
+</div><div class="headerlisting">
+<span class="docheader">Common Objects</span>
+<br><a href="Tooltip.html">Tooltip</a>
+<a href="TooltipLine.html">TooltipLine</a>
+<a href="QuadTree.html">QuadTree</a>
+<a href="Uuid.html">Uuid</a>
+<a href="Timer.html">Timer</a>
+<a href="Profiler.html">Profiler</a>
+<a href="Ray.html">Ray</a>
+<a href="Color.html">Color</a>
+<a href="Box.html">Box</a>
+<a href="vec2.html">vec2</a>
+<a href="vec3.html">vec3</a>
+<a href="vec4.html">vec4</a>
+<a href="dvec2.html">dvec2</a>
+<a href="dvec3.html">dvec3</a>
+<a href="dvec4.html">dvec4</a>
+<a href="ivec2.html">ivec2</a>
+<a href="ivec3.html">ivec3</a>
+<a href="ivec4.html">ivec4</a>
+<a href="Rect.html">Rect</a>
+<a href="Matrix.html">Matrix</a>
+<a href="Sphere.html">Sphere</a>
+<a href="Seed.html">Seed</a>
+<a href="Random.html">Random</a>
+<a href="FighterTemplate.html">FighterTemplate</a>
+<a href="VanillaInventoryItem.html">VanillaInventoryItem</a>
+<a href="Rarity.html">Rarity</a>
+<a href="PlanetSpecifics.html">PlanetSpecifics</a>
+<a href="CraftStyle.html">CraftStyle</a>
+<a href="BlockPlanBlock.html">BlockPlanBlock</a>
+<a href="BlockPlan.html">BlockPlan</a>
+<a href="EntityDescriptor.html">EntityDescriptor</a>
+<a href="Language.html">Language</a>
+<a href="Inventory.html">Inventory</a>
+<a href="PlanBspTree.html">PlanBspTree</a>
+<a href="Weapon.html">Weapon</a>
+<a href="Crew.html">Crew</a>
+<a href="CrewProfession.html">CrewProfession</a>
+<a href="CrewMan.html">CrewMan</a>
+<a href="TurretTemplate.html">TurretTemplate</a>
+<a href="InventoryTurret.html">InventoryTurret</a>
+<a href="AllianceRank.html">AllianceRank</a>
+<a href="TradingGood.html">TradingGood</a>
+<a href="AllianceMember.html">AllianceMember</a>
+<a href="Entity.html">Entity</a>
+<a href="Mail.html">Mail</a>
+<a href="Material.html">Material</a>
+<a href="SystemUpgradeTemplate.html">SystemUpgradeTemplate</a>
+<a href="PlayerId.html">PlayerId</a>
+</div><div class="headerlisting">
+<span class="docheader">Client Components</span>
+<br><a href="EntityIcon.html">EntityIcon</a>
+<a href="EntityTooltip.html">EntityTooltip</a>
+<a href="ScriptUI.html">ScriptUI</a>
+</div><div class="headerlisting">
+<span class="docheader">Client Objects</span>
+<br><a href="InventorySelectionItem.html">InventorySelectionItem</a>
+<a href="TooltipRenderer.html">TooltipRenderer</a>
+<a href="InputWindow.html">InputWindow</a>
+<a href="PlanSelectionItem.html">PlanSelectionItem</a>
+<a href="SelectionItem.html">SelectionItem</a>
+<a href="InventoryReferenceSelectionItem.html">InventoryReferenceSelectionItem</a>
+<a href="Alliance [Client].html">Alliance [Client]</a>
+<a href="Planet.html">Planet</a>
+<a href="Sector [Client].html">Sector [Client]</a>
+<a href="Galaxy [Client].html">Galaxy [Client]</a>
+<a href="Achievements.html">Achievements</a>
+<a href="Player [Client].html">Player [Client]</a>
+<a href="GalaxyMap.html">GalaxyMap</a>
+<a href="Faction [Client].html">Faction [Client]</a>
+<a href="Mouse.html">Mouse</a>
+<a href="Keyboard.html">Keyboard</a>
+<a href="LaserFX.html">LaserFX</a>
+</div><div class="headerlisting">
+<span class="docheader">Client UI Objects</span>
+<br><a href="Line.html">Line</a>
+<a href="UIOrganizer.html">UIOrganizer</a>
+<a href="UIVerticalLister.html">UIVerticalLister</a>
+<a href="UIHorizontalSplitter.html">UIHorizontalSplitter</a>
+<a href="UIVerticalSplitter.html">UIVerticalSplitter</a>
+<a href="UIHorizontalMultiSplitter.html">UIHorizontalMultiSplitter</a>
+<a href="UIVerticalMultiSplitter.html">UIVerticalMultiSplitter</a>
+<a href="UIArbitraryVerticalSplitter.html">UIArbitraryVerticalSplitter</a>
+<a href="Tab.html">Tab</a>
+<a href="TabbedWindow.html">TabbedWindow</a>
+<a href="StatisticsBar.html">StatisticsBar</a>
+<a href="ComboBox.html">ComboBox</a>
+<a href="MultiLineTextBox.html">MultiLineTextBox</a>
+<a href="InventorySelection.html">InventorySelection</a>
+<a href="UIElement.html">UIElement</a>
+<a href="PlanDisplayer.html">PlanDisplayer</a>
+<a href="ListBoxEx.html">ListBoxEx</a>
+<a href="ListBox.html">ListBox</a>
+<a href="Window.html">Window</a>
+<a href="ScrollFrame.html">ScrollFrame</a>
+<a href="Slider.html">Slider</a>
+<a href="Frame.html">Frame</a>
+<a href="TextBox.html">TextBox</a>
+<a href="Selection.html">Selection</a>
+<a href="CheckBox.html">CheckBox</a>
+<a href="Label.html">Label</a>
+<a href="TextField.html">TextField</a>
+<a href="Button.html">Button</a>
+<a href="Picture.html">Picture</a>
+<a href="UIRenderer.html">UIRenderer</a>
+<a href="NumbersBar.html">NumbersBar</a>
+<a href="UIContainer.html">UIContainer</a>
+</div><div class="headerlisting">
+<span class="docheader">Server Components</span>
+<br><a href="WreckageCreator.html">WreckageCreator</a>
+<a href="EntityTransferrer.html">EntityTransferrer</a>
+<a href="FighterController.html">FighterController</a>
+<a href="Loot.html">Loot</a>
+</div><div class="headerlisting">
+<span class="docheader">Server Objects</span>
+<br><a href="Sector [Server].html">Sector [Server]</a>
+<a href="Server.html">Server</a>
+<a href="Galaxy [Server].html">Galaxy [Server]</a>
+<a href="Alliance [Server].html">Alliance [Server]</a>
+<a href="Faction [Server].html">Faction [Server]</a>
+<a href="Player [Server].html">Player [Server]</a>
+</div><div class="lastheaderlisting">
+<span class="docheader">Enums</span>
+<br><a href="Enums.html#SoundType">SoundType</a>
+<a href="Enums.html#FontType">FontType</a>
+<a href="Enums.html#Difficulty">Difficulty</a>
+<a href="Enums.html#ChatMessageType">ChatMessageType</a>
+<a href="Enums.html#ComponentType">ComponentType</a>
+<a href="Enums.html#WeaponCategory">WeaponCategory</a>
+<a href="Enums.html#RarityType">RarityType</a>
+<a href="Enums.html#MoonType">MoonType</a>
+<a href="Enums.html#PlanetType">PlanetType</a>
+<a href="Enums.html#AlliancePrivilege">AlliancePrivilege</a>
+<a href="Enums.html#BlockType">BlockType</a>
+<a href="Enums.html#InventoryItemType">InventoryItemType</a>
+<a href="Enums.html#WeaponType">WeaponType</a>
+<a href="Enums.html#CrewProfessionType">CrewProfessionType</a>
+<a href="Enums.html#DamageType">DamageType</a>
+<a href="Enums.html#StatsBonuses">StatsBonuses</a>
+<a href="Enums.html#EntityType">EntityType</a>
+<a href="Enums.html#AIState">AIState</a>
+<a href="Enums.html#MaterialType">MaterialType</a>
+<a href="Enums.html#FighterOrders">FighterOrders</a>
+</div></div>
+<div class="footer">
+<p align="center">Work in Progress.</p>
+<p align="center">Copyright &copy; 2017 Konstantin Kronfeldner, Boxelware. All rights reserved.</p>
+</div>
+</div>
+</body>
+</html>

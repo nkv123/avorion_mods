@@ -1,0 +1,2249 @@
+<html>
+<head>
+<title> Functions</title>
+<link rel="stylesheet" href="stylesheet.css"/>
+</head>
+<body>
+<div class="maincentered">
+<div class="maincontent">
+<h1 class="documentationheader">Avorion Script API Documentation</h1>
+<div class="sitemap">
+<div class="headerlisting">
+<a href="index.html">Home</a>
+<a href="Functions.html">Functions</a>
+</div></div>
+<div class="floatleft">
+<div class="codecontainer">
+<table>
+<tr><td><p class="floatheadline">Functions</p></td></tr>
+<tr><td>
+<a href="#onServer">onServer</a>
+</td></tr>
+<tr><td>
+<a href="#onClient">onClient</a>
+</td></tr>
+<tr><td>
+<a href="#invokeClientFunction">invokeClientFunction</a>
+</td></tr>
+<tr><td>
+<a href="#broadcastInvokeClientFunction">broadcastInvokeClientFunction</a>
+</td></tr>
+<tr><td>
+<a href="#async">async</a>
+</td></tr>
+<tr><td>
+<a href="#getWorkshopShips">getWorkshopShips</a>
+</td></tr>
+<tr><td>
+<a href="#getSavedShips">getSavedShips</a>
+</td></tr>
+<tr><td>
+<a href="#playSound">playSound</a>
+</td></tr>
+<tr><td>
+<a href="#play3DSound">play3DSound</a>
+</td></tr>
+<tr><td>
+<a href="#displayMissionAccomplishedText">displayMissionAccomplishedText</a>
+</td></tr>
+<tr><td>
+<a href="#registerBoss">registerBoss</a>
+</td></tr>
+<tr><td>
+<a href="#unregisterBoss">unregisterBoss</a>
+</td></tr>
+<tr><td>
+<a href="#setBossHealth">setBossHealth</a>
+</td></tr>
+<tr><td>
+<a href="#setBossHealthColor">setBossHealthColor</a>
+</td></tr>
+<tr><td>
+<a href="#displayChatMessage">displayChatMessage</a>
+</td></tr>
+<tr><td>
+<a href="#invokeServerFunction">invokeServerFunction</a>
+</td></tr>
+<tr><td>
+<a href="#onServer">onServer</a>
+</td></tr>
+<tr><td>
+<a href="#onClient">onClient</a>
+</td></tr>
+<tr><td>
+<a href="#async">async</a>
+</td></tr>
+<tr><td>
+<a href="#copy">copy</a>
+</td></tr>
+<tr><td>
+<a href="#valid">valid</a>
+</td></tr>
+<tr><td>
+<a href="#terminate">terminate</a>
+</td></tr>
+<tr><td>
+<a href="#getReadableValue">getReadableValue</a>
+</td></tr>
+<tr><td>
+<a href="#deferredCallback">deferredCallback</a>
+</td></tr>
+<tr><td>
+<a href="#systemTimeMs">systemTimeMs</a>
+</td></tr>
+<tr><td>
+<a href="#systemTime">systemTime</a>
+</td></tr>
+<tr><td>
+<a href="#appTimeMs">appTimeMs</a>
+</td></tr>
+<tr><td>
+<a href="#appTime">appTime</a>
+</td></tr>
+<tr><td>
+<a href="#getGlobal">getGlobal</a>
+</td></tr>
+<tr><td>
+<a href="#setGlobal">setGlobal</a>
+</td></tr>
+<tr><td>
+<a href="#print">print</a>
+</td></tr>
+<tr><td>
+<a href="#printlog">printlog</a>
+</td></tr>
+<tr><td>
+<a href="#writeTrace">writeTrace</a>
+</td></tr>
+<tr><td>
+<a href="#createMonetaryString">createMonetaryString</a>
+</td></tr>
+<tr><td>
+<a href="#async">async</a>
+</td></tr>
+<tr><td>
+<a href="#getParentFaction">getParentFaction</a>
+</td></tr>
+<tr><td>
+<a href="#getPlayerCraft">getPlayerCraft</a>
+</td></tr>
+<tr><td>
+<a href="#getParentFaction">getParentFaction</a>
+</td></tr>
+<tr><td>
+<a href="#drawText">drawText</a>
+</td></tr>
+<tr><td>
+<a href="#drawTextRect">drawTextRect</a>
+</td></tr>
+<tr><td>
+<a href="#drawRect">drawRect</a>
+</td></tr>
+<tr><td>
+<a href="#drawBorder">drawBorder</a>
+</td></tr>
+<tr><td>
+<a href="#drawTurretTooltip">drawTurretTooltip</a>
+</td></tr>
+<tr><td>
+<a href="#drawFighterTooltip">drawFighterTooltip</a>
+</td></tr>
+<tr><td>
+<a href="#drawDebugSphere">drawDebugSphere</a>
+</td></tr>
+<tr><td>
+<a href="#drawDebugBox">drawDebugBox</a>
+</td></tr>
+<tr><td>
+<a href="#drawDebugLine">drawDebugLine</a>
+</td></tr>
+<tr><td>
+<a href="#projectPoint">projectPoint</a>
+</td></tr>
+<tr><td>
+<a href="#getResolution">getResolution</a>
+</td></tr>
+<tr><td>
+<a href="#GetLocalizedString">GetLocalizedString</a>
+</td></tr>
+<tr><td>
+<a href="#ColorHSV">ColorHSV</a>
+</td></tr>
+<tr><td>
+<a href="#ColorARGB">ColorARGB</a>
+</td></tr>
+<tr><td>
+<a href="#ColorRGB">ColorRGB</a>
+</td></tr>
+<tr><td>
+<a href="#ColorInt">ColorInt</a>
+</td></tr>
+<tr><td>
+<a href="#dot">dot</a>
+</td></tr>
+<tr><td>
+<a href="#cross">cross</a>
+</td></tr>
+<tr><td>
+<a href="#normalize">normalize</a>
+</td></tr>
+<tr><td>
+<a href="#normalize_ip">normalize_ip</a>
+</td></tr>
+<tr><td>
+<a href="#length">length</a>
+</td></tr>
+<tr><td>
+<a href="#length2">length2</a>
+</td></tr>
+<tr><td>
+<a href="#distance">distance</a>
+</td></tr>
+<tr><td>
+<a href="#distance2">distance2</a>
+</td></tr>
+<tr><td>
+<a href="#MatrixLookUp">MatrixLookUp</a>
+</td></tr>
+<tr><td>
+<a href="#MatrixLookUpRight">MatrixLookUpRight</a>
+</td></tr>
+<tr><td>
+<a href="#MatrixLookUpPosition">MatrixLookUpPosition</a>
+</td></tr>
+<tr><td>
+<a href="#translate">translate</a>
+</td></tr>
+<tr><td>
+<a href="#scale">scale</a>
+</td></tr>
+<tr><td>
+<a href="#rotate">rotate</a>
+</td></tr>
+<tr><td>
+<a href="#lookAt">lookAt</a>
+</td></tr>
+<tr><td>
+<a href="#perspective">perspective</a>
+</td></tr>
+<tr><td>
+<a href="#SeedStr">SeedStr</a>
+</td></tr>
+<tr><td>
+<a href="#makeFastHash">makeFastHash</a>
+</td></tr>
+<tr><td>
+<a href="#makeHash">makeHash</a>
+</td></tr>
+<tr><td>
+<a href="#makeHash64">makeHash64</a>
+</td></tr>
+<tr><td>
+<a href="#GenerateFighterTemplate">GenerateFighterTemplate</a>
+</td></tr>
+<tr><td>
+<a href="#GenerateStationStyle">GenerateStationStyle</a>
+</td></tr>
+<tr><td>
+<a href="#GenerateShipStyle">GenerateShipStyle</a>
+</td></tr>
+<tr><td>
+<a href="#GeneratePlanFromStyle">GeneratePlanFromStyle</a>
+</td></tr>
+<tr><td>
+<a href="#GeneratePlanFromFile">GeneratePlanFromFile</a>
+</td></tr>
+<tr><td>
+<a href="#LoadPlanFromFile">LoadPlanFromFile</a>
+</td></tr>
+<tr><td>
+<a href="#CorrectInefficiencies">CorrectInefficiencies</a>
+</td></tr>
+<tr><td>
+<a href="#StationDescriptor">StationDescriptor</a>
+</td></tr>
+<tr><td>
+<a href="#ShipDescriptor">ShipDescriptor</a>
+</td></tr>
+<tr><td>
+<a href="#DroneDescriptor">DroneDescriptor</a>
+</td></tr>
+<tr><td>
+<a href="#AsteroidDescriptor">AsteroidDescriptor</a>
+</td></tr>
+<tr><td>
+<a href="#FighterDescriptor">FighterDescriptor</a>
+</td></tr>
+<tr><td>
+<a href="#WreckageDescriptor">WreckageDescriptor</a>
+</td></tr>
+<tr><td>
+<a href="#TurretDescriptor">TurretDescriptor</a>
+</td></tr>
+<tr><td>
+<a href="#WormholeDescriptor">WormholeDescriptor</a>
+</td></tr>
+<tr><td>
+<a href="#CargoLootDescriptor">CargoLootDescriptor</a>
+</td></tr>
+<tr><td>
+<a href="#CrewLootDescriptor">CrewLootDescriptor</a>
+</td></tr>
+<tr><td>
+<a href="#ColorLootDescriptor">ColorLootDescriptor</a>
+</td></tr>
+<tr><td>
+<a href="#TurretLootDescriptor">TurretLootDescriptor</a>
+</td></tr>
+<tr><td>
+<a href="#MoneyLootDescriptor">MoneyLootDescriptor</a>
+</td></tr>
+<tr><td>
+<a href="#ResourceLootDescriptor">ResourceLootDescriptor</a>
+</td></tr>
+<tr><td>
+<a href="#SystemUpgradeLootDescriptor">SystemUpgradeLootDescriptor</a>
+</td></tr>
+<tr><td>
+<a href="#CreateTemplateFromTurret">CreateTemplateFromTurret</a>
+</td></tr>
+<tr><td>
+<a href="#GenerateTurretTemplate">GenerateTurretTemplate</a>
+</td></tr>
+<tr><td>
+<a href="#ColorPalette">ColorPalette</a>
+</td></tr>
+<tr><td>
+<a href="#getSectorSeed">getSectorSeed</a>
+</td></tr>
+<tr><td>
+<a href="#getGameSeed">getGameSeed</a>
+</td></tr>
+<tr><td>
+<a href="#getParentEntity">getParentEntity</a>
+</td></tr>
+<tr><td>
+<a href="#NumMaterials">NumMaterials</a>
+</td></tr>
+<tr><td>
+<a href="#IsValidMaterial">IsValidMaterial</a>
+</td></tr>
+</table>
+</div>
+</div>
+<div class="floatright">
+<h1>Global Functions</h1>
+<div id="onServer", class="codecontainer">
+<div id="onServer", class="function">
+<p>
+<span class="keyword">function bool</span> onServer() <br/>
+</p>
+</div>
+<div id="onServer", class="">
+<p>
+<span class="warning">This function is only available on the server.</span>
+</p>
+</p>
+</div>
+</div>
+<div id="onClient", class="codecontainer">
+<div id="onClient", class="function">
+<p>
+<span class="keyword">function bool</span> onClient() <br/>
+</p>
+</div>
+<div id="onClient", class="">
+<p>
+<span class="warning">This function is only available on the server.</span>
+</p>
+</p>
+</div>
+</div>
+<div id="invokeClientFunction", class="codecontainer">
+<div id="invokeClientFunction", class="function">
+<p>
+<span class="keyword">function </span> invokeClientFunction(<span class="type">Player</span> <span class="parameter">playerIndex</span>, <span class="type">string</span> <span class="parameter">functionName</span>, <span class="type">var...</span> <span class="parameter">arguments</span>) <br/>
+</p>
+</div>
+<div id="invokeClientFunction", class="">
+<p>
+Invokes a function on a remote client, in the client instance of the caller script. Example usage would be a server Resource Trader calling the setData() function of its client instance. Return values of the remotely executed functions cannot be retrieved. <br/><br/><span class="warning">This function is only available on the server.</span>
+</p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">playerIndex</span>
+The player index of the client the function should be invoked on <br/>
+<span class="parameter">functionName</span>
+The name of the scripting function that is to be executed <br/>
+<span class="parameter">arguments</span>
+An arbitrary number of arguments that will be given to the remote function <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="broadcastInvokeClientFunction", class="codecontainer">
+<div id="broadcastInvokeClientFunction", class="function">
+<p>
+<span class="keyword">function </span> broadcastInvokeClientFunction(<span class="type">string</span> <span class="parameter">functionName</span>, <span class="type">var...</span> <span class="parameter">arguments</span>) <br/>
+</p>
+</div>
+<div id="broadcastInvokeClientFunction", class="">
+<p>
+Invokes a function on *all* remote clients, in the client instances of the caller script. Return values of the remotely executed functions cannot be retrieved. <br/><br/><span class="warning">This function is only available on the server.</span>
+</p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">functionName</span>
+The name of the scripting function that is to be executed <br/>
+<span class="parameter">arguments</span>
+An arbitrary number of arguments that will be given to the remote function <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="async", class="codecontainer">
+<div id="async", class="function">
+<p>
+<span class="keyword">function </span> async(<span class="type">string</span> <span class="parameter">callbackFunction</span>, <span class="type">string</span> <span class="parameter">code</span>, <span class="type">var...</span> <span class="parameter">arguments</span>) <br/>
+</p>
+</div>
+<div id="async", class="">
+<p>
+Starts an async call that will be executed in a separate thread. Once finished, the given callback function will be called with the values returned by the run() function, which is required to be in the code to run. During the running of this function, only server, galaxy, players and factions can be accessed, other objects like sector and entities can't be accessed. The amount of threads in the thread pool responsible for running these async calls can be configured in the server.ini file. <br/><br/><span class="warning">This function is only available on the server.</span>
+</p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">callbackFunction</span>
+The function in the current script that will be called once the asynchronous execution is finished <br/>
+<span class="parameter">code</span>
+The code that will be executed. Has to contain a function run(...). The run() function will be given the arguments that are passed after this parameter. <br/>
+<span class="parameter">arguments</span>
+The arguments that will be passed to the run() function. <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="getWorkshopShips", class="codecontainer">
+<div id="getWorkshopShips", class="function">
+<p>
+<span class="keyword">function string...</span> getWorkshopShips() <br/>
+</p>
+</div>
+<div id="getWorkshopShips", class="">
+<p>
+<span class="warning">This function is only available on the client.</span>
+</p>
+</p>
+</div>
+</div>
+<div id="getSavedShips", class="codecontainer">
+<div id="getSavedShips", class="function">
+<p>
+<span class="keyword">function string...</span> getSavedShips() <br/>
+</p>
+</div>
+<div id="getSavedShips", class="">
+<p>
+<span class="warning">This function is only available on the client.</span>
+</p>
+</p>
+</div>
+</div>
+<div id="playSound", class="codecontainer">
+<div id="playSound", class="function">
+<p>
+<span class="keyword">function </span> playSound(<span class="type">string</span> <span class="parameter">soundName</span>, <span class="type">int</span> <span class="parameter">type</span>, <span class="type">float</span> <span class="parameter">volume</span>) <br/>
+</p>
+</div>
+<div id="playSound", class="">
+<p>
+<span class="warning">This function is only available on the client.</span>
+</p>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="play3DSound", class="codecontainer">
+<div id="play3DSound", class="function">
+<p>
+<span class="keyword">function </span> play3DSound(<span class="type">string</span> <span class="parameter">soundName</span>, <span class="type">int</span> <span class="parameter">type</span>, <span class="type">vec3</span> <span class="parameter">position</span>, <span class="type">float</span> <span class="parameter">radius</span>, <span class="type">float</span> <span class="parameter">volume</span>, <span class="type">Entity [or nil]</span> <span class="parameter">entity</span>) <br/>
+</p>
+</div>
+<div id="play3DSound", class="">
+<p>
+<span class="warning">This function is only available on the client.</span>
+</p>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="displayMissionAccomplishedText", class="codecontainer">
+<div id="displayMissionAccomplishedText", class="function">
+<p>
+<span class="keyword">function </span> displayMissionAccomplishedText(<span class="type">string</span> <span class="parameter">bigText</span>, <span class="type">string</span> <span class="parameter">smallText</span>) <br/>
+</p>
+</div>
+<div id="displayMissionAccomplishedText", class="">
+<p>
+<span class="warning">This function is only available on the client.</span>
+</p>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="registerBoss", class="codecontainer">
+<div id="registerBoss", class="function">
+<p>
+<span class="keyword">function </span> registerBoss(<span class="type">Uuid</span> <span class="parameter">entityId</span>, <span class="type">var</span> <span class="parameter">healthColor</span>, <span class="type">var</span> <span class="parameter">shieldColor</span>) <br/>
+</p>
+</div>
+<div id="registerBoss", class="">
+<p>
+<span class="warning">This function is only available on the client.</span>
+</p>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="unregisterBoss", class="codecontainer">
+<div id="unregisterBoss", class="function">
+<p>
+<span class="keyword">function </span> unregisterBoss(<span class="type">Uuid</span> <span class="parameter">entityId</span>) <br/>
+</p>
+</div>
+<div id="unregisterBoss", class="">
+<p>
+<span class="warning">This function is only available on the client.</span>
+</p>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="setBossHealth", class="codecontainer">
+<div id="setBossHealth", class="function">
+<p>
+<span class="keyword">function </span> setBossHealth(<span class="type">Uuid</span> <span class="parameter">id</span>, <span class="type">var</span> <span class="parameter">health</span>, <span class="type">var</span> <span class="parameter">maxHealth</span>, <span class="type">var</span> <span class="parameter">shield</span>, <span class="type">var</span> <span class="parameter">maxShield</span>) <br/>
+</p>
+</div>
+<div id="setBossHealth", class="">
+<p>
+<span class="warning">This function is only available on the client.</span>
+</p>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="setBossHealthColor", class="codecontainer">
+<div id="setBossHealthColor", class="function">
+<p>
+<span class="keyword">function </span> setBossHealthColor(<span class="type">Uuid</span> <span class="parameter">id</span>, <span class="type">var</span> <span class="parameter">health</span>, <span class="type">var</span> <span class="parameter">shield</span>) <br/>
+</p>
+</div>
+<div id="setBossHealthColor", class="">
+<p>
+<span class="warning">This function is only available on the client.</span>
+</p>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="displayChatMessage", class="codecontainer">
+<div id="displayChatMessage", class="function">
+<p>
+<span class="keyword">function </span> displayChatMessage(<span class="type">string</span> <span class="parameter">message</span>, <span class="type">string</span> <span class="parameter">sender</span>, <span class="type">int</span> <span class="parameter">type</span>) <br/>
+</p>
+</div>
+<div id="displayChatMessage", class="">
+<p>
+This function displays a chat message on the Chat window of the client. <br/><br/><span class="warning">This function is only available on the client.</span>
+</p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">message</span>
+The message that will be displayed in the chat window <br/>
+<span class="parameter">sender</span>
+The sender that will be displayed for the chat message <br/>
+<span class="parameter">type</span>
+The type of chat message, 0 = Normal, 1 = Error, 2 = Warning, 3 = Info <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="invokeServerFunction", class="codecontainer">
+<div id="invokeServerFunction", class="function">
+<p>
+<span class="keyword">function </span> invokeServerFunction(<span class="type">string</span> <span class="parameter">functionName</span>, <span class="type">var...</span> <span class="parameter">arguments</span>) <br/>
+</p>
+</div>
+<div id="invokeServerFunction", class="">
+<p>
+Invokes a function on the remote server, in the server instance of the caller script. Example usage would be a server Resource Trader calling the getData() function of its server instance. Return values of the remotely executed functions are not retrieved. On the server side, a variable called "callingPlayer" will be created or set before executing the called function. callingPlayer contains the index of the calling player. Use this variable to verify that the calling player is actually the player you'd expect. After the call finishes on the server, callingPlayer is set to nil. <br/><br/><span class="warning">This function is only available on the client.</span>
+</p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">functionName</span>
+The name of the scripting function that is to be executed <br/>
+<span class="parameter">arguments</span>
+An arbitrary number of arguments that will be given to the remote function <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="onServer", class="codecontainer">
+<div id="onServer", class="function">
+<p>
+<span class="keyword">function bool</span> onServer() <br/>
+</p>
+</div>
+<div id="onServer", class="">
+<p>
+A function to find out in a script, whether it's currently executed on the server. <br/><br/><span class="warning">This function is only available on the client.</span>
+</p>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+true when called on the server, false otherwise 
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="onClient", class="codecontainer">
+<div id="onClient", class="function">
+<p>
+<span class="keyword">function bool</span> onClient() <br/>
+</p>
+</div>
+<div id="onClient", class="">
+<p>
+A function to find out in a script, whether it's currently executed on the client. <br/><br/><span class="warning">This function is only available on the client.</span>
+</p>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+true when called on the client, false otherwise 
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="async", class="codecontainer">
+<div id="async", class="function">
+<p>
+<span class="keyword">function </span> async(<span class="type">string</span> <span class="parameter">callbackFunction</span>, <span class="type">string</span> <span class="parameter">code</span>, <span class="type">var...</span> <span class="parameter">arguments</span>) <br/>
+</p>
+</div>
+<div id="async", class="">
+<p>
+Starts an async call that will be executed in a separate thread. Once finished, the given callback function will be called with the values returned by the run() function, which is required to be in the code to run. During the running of this function, only players and factions can be accessed, other objects like sector and entities can't be accessed. <br/><br/><span class="warning">This function is only available on the client.</span>
+</p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">callbackFunction</span>
+The function in the current script that will be called once the asynchronous execution is finished <br/>
+<span class="parameter">code</span>
+The code that will be executed. Has to contain a function run(...). The run() function will be given the arguments that are passed after this parameter. <br/>
+<span class="parameter">arguments</span>
+The arguments that will be passed to the run() function. <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="copy", class="codecontainer">
+<div id="copy", class="function">
+<p>
+<span class="keyword">function UserObject</span> copy(<span class="type">var</span> <span class="parameter">value</span>) <br/>
+</p>
+</div>
+<div id="copy", class="">
+<p>
+Copies the given Object 
+</p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">value</span>
+A non-POD, non-table object <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+A true copy of the given object 
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="valid", class="codecontainer">
+<div id="valid", class="function">
+<p>
+<span class="keyword">function bool</span> valid(<span class="type">var</span> <span class="parameter">value</span>) <br/>
+</p>
+</div>
+<div id="valid", class="">
+<p>
+Checks if the given object is valid. Some objects can become invalid, for example when an entity is deleted the instances of the Entity in the scripts will become invalid. 
+</p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">value</span>
+A non-POD, non-table object <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+A boolean indicating whether the object is valid. Returns false when given nil. 
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="terminate", class="codecontainer">
+<div id="terminate", class="function">
+<p>
+<span class="keyword">function </span> terminate() <br/>
+</p>
+</div>
+<div id="terminate", class="">
+<p>
+Terminates the script. This function returns normally and the current function will run until finished, but no more following calls will be made to the script. The script will be removed from the entity on the next occasion. 
+</p>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="getReadableValue", class="codecontainer">
+<div id="getReadableValue", class="function">
+<p>
+<span class="keyword">function double, string</span> getReadableValue(<span class="type">double</span> <span class="parameter">number</span>) <br/>
+</p>
+</div>
+<div id="getReadableValue", class="">
+<p>
+Rounds a large number and adds a suffix such as k or M. For example, 10.000 will become 10k. 
+</p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">number</span>
+The number to make readable <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+A string containing the rounded number and the suffix 
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="deferredCallback", class="codecontainer">
+<div id="deferredCallback", class="function">
+<p>
+<span class="keyword">function bool</span> deferredCallback(<span class="type">double</span> <span class="parameter">time</span>, <span class="type">string</span> <span class="parameter">function</span>, <span class="type">var...</span> <span class="parameter">args</span>) <br/>
+</p>
+</div>
+<div id="deferredCallback", class="">
+<p>
+Registers a deferred callback in the script. The given function will be executed after the given time. Depending on the tick rate of the simulation, the callback might get called slightly later than the given time. The callback will never happen before the given time hasn't passed. 
+</p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">time</span>
+The time to wait until the callback will be executed <br/>
+<span class="parameter">function</span>
+The function that is to be executed once the time has passed as a string <br/>
+<span class="parameter">args...</span>
+Arguments that will be passed to the callback function <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+true if the callback was registered, false otherwise 
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="systemTimeMs", class="codecontainer">
+<div id="systemTimeMs", class="function">
+<p>
+<span class="keyword">function double</span> systemTimeMs() <br/>
+</p>
+</div>
+<div id="systemTimeMs", class="">
+<p>
+Returns the system time in milliseconds. Since lua doesn't support clocks that are accurate down to milliseconds. 
+</p>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+The system time in milliseconds 
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="systemTime", class="codecontainer">
+<div id="systemTime", class="function">
+<p>
+<span class="keyword">function double</span> systemTime() <br/>
+</p>
+</div>
+<div id="systemTime", class="">
+<p>
+Returns the system time in seconds. Since lua doesn't support clocks that are accurate down to milliseconds. 
+</p>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+The system time in seconds 
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="appTimeMs", class="codecontainer">
+<div id="appTimeMs", class="function">
+<p>
+<span class="keyword">function double</span> appTimeMs() <br/>
+</p>
+</div>
+<div id="appTimeMs", class="">
+<p>
+Returns the system time in milliseconds. Since lua doesn't support clocks that are accurate down to milliseconds. 
+</p>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+The system time in milliseconds 
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="appTime", class="codecontainer">
+<div id="appTime", class="function">
+<p>
+<span class="keyword">function double</span> appTime() <br/>
+</p>
+</div>
+<div id="appTime", class="">
+<p>
+Returns the system time in seconds. Since lua doesn't support clocks that are accurate down to milliseconds. 
+</p>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+The system time in seconds 
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="getGlobal", class="codecontainer">
+<div id="getGlobal", class="function">
+<p>
+<span class="keyword">function var</span> getGlobal(<span class="type">string</span> <span class="parameter">name</span>) <br/>
+</p>
+</div>
+<div id="getGlobal", class="">
+<p>
+Retrieves a global variable. These variables are shared over the entire process. 
+</p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">name</span>
+The name of the global variable <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+The queried variable, or nil if non-existant 
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="setGlobal", class="codecontainer">
+<div id="setGlobal", class="function">
+<p>
+<span class="keyword">function </span> setGlobal(<span class="type">string</span> <span class="parameter">name</span>, <span class="type">var</span> <span class="parameter">value</span>) <br/>
+</p>
+</div>
+<div id="setGlobal", class="">
+<p>
+Sets a global variable. These variables are shared over the entire process. 
+</p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">name</span>
+The name of the global variable <br/>
+<span class="parameter">value</span>
+The value of the global variable. POD datatypes only. Nil deletes the variable. <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="print", class="codecontainer">
+<div id="print", class="function">
+<p>
+<span class="keyword">function </span> print(<span class="type">var...</span> <span class="parameter">args</span>) <br/>
+</p>
+</div>
+<div id="print", class="">
+<p>
+Prints to the console. In the ingame console, server output will be printed in cyan, client output will be printed in white. 
+</p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">args</span>
+Any number of arguments. The first value can be a format string. If no formatting can be done then the function falls back to printing all given values. <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="printlog", class="codecontainer">
+<div id="printlog", class="function">
+<p>
+<span class="keyword">function </span> printlog(<span class="type">var...</span> <span class="parameter">args</span>) <br/>
+</p>
+</div>
+<div id="printlog", class="">
+<p>
+Similar to print, but prints to the log file. 
+</p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">args</span>
+Any number of arguments. The first value can be a format string. If no formatting can be done then the function falls back to printing all given values. <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="writeTrace", class="codecontainer">
+<div id="writeTrace", class="function">
+<p>
+<span class="keyword">function </span> writeTrace(<span class="type">var...</span> <span class="parameter">args</span>) <br/>
+</p>
+</div>
+<div id="writeTrace", class="">
+<p>
+Similar to print, but prints to the user trace stream. This trace stream can be enabled by passing "-t user" to the command line arguments of client or server. 
+</p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">args</span>
+Any number of arguments. The first value can be a format string. If no formatting can be done then the function falls back to printing all given values. <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="createMonetaryString", class="codecontainer">
+<div id="createMonetaryString", class="function">
+<p>
+<span class="keyword">function string</span> createMonetaryString(<span class="type">int</span> <span class="parameter">number</span>) <br/>
+</p>
+</div>
+<div id="createMonetaryString", class="">
+<p>
+Inserts dots into a large number to create an easily human readable money string. Example: 10000000 will become 10.000.000 
+</p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">number</span>
+The large number <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+A string containing the readable number 
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="async", class="codecontainer">
+<div id="async", class="function">
+<p>
+<span class="keyword">function </span> async(<span class="type">string</span> <span class="parameter">callbackFunction</span>, <span class="type">string</span> <span class="parameter">code</span>, <span class="type">var...</span> <span class="parameter">arguments</span>) <br/>
+</p>
+</div>
+<div id="async", class="">
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="getParentFaction", class="codecontainer">
+<div id="getParentFaction", class="function">
+<p>
+<span class="keyword">function Faction</span> getParentFaction() <br/>
+</p>
+</div>
+<div id="getParentFaction", class="">
+<p>
+<span class="warning">This function is only available on the server.</span>
+</p>
+</p>
+</div>
+</div>
+<div id="getPlayerCraft", class="codecontainer">
+<div id="getPlayerCraft", class="function">
+<p>
+<span class="keyword">function Entity</span> getPlayerCraft() <br/>
+</p>
+</div>
+<div id="getPlayerCraft", class="">
+<p>
+<span class="warning">This function is only available on the client.</span>
+</p>
+</p>
+</div>
+</div>
+<div id="getParentFaction", class="codecontainer">
+<div id="getParentFaction", class="function">
+<p>
+<span class="keyword">function Faction</span> getParentFaction() <br/>
+</p>
+</div>
+<div id="getParentFaction", class="">
+<p>
+<span class="warning">This function is only available on the client.</span>
+</p>
+</p>
+</div>
+</div>
+<div id="drawText", class="codecontainer">
+<div id="drawText", class="function">
+<p>
+<span class="keyword">function </span> drawText(<span class="type">string</span> <span class="parameter">text</span>, <span class="type">int</span> <span class="parameter">px</span>, <span class="type">int</span> <span class="parameter">py</span>, <span class="type">Color</span> <span class="parameter">color</span>, <span class="type">int</span> <span class="parameter">size</span>, <span class="type">int</span> <span class="parameter">bold</span>, <span class="type">int</span> <span class="parameter">italic</span>, <span class="type">int</span> <span class="parameter">style</span>) <br/>
+</p>
+</div>
+<div id="drawText", class="">
+<p>
+Draw text. This function should only be called in valid rendering steps. This function is expensive, don't overuse it. <br/><br/><span class="warning">This function is only available on the client.</span>
+</p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">text</span>
+The text that is to be rendered <br/>
+<span class="parameter">px</span>
+The x value in pixels of the position, ie. upper left <br/>
+<span class="parameter">py</span>
+The y value in pixels of the position, ie. upper left <br/>
+<span class="parameter">color</span>
+The color of the text <br/>
+<span class="parameter">size</span>
+The font size of the rendered text <br/>
+<span class="parameter">bold</span>
+Use 1 if the text should be bold, 0 otherwise <br/>
+<span class="parameter">italic</span>
+Use 1 if the text should be italic, 0 otherwise <br/>
+<span class="parameter">style</span>
+The style of the text, 0 is default style, 1 is shadowed, 2 is outlined <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="drawTextRect", class="codecontainer">
+<div id="drawTextRect", class="function">
+<p>
+<span class="keyword">function </span> drawTextRect(<span class="type">string</span> <span class="parameter">text</span>, <span class="type">Rect</span> <span class="parameter">rect</span>, <span class="type">int</span> <span class="parameter">horizontalAlignment</span>, <span class="type">int</span> <span class="parameter">verticalAlignment</span>, <span class="type">Color</span> <span class="parameter">color</span>, <span class="type">int</span> <span class="parameter">size</span>, <span class="type">int</span> <span class="parameter">bold</span>, <span class="type">int</span> <span class="parameter">italic</span>, <span class="type">int</span> <span class="parameter">style</span>) <br/>
+</p>
+</div>
+<div id="drawTextRect", class="">
+<p>
+Draw text inside a rect. This function should only be called in valid rendering steps. This function is expensive, don't overuse it. <br/><br/><span class="warning">This function is only available on the client.</span>
+</p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">text</span>
+The text that is to be rendered <br/>
+<span class="parameter">rect</span>
+The rect that functions as boundaries for the text <br/>
+<span class="parameter">horizontalAlignment</span>
+-1 to position the text at the left, 0 to center it horizontally, +1 to position the text at the right <br/>
+<span class="parameter">verticalAlignment</span>
+-1 to position the text at the top, 0 to center it vertically, +1 to position the text at the bottom <br/>
+<span class="parameter">color</span>
+The color of the text, as an int <br/>
+<span class="parameter">size</span>
+The font size of the rendered text <br/>
+<span class="parameter">bold</span>
+Use 1 if the text should be bold, 0 otherwise <br/>
+<span class="parameter">italic</span>
+Use 1 if the text should be italic, 0 otherwise <br/>
+<span class="parameter">style</span>
+The style of the text, 0 is default style, 1 is shadowed, 2 is outlined <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="drawRect", class="codecontainer">
+<div id="drawRect", class="function">
+<p>
+<span class="keyword">function </span> drawRect(<span class="type">Rect</span> <span class="parameter">rect</span>, <span class="type">Color</span> <span class="parameter">color</span>) <br/>
+</p>
+</div>
+<div id="drawRect", class="">
+<p>
+Draw a rect. This function should only be called in valid rendering steps. This function is expensive, don't overuse it. <br/><br/><span class="warning">This function is only available on the client.</span>
+</p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">rect</span>
+The rect that is to be drawn <br/>
+<span class="parameter">color</span>
+The color of the rect <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="drawBorder", class="codecontainer">
+<div id="drawBorder", class="function">
+<p>
+<span class="keyword">function </span> drawBorder(<span class="type">Rect</span> <span class="parameter">rect</span>, <span class="type">Color</span> <span class="parameter">color</span>) <br/>
+</p>
+</div>
+<div id="drawBorder", class="">
+<p>
+Draw a border. This function should only be called in valid rendering steps. This function is expensive, don't overuse it. <br/><br/><span class="warning">This function is only available on the client.</span>
+</p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">rect</span>
+The rect that is to be drawn <br/>
+<span class="parameter">color</span>
+The color of the rect <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="drawTurretTooltip", class="codecontainer">
+<div id="drawTurretTooltip", class="function">
+<p>
+<span class="keyword">function </span> drawTurretTooltip(<span class="type">TurretTemplate</span> <span class="parameter">turret</span>) <br/>
+</p>
+</div>
+<div id="drawTurretTooltip", class="">
+<p>
+<span class="warning">This function is only available on the client.</span>
+</p>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="drawFighterTooltip", class="codecontainer">
+<div id="drawFighterTooltip", class="function">
+<p>
+<span class="keyword">function </span> drawFighterTooltip(<span class="type">FighterTemplate</span> <span class="parameter">fighter</span>) <br/>
+</p>
+</div>
+<div id="drawFighterTooltip", class="">
+<p>
+<span class="warning">This function is only available on the client.</span>
+</p>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="drawDebugSphere", class="codecontainer">
+<div id="drawDebugSphere", class="function">
+<p>
+<span class="keyword">function </span> drawDebugSphere(<span class="type">Sphere</span> <span class="parameter">sphere</span>, <span class="type">Color</span> <span class="parameter">color</span>) <br/>
+</p>
+</div>
+<div id="drawDebugSphere", class="">
+<p>
+<span class="warning">This function is only available on the client.</span>
+</p>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="drawDebugBox", class="codecontainer">
+<div id="drawDebugBox", class="function">
+<p>
+<span class="keyword">function </span> drawDebugBox(<span class="type">Box</span> <span class="parameter">box</span>, <span class="type">Matrix</span> <span class="parameter">matrix</span>, <span class="type">Color</span> <span class="parameter">color</span>) <br/>
+</p>
+</div>
+<div id="drawDebugBox", class="">
+<p>
+<span class="warning">This function is only available on the client.</span>
+</p>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="drawDebugLine", class="codecontainer">
+<div id="drawDebugLine", class="function">
+<p>
+<span class="keyword">function </span> drawDebugLine(<span class="type">vec3</span> <span class="parameter">a</span>, <span class="type">vec3</span> <span class="parameter">b</span>, <span class="type">Color</span> <span class="parameter">color</span>) <br/>
+</p>
+</div>
+<div id="drawDebugLine", class="">
+<p>
+<span class="warning">This function is only available on the client.</span>
+</p>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="projectPoint", class="codecontainer">
+<div id="projectPoint", class="function">
+<p>
+<span class="keyword">function vec3</span> projectPoint(<span class="type">vec3</span> <span class="parameter">p</span>) <br/>
+</p>
+</div>
+<div id="projectPoint", class="">
+<p>
+<span class="warning">This function is only available on the client.</span>
+</p>
+</p>
+</div>
+</div>
+<div id="getResolution", class="codecontainer">
+<div id="getResolution", class="function">
+<p>
+<span class="keyword">function vec2</span> getResolution() <br/>
+</p>
+</div>
+<div id="getResolution", class="">
+<p>
+<span class="warning">This function is only available on the client.</span>
+</p>
+</p>
+</div>
+</div>
+<div id="GetLocalizedString", class="codecontainer">
+<div id="GetLocalizedString", class="function">
+<p>
+<span class="keyword">function string</span> GetLocalizedString(<span class="type">string</span> <span class="parameter">str</span>) <br/>
+</p>
+</div>
+<div id="GetLocalizedString", class="">
+</p>
+</div>
+</div>
+<div id="ColorHSV", class="codecontainer">
+<div id="ColorHSV", class="function">
+<p>
+<span class="keyword">function Color</span> ColorHSV(<span class="type">float</span> <span class="parameter">h</span>, <span class="type">float</span> <span class="parameter">s</span>, <span class="type">float</span> <span class="parameter">v</span>) <br/>
+</p>
+</div>
+<div id="ColorHSV", class="">
+</p>
+</div>
+</div>
+<div id="ColorARGB", class="codecontainer">
+<div id="ColorARGB", class="function">
+<p>
+<span class="keyword">function Color</span> ColorARGB(<span class="type">float</span> <span class="parameter">a</span>, <span class="type">float</span> <span class="parameter">r</span>, <span class="type">float</span> <span class="parameter">g</span>, <span class="type">float</span> <span class="parameter">b</span>) <br/>
+</p>
+</div>
+<div id="ColorARGB", class="">
+</p>
+</div>
+</div>
+<div id="ColorRGB", class="codecontainer">
+<div id="ColorRGB", class="function">
+<p>
+<span class="keyword">function Color</span> ColorRGB(<span class="type">float</span> <span class="parameter">r</span>, <span class="type">float</span> <span class="parameter">g</span>, <span class="type">float</span> <span class="parameter">b</span>) <br/>
+</p>
+</div>
+<div id="ColorRGB", class="">
+</p>
+</div>
+</div>
+<div id="ColorInt", class="codecontainer">
+<div id="ColorInt", class="function">
+<p>
+<span class="keyword">function Color</span> ColorInt(<span class="type">int</span> <span class="parameter">i</span>) <br/>
+</p>
+</div>
+<div id="ColorInt", class="">
+</p>
+</div>
+</div>
+<div id="dot", class="codecontainer">
+<div id="dot", class="function">
+<p>
+<span class="keyword">function var</span> dot(<span class="type">var</span> <span class="parameter">a</span>, <span class="type">var</span> <span class="parameter">b</span>) <br/>
+</p>
+</div>
+<div id="dot", class="">
+<p>
+Calculates the dot product between 2 vectors. The vectors must have the same type. 
+</p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">a</span>
+vector a <br/>
+<span class="parameter">b</span>
+vector b <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+The dot product between the two vectors 
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="cross", class="codecontainer">
+<div id="cross", class="function">
+<p>
+<span class="keyword">function var</span> cross(<span class="type">var</span> <span class="parameter">a</span>, <span class="type">var</span> <span class="parameter">b</span>) <br/>
+</p>
+</div>
+<div id="cross", class="">
+<p>
+Calculates the dot product between two vec3s. The vectors must have the same underlying type (double or float). 
+</p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">a</span>
+vector a <br/>
+<span class="parameter">b</span>
+vector b <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+The cross product of the vectors 
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="normalize", class="codecontainer">
+<div id="normalize", class="function">
+<p>
+<span class="keyword">function var</span> normalize(<span class="type">var</span> <span class="parameter">vec</span>) <br/>
+</p>
+</div>
+<div id="normalize", class="">
+<p>
+Normalizes a given vector. This function creates a new normalized vector, the given vector is not changed. 
+</p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">vec</span>
+the vector to normalize <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+The normalized result of the given vector 
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="normalize_ip", class="codecontainer">
+<div id="normalize_ip", class="function">
+<p>
+<span class="keyword">function var</span> normalize_ip(<span class="type">var</span> <span class="parameter">vec</span>) <br/>
+</p>
+</div>
+<div id="normalize_ip", class="">
+<p>
+Normalizes a given vector. This function normalizes the vector in place. 
+</p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">vec</span>
+the vector to normalize <br/>
+</div>
+</p>
+</div>
+</div>
+<div id="length", class="codecontainer">
+<div id="length", class="function">
+<p>
+<span class="keyword">function var</span> length(<span class="type">var</span> <span class="parameter">vec</span>) <br/>
+</p>
+</div>
+<div id="length", class="">
+<p>
+Calculates the length of a vector 
+</p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">vec</span>
+the vector <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+The length of the vector 
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="length2", class="codecontainer">
+<div id="length2", class="function">
+<p>
+<span class="keyword">function var</span> length2(<span class="type">var</span> <span class="parameter">vec</span>) <br/>
+</p>
+</div>
+<div id="length2", class="">
+<p>
+Calculates the squared length of a vector 
+</p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">vec</span>
+the vector <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+The squared length of the vector 
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="distance", class="codecontainer">
+<div id="distance", class="function">
+<p>
+<span class="keyword">function var</span> distance(<span class="type">var</span> <span class="parameter">a</span>, <span class="type">var</span> <span class="parameter">b</span>) <br/>
+</p>
+</div>
+<div id="distance", class="">
+<p>
+Calculates the linear distance between two vectors. The vectors must have the same type. 
+</p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">a</span>
+vector a <br/>
+<span class="parameter">b</span>
+vector b <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+The linear distance between the vectors 
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="distance2", class="codecontainer">
+<div id="distance2", class="function">
+<p>
+<span class="keyword">function var</span> distance2(<span class="type">var</span> <span class="parameter">a</span>, <span class="type">var</span> <span class="parameter">b</span>) <br/>
+</p>
+</div>
+<div id="distance2", class="">
+<p>
+Calculates the squared linear distance between two vectors. The vectors must have the same type. 
+</p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">a</span>
+vector a <br/>
+<span class="parameter">b</span>
+vector b <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+The squared linear distance between the vectors 
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="MatrixLookUp", class="codecontainer">
+<div id="MatrixLookUp", class="function">
+<p>
+<span class="keyword">function Matrix</span> MatrixLookUp(<span class="type">vec3</span> <span class="parameter">look</span>, <span class="type">vec3</span> <span class="parameter">up</span>) <br/>
+</p>
+</div>
+<div id="MatrixLookUp", class="">
+</p>
+</div>
+</div>
+<div id="MatrixLookUpRight", class="codecontainer">
+<div id="MatrixLookUpRight", class="function">
+<p>
+<span class="keyword">function Matrix</span> MatrixLookUpRight(<span class="type">vec3</span> <span class="parameter">look</span>, <span class="type">vec3</span> <span class="parameter">up</span>, <span class="type">vec3</span> <span class="parameter">right</span>) <br/>
+</p>
+</div>
+<div id="MatrixLookUpRight", class="">
+</p>
+</div>
+</div>
+<div id="MatrixLookUpPosition", class="codecontainer">
+<div id="MatrixLookUpPosition", class="function">
+<p>
+<span class="keyword">function Matrix</span> MatrixLookUpPosition(<span class="type">vec3</span> <span class="parameter">look</span>, <span class="type">vec3</span> <span class="parameter">up</span>, <span class="type">vec3</span> <span class="parameter">pos</span>) <br/>
+</p>
+</div>
+<div id="MatrixLookUpPosition", class="">
+</p>
+</div>
+</div>
+<div id="translate", class="codecontainer">
+<div id="translate", class="function">
+<p>
+<span class="keyword">function Matrix</span> translate(<span class="type">Matrix</span> <span class="parameter">in</span>, <span class="type">vec3</span> <span class="parameter">pos</span>) <br/>
+</p>
+</div>
+<div id="translate", class="">
+</p>
+</div>
+</div>
+<div id="scale", class="codecontainer">
+<div id="scale", class="function">
+<p>
+<span class="keyword">function Matrix</span> scale(<span class="type">Matrix</span> <span class="parameter">in</span>, <span class="type">vec3</span> <span class="parameter">size</span>) <br/>
+</p>
+</div>
+<div id="scale", class="">
+</p>
+</div>
+</div>
+<div id="rotate", class="codecontainer">
+<div id="rotate", class="function">
+<p>
+<span class="keyword">function Matrix</span> rotate(<span class="type">Matrix</span> <span class="parameter">in</span>, <span class="type">float</span> <span class="parameter">angle</span>, <span class="type">vec3</span> <span class="parameter">axis</span>) <br/>
+</p>
+</div>
+<div id="rotate", class="">
+</p>
+</div>
+</div>
+<div id="lookAt", class="codecontainer">
+<div id="lookAt", class="function">
+<p>
+<span class="keyword">function Matrix</span> lookAt(<span class="type">vec3</span> <span class="parameter">eye</span>, <span class="type">vec3</span> <span class="parameter">at</span>, <span class="type">vec3</span> <span class="parameter">up</span>) <br/>
+</p>
+</div>
+<div id="lookAt", class="">
+</p>
+</div>
+</div>
+<div id="perspective", class="codecontainer">
+<div id="perspective", class="function">
+<p>
+<span class="keyword">function Matrix</span> perspective(<span class="type">float</span> <span class="parameter">fov</span>, <span class="type">float</span> <span class="parameter">aspect</span>, <span class="type">float</span> <span class="parameter">nearClip</span>, <span class="type">float</span> <span class="parameter">farClip</span>) <br/>
+</p>
+</div>
+<div id="perspective", class="">
+</p>
+</div>
+</div>
+<div id="SeedStr", class="codecontainer">
+<div id="SeedStr", class="function">
+<p>
+<span class="keyword">function Seed</span> SeedStr(<span class="type">string</span> <span class="parameter">str</span>) <br/>
+</p>
+</div>
+<div id="SeedStr", class="">
+</p>
+</div>
+</div>
+<div id="makeFastHash", class="codecontainer">
+<div id="makeFastHash", class="function">
+<p>
+<span class="keyword">function int</span> makeFastHash(<span class="type">int</span> <span class="parameter">x</span>, <span class="type">int</span> <span class="parameter">y</span>, <span class="type">int</span> <span class="parameter">seed</span>) <br/>
+</p>
+</div>
+<div id="makeFastHash", class="">
+</p>
+</div>
+</div>
+<div id="makeHash", class="codecontainer">
+<div id="makeHash", class="function">
+<p>
+<span class="keyword">function int</span> makeHash(<span class="type">var...</span> <span class="parameter">values</span>) <br/>
+</p>
+</div>
+<div id="makeHash", class="">
+</p>
+</div>
+</div>
+<div id="makeHash64", class="codecontainer">
+<div id="makeHash64", class="function">
+<p>
+<span class="keyword">function double</span> makeHash64(<span class="type">var...</span> <span class="parameter">values</span>) <br/>
+</p>
+</div>
+<div id="makeHash64", class="">
+</p>
+</div>
+</div>
+<div id="GenerateFighterTemplate", class="codecontainer">
+<div id="GenerateFighterTemplate", class="function">
+<p>
+<span class="keyword">function FighterTemplate</span> GenerateFighterTemplate(<span class="type">int</span> <span class="parameter">seed</span>, <span class="type">int</span> <span class="parameter">weaponType</span>, <span class="type">float</span> <span class="parameter">dps</span>, <span class="type">int</span> <span class="parameter">tech</span>, <span class="type">Rarity</span> <span class="parameter">rarity</span>, <span class="type">Material</span> <span class="parameter">material</span>) <br/>
+</p>
+</div>
+<div id="GenerateFighterTemplate", class="">
+</p>
+</div>
+</div>
+<div id="GenerateStationStyle", class="codecontainer">
+<div id="GenerateStationStyle", class="function">
+<p>
+<span class="keyword">function CraftStyle</span> GenerateStationStyle(<span class="type">Seed</span> <span class="parameter">seed</span>, <span class="type">bool</span> <span class="parameter">noDisks</span>, <span class="type">bool</span> <span class="parameter">noSpikes</span>, <span class="type">bool</span> <span class="parameter">rings</span>, <span class="type">vec3</span> <span class="parameter">shape</span>, <span class="type">Color</span> <span class="parameter">color1</span>, <span class="type">Color</span> <span class="parameter">color2</span>, <span class="type">Color</span> <span class="parameter">color3</span>) <br/>
+</p>
+</div>
+<div id="GenerateStationStyle", class="">
+</p>
+</div>
+</div>
+<div id="GenerateShipStyle", class="codecontainer">
+<div id="GenerateShipStyle", class="function">
+<p>
+<span class="keyword">function CraftStyle</span> GenerateShipStyle(<span class="type">Seed</span> <span class="parameter">seed</span>, <span class="type">bool</span> <span class="parameter">noSpikes</span>, <span class="type">bool</span> <span class="parameter">rings</span>, <span class="type">vec3</span> <span class="parameter">shape</span>, <span class="type">Color</span> <span class="parameter">color1</span>, <span class="type">Color</span> <span class="parameter">color2</span>, <span class="type">Color</span> <span class="parameter">color3</span>) <br/>
+</p>
+</div>
+<div id="GenerateShipStyle", class="">
+</p>
+</div>
+</div>
+<div id="GeneratePlanFromStyle", class="codecontainer">
+<div id="GeneratePlanFromStyle", class="function">
+<p>
+<span class="keyword">function BlockPlan</span> GeneratePlanFromStyle(<span class="type">CraftStyle</span> <span class="parameter">style</span>, <span class="type">Seed</span> <span class="parameter">seed</span>, <span class="type">float</span> <span class="parameter">volume</span>, <span class="type">int</span> <span class="parameter">maxBlocks</span>, <span class="type">bool</span> <span class="parameter">scaleToFit</span>, <span class="type">Material</span> <span class="parameter">material</span>) <br/>
+</p>
+</div>
+<div id="GeneratePlanFromStyle", class="">
+</p>
+</div>
+</div>
+<div id="GeneratePlanFromFile", class="codecontainer">
+<div id="GeneratePlanFromFile", class="function">
+<p>
+<span class="keyword">function BlockPlan</span> GeneratePlanFromFile(<span class="type">string</span> <span class="parameter">file</span>, <span class="type">Seed</span> <span class="parameter">seed</span>, <span class="type">float</span> <span class="parameter">volume</span>, <span class="type">int</span> <span class="parameter">maxBlocks</span>, <span class="type">bool</span> <span class="parameter">scaleToFit</span>, <span class="type">Material</span> <span class="parameter">material</span>) <br/>
+</p>
+</div>
+<div id="GeneratePlanFromFile", class="">
+</p>
+</div>
+</div>
+<div id="LoadPlanFromFile", class="codecontainer">
+<div id="LoadPlanFromFile", class="function">
+<p>
+<span class="keyword">function BlockPlan</span> LoadPlanFromFile(<span class="type">string</span> <span class="parameter">file</span>) <br/>
+</p>
+</div>
+<div id="LoadPlanFromFile", class="">
+</p>
+</div>
+</div>
+<div id="CorrectInefficiencies", class="codecontainer">
+<div id="CorrectInefficiencies", class="function">
+<p>
+<span class="keyword">function </span> CorrectInefficiencies(<span class="type">BlockPlan</span> <span class="parameter">plan</span>, <span class="type">bool</span> <span class="parameter">addEngines</span>) <br/>
+</p>
+</div>
+<div id="CorrectInefficiencies", class="">
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="StationDescriptor", class="codecontainer">
+<div id="StationDescriptor", class="function">
+<p>
+<span class="keyword">function EntityDescriptor</span> StationDescriptor() <br/>
+</p>
+</div>
+<div id="StationDescriptor", class="">
+</p>
+</div>
+</div>
+<div id="ShipDescriptor", class="codecontainer">
+<div id="ShipDescriptor", class="function">
+<p>
+<span class="keyword">function EntityDescriptor</span> ShipDescriptor() <br/>
+</p>
+</div>
+<div id="ShipDescriptor", class="">
+</p>
+</div>
+</div>
+<div id="DroneDescriptor", class="codecontainer">
+<div id="DroneDescriptor", class="function">
+<p>
+<span class="keyword">function EntityDescriptor</span> DroneDescriptor() <br/>
+</p>
+</div>
+<div id="DroneDescriptor", class="">
+</p>
+</div>
+</div>
+<div id="AsteroidDescriptor", class="codecontainer">
+<div id="AsteroidDescriptor", class="function">
+<p>
+<span class="keyword">function EntityDescriptor</span> AsteroidDescriptor() <br/>
+</p>
+</div>
+<div id="AsteroidDescriptor", class="">
+</p>
+</div>
+</div>
+<div id="FighterDescriptor", class="codecontainer">
+<div id="FighterDescriptor", class="function">
+<p>
+<span class="keyword">function EntityDescriptor</span> FighterDescriptor() <br/>
+</p>
+</div>
+<div id="FighterDescriptor", class="">
+</p>
+</div>
+</div>
+<div id="WreckageDescriptor", class="codecontainer">
+<div id="WreckageDescriptor", class="function">
+<p>
+<span class="keyword">function EntityDescriptor</span> WreckageDescriptor() <br/>
+</p>
+</div>
+<div id="WreckageDescriptor", class="">
+</p>
+</div>
+</div>
+<div id="TurretDescriptor", class="codecontainer">
+<div id="TurretDescriptor", class="function">
+<p>
+<span class="keyword">function EntityDescriptor</span> TurretDescriptor() <br/>
+</p>
+</div>
+<div id="TurretDescriptor", class="">
+</p>
+</div>
+</div>
+<div id="WormholeDescriptor", class="codecontainer">
+<div id="WormholeDescriptor", class="function">
+<p>
+<span class="keyword">function EntityDescriptor</span> WormholeDescriptor() <br/>
+</p>
+</div>
+<div id="WormholeDescriptor", class="">
+</p>
+</div>
+</div>
+<div id="CargoLootDescriptor", class="codecontainer">
+<div id="CargoLootDescriptor", class="function">
+<p>
+<span class="keyword">function EntityDescriptor</span> CargoLootDescriptor() <br/>
+</p>
+</div>
+<div id="CargoLootDescriptor", class="">
+</p>
+</div>
+</div>
+<div id="CrewLootDescriptor", class="codecontainer">
+<div id="CrewLootDescriptor", class="function">
+<p>
+<span class="keyword">function EntityDescriptor</span> CrewLootDescriptor() <br/>
+</p>
+</div>
+<div id="CrewLootDescriptor", class="">
+</p>
+</div>
+</div>
+<div id="ColorLootDescriptor", class="codecontainer">
+<div id="ColorLootDescriptor", class="function">
+<p>
+<span class="keyword">function EntityDescriptor</span> ColorLootDescriptor() <br/>
+</p>
+</div>
+<div id="ColorLootDescriptor", class="">
+</p>
+</div>
+</div>
+<div id="TurretLootDescriptor", class="codecontainer">
+<div id="TurretLootDescriptor", class="function">
+<p>
+<span class="keyword">function EntityDescriptor</span> TurretLootDescriptor() <br/>
+</p>
+</div>
+<div id="TurretLootDescriptor", class="">
+</p>
+</div>
+</div>
+<div id="MoneyLootDescriptor", class="codecontainer">
+<div id="MoneyLootDescriptor", class="function">
+<p>
+<span class="keyword">function EntityDescriptor</span> MoneyLootDescriptor() <br/>
+</p>
+</div>
+<div id="MoneyLootDescriptor", class="">
+</p>
+</div>
+</div>
+<div id="ResourceLootDescriptor", class="codecontainer">
+<div id="ResourceLootDescriptor", class="function">
+<p>
+<span class="keyword">function EntityDescriptor</span> ResourceLootDescriptor() <br/>
+</p>
+</div>
+<div id="ResourceLootDescriptor", class="">
+</p>
+</div>
+</div>
+<div id="SystemUpgradeLootDescriptor", class="codecontainer">
+<div id="SystemUpgradeLootDescriptor", class="function">
+<p>
+<span class="keyword">function EntityDescriptor</span> SystemUpgradeLootDescriptor() <br/>
+</p>
+</div>
+<div id="SystemUpgradeLootDescriptor", class="">
+</p>
+</div>
+</div>
+<div id="CreateTemplateFromTurret", class="codecontainer">
+<div id="CreateTemplateFromTurret", class="function">
+<p>
+<span class="keyword">function TurretTemplate</span> CreateTemplateFromTurret(<span class="type">Entity</span> <span class="parameter">turret</span>) <br/>
+</p>
+</div>
+<div id="CreateTemplateFromTurret", class="">
+</p>
+</div>
+</div>
+<div id="GenerateTurretTemplate", class="codecontainer">
+<div id="GenerateTurretTemplate", class="function">
+<p>
+<span class="keyword">function TurretTemplate</span> GenerateTurretTemplate(<span class="type">Seed</span> <span class="parameter">seed</span>, <span class="type">int</span> <span class="parameter">weaponType</span>, <span class="type">float</span> <span class="parameter">dps</span>, <span class="type">int</span> <span class="parameter">tech</span>, <span class="type">Rarity</span> <span class="parameter">rarity</span>, <span class="type">Material</span> <span class="parameter">material</span>) <br/>
+</p>
+</div>
+<div id="GenerateTurretTemplate", class="">
+<p>
+Generates a turret with assigned values into the target slot. All other values will be chosen randomly, but matching to the given arguments.  
+</p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">seed</span>
+The seed used for initializing the random generator. If this seed is 0, a random seed will be used. <br/>
+<span class="parameter">weaponType</span>
+The type of the weapons that are attached to the turret. <br/>
+<span class="parameter">dps</span>
+The base amount of damage per second that the turret will deal. <br/>
+<span class="parameter">material</span>
+The material the turret is made of. This will not have an influence on the dps of the turret. <br/>
+<span class="parameter">rarity</span>
+The rarity of the turret. This will have an influence on the dps. <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+Returns the target slot on success, nil otherwise.  
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="ColorPalette", class="codecontainer">
+<div id="ColorPalette", class="function">
+<p>
+<span class="keyword">function Color...</span> ColorPalette() <br/>
+</p>
+</div>
+<div id="ColorPalette", class="">
+</p>
+</div>
+</div>
+<div id="getSectorSeed", class="codecontainer">
+<div id="getSectorSeed", class="function">
+<p>
+<span class="keyword">function Seed</span> getSectorSeed(<span class="type">int</span> <span class="parameter">x</span>, <span class="type">int</span> <span class="parameter">y</span>) <br/>
+</p>
+</div>
+<div id="getSectorSeed", class="">
+</p>
+</div>
+</div>
+<div id="getGameSeed", class="codecontainer">
+<div id="getGameSeed", class="function">
+<p>
+<span class="keyword">function Seed</span> getGameSeed() <br/>
+</p>
+</div>
+<div id="getGameSeed", class="">
+</p>
+</div>
+</div>
+<div id="getParentEntity", class="codecontainer">
+<div id="getParentEntity", class="function">
+<p>
+<span class="keyword">function Entity</span> getParentEntity() <br/>
+</p>
+</div>
+<div id="getParentEntity", class="">
+</p>
+</div>
+</div>
+<div id="NumMaterials", class="codecontainer">
+<div id="NumMaterials", class="function">
+<p>
+<span class="keyword">function int</span> NumMaterials() <br/>
+</p>
+</div>
+<div id="NumMaterials", class="">
+</p>
+</div>
+</div>
+<div id="IsValidMaterial", class="codecontainer">
+<div id="IsValidMaterial", class="function">
+<p>
+<span class="keyword">function bool</span> IsValidMaterial(<span class="type">int</span> <span class="parameter">i</span>) <br/>
+</p>
+</div>
+<div id="IsValidMaterial", class="">
+</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sitemap">
+<div class="headerlisting">
+<span class="docheader">Overview</span>
+<br><a href="index.html">Home</a>
+<a href="Functions.html">Functions</a>
+</div><div class="headerlisting">
+<span class="docheader">Callbacks</span>
+<br><a href="Callbacks.html"> Callbacks</a>
+<a href="ClientSector Callbacks.html">ClientSector  Callbacks</a>
+<a href="Entity Callbacks.html">Entity  Callbacks</a>
+<a href="Galaxy Callbacks.html">Galaxy  Callbacks</a>
+<a href="Player Callbacks.html">Player  Callbacks</a>
+<a href="Sector Callbacks.html">Sector  Callbacks</a>
+<a href="Server Callbacks.html">Server  Callbacks</a>
+<a href="Turret Callbacks.html">Turret  Callbacks</a>
+</div><div class="headerlisting">
+<span class="docheader">Common Components</span>
+<br><a href="Hangar.html">Hangar</a>
+<a href="BspTree.html">BspTree</a>
+<a href="DeletionTimer.html">DeletionTimer</a>
+<a href="Engine.html">Engine</a>
+<a href="Weapons.html">Weapons</a>
+<a href="FighterAI.html">FighterAI</a>
+<a href="Physics.html">Physics</a>
+<a href="Plan.html">Plan</a>
+<a href="ShipAI.html">ShipAI</a>
+<a href="Velocity.html">Velocity</a>
+<a href="InteractionText.html">InteractionText</a>
+<a href="EnergySystem.html">EnergySystem</a>
+<a href="WormHole.html">WormHole</a>
+</div><div class="headerlisting">
+<span class="docheader">Common Objects</span>
+<br><a href="Tooltip.html">Tooltip</a>
+<a href="TooltipLine.html">TooltipLine</a>
+<a href="QuadTree.html">QuadTree</a>
+<a href="Uuid.html">Uuid</a>
+<a href="Timer.html">Timer</a>
+<a href="Profiler.html">Profiler</a>
+<a href="Ray.html">Ray</a>
+<a href="Color.html">Color</a>
+<a href="Box.html">Box</a>
+<a href="vec2.html">vec2</a>
+<a href="vec3.html">vec3</a>
+<a href="vec4.html">vec4</a>
+<a href="dvec2.html">dvec2</a>
+<a href="dvec3.html">dvec3</a>
+<a href="dvec4.html">dvec4</a>
+<a href="ivec2.html">ivec2</a>
+<a href="ivec3.html">ivec3</a>
+<a href="ivec4.html">ivec4</a>
+<a href="Rect.html">Rect</a>
+<a href="Matrix.html">Matrix</a>
+<a href="Sphere.html">Sphere</a>
+<a href="Seed.html">Seed</a>
+<a href="Random.html">Random</a>
+<a href="FighterTemplate.html">FighterTemplate</a>
+<a href="VanillaInventoryItem.html">VanillaInventoryItem</a>
+<a href="Rarity.html">Rarity</a>
+<a href="PlanetSpecifics.html">PlanetSpecifics</a>
+<a href="CraftStyle.html">CraftStyle</a>
+<a href="BlockPlanBlock.html">BlockPlanBlock</a>
+<a href="BlockPlan.html">BlockPlan</a>
+<a href="EntityDescriptor.html">EntityDescriptor</a>
+<a href="Language.html">Language</a>
+<a href="Inventory.html">Inventory</a>
+<a href="PlanBspTree.html">PlanBspTree</a>
+<a href="Weapon.html">Weapon</a>
+<a href="Crew.html">Crew</a>
+<a href="CrewProfession.html">CrewProfession</a>
+<a href="CrewMan.html">CrewMan</a>
+<a href="TurretTemplate.html">TurretTemplate</a>
+<a href="InventoryTurret.html">InventoryTurret</a>
+<a href="AllianceRank.html">AllianceRank</a>
+<a href="TradingGood.html">TradingGood</a>
+<a href="AllianceMember.html">AllianceMember</a>
+<a href="Entity.html">Entity</a>
+<a href="Mail.html">Mail</a>
+<a href="Material.html">Material</a>
+<a href="SystemUpgradeTemplate.html">SystemUpgradeTemplate</a>
+<a href="PlayerId.html">PlayerId</a>
+</div><div class="headerlisting">
+<span class="docheader">Client Components</span>
+<br><a href="EntityIcon.html">EntityIcon</a>
+<a href="EntityTooltip.html">EntityTooltip</a>
+<a href="ScriptUI.html">ScriptUI</a>
+</div><div class="headerlisting">
+<span class="docheader">Client Objects</span>
+<br><a href="InventorySelectionItem.html">InventorySelectionItem</a>
+<a href="TooltipRenderer.html">TooltipRenderer</a>
+<a href="InputWindow.html">InputWindow</a>
+<a href="PlanSelectionItem.html">PlanSelectionItem</a>
+<a href="SelectionItem.html">SelectionItem</a>
+<a href="InventoryReferenceSelectionItem.html">InventoryReferenceSelectionItem</a>
+<a href="Alliance [Client].html">Alliance [Client]</a>
+<a href="Planet.html">Planet</a>
+<a href="Sector [Client].html">Sector [Client]</a>
+<a href="Galaxy [Client].html">Galaxy [Client]</a>
+<a href="Achievements.html">Achievements</a>
+<a href="Player [Client].html">Player [Client]</a>
+<a href="GalaxyMap.html">GalaxyMap</a>
+<a href="Faction [Client].html">Faction [Client]</a>
+<a href="Mouse.html">Mouse</a>
+<a href="Keyboard.html">Keyboard</a>
+<a href="LaserFX.html">LaserFX</a>
+</div><div class="headerlisting">
+<span class="docheader">Client UI Objects</span>
+<br><a href="Line.html">Line</a>
+<a href="UIOrganizer.html">UIOrganizer</a>
+<a href="UIVerticalLister.html">UIVerticalLister</a>
+<a href="UIHorizontalSplitter.html">UIHorizontalSplitter</a>
+<a href="UIVerticalSplitter.html">UIVerticalSplitter</a>
+<a href="UIHorizontalMultiSplitter.html">UIHorizontalMultiSplitter</a>
+<a href="UIVerticalMultiSplitter.html">UIVerticalMultiSplitter</a>
+<a href="UIArbitraryVerticalSplitter.html">UIArbitraryVerticalSplitter</a>
+<a href="Tab.html">Tab</a>
+<a href="TabbedWindow.html">TabbedWindow</a>
+<a href="StatisticsBar.html">StatisticsBar</a>
+<a href="ComboBox.html">ComboBox</a>
+<a href="MultiLineTextBox.html">MultiLineTextBox</a>
+<a href="InventorySelection.html">InventorySelection</a>
+<a href="UIElement.html">UIElement</a>
+<a href="PlanDisplayer.html">PlanDisplayer</a>
+<a href="ListBoxEx.html">ListBoxEx</a>
+<a href="ListBox.html">ListBox</a>
+<a href="Window.html">Window</a>
+<a href="ScrollFrame.html">ScrollFrame</a>
+<a href="Slider.html">Slider</a>
+<a href="Frame.html">Frame</a>
+<a href="TextBox.html">TextBox</a>
+<a href="Selection.html">Selection</a>
+<a href="CheckBox.html">CheckBox</a>
+<a href="Label.html">Label</a>
+<a href="TextField.html">TextField</a>
+<a href="Button.html">Button</a>
+<a href="Picture.html">Picture</a>
+<a href="UIRenderer.html">UIRenderer</a>
+<a href="NumbersBar.html">NumbersBar</a>
+<a href="UIContainer.html">UIContainer</a>
+</div><div class="headerlisting">
+<span class="docheader">Server Components</span>
+<br><a href="WreckageCreator.html">WreckageCreator</a>
+<a href="EntityTransferrer.html">EntityTransferrer</a>
+<a href="FighterController.html">FighterController</a>
+<a href="Loot.html">Loot</a>
+</div><div class="headerlisting">
+<span class="docheader">Server Objects</span>
+<br><a href="Sector [Server].html">Sector [Server]</a>
+<a href="Server.html">Server</a>
+<a href="Galaxy [Server].html">Galaxy [Server]</a>
+<a href="Alliance [Server].html">Alliance [Server]</a>
+<a href="Faction [Server].html">Faction [Server]</a>
+<a href="Player [Server].html">Player [Server]</a>
+</div><div class="lastheaderlisting">
+<span class="docheader">Enums</span>
+<br><a href="Enums.html#SoundType">SoundType</a>
+<a href="Enums.html#FontType">FontType</a>
+<a href="Enums.html#Difficulty">Difficulty</a>
+<a href="Enums.html#ChatMessageType">ChatMessageType</a>
+<a href="Enums.html#ComponentType">ComponentType</a>
+<a href="Enums.html#WeaponCategory">WeaponCategory</a>
+<a href="Enums.html#RarityType">RarityType</a>
+<a href="Enums.html#MoonType">MoonType</a>
+<a href="Enums.html#PlanetType">PlanetType</a>
+<a href="Enums.html#AlliancePrivilege">AlliancePrivilege</a>
+<a href="Enums.html#BlockType">BlockType</a>
+<a href="Enums.html#InventoryItemType">InventoryItemType</a>
+<a href="Enums.html#WeaponType">WeaponType</a>
+<a href="Enums.html#CrewProfessionType">CrewProfessionType</a>
+<a href="Enums.html#DamageType">DamageType</a>
+<a href="Enums.html#StatsBonuses">StatsBonuses</a>
+<a href="Enums.html#EntityType">EntityType</a>
+<a href="Enums.html#AIState">AIState</a>
+<a href="Enums.html#MaterialType">MaterialType</a>
+<a href="Enums.html#FighterOrders">FighterOrders</a>
+</div></div>
+<div class="disclaimer">
+<p>This is the official documentation for the scripting API of Avorion. This documentation is automatically generated and <strong>not</strong> necessarily complete. Depending on the context in which functions exist, some documentation such as descriptions, return values or variable names or types may be missing.</p>
+<p>Work in Progress. Documentation of Avorion Version: Beta 0.14.5 r9490</p>
+</div>
+<div class="footer">
+<p align="center">Work in Progress.</p>
+<p align="center">Copyright &copy; 2017 Konstantin Kronfeldner, Boxelware. All rights reserved.</p>
+</div>
+</div>
+</body>
+</html>
