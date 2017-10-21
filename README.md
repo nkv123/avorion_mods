@@ -64,7 +64,7 @@ adds 12 mining, salvage, hull repair, shield repair turrets
 ## upgrades
 adds 5 hyperspace, minining systems, tradeoverview, civiltcs, militarycts, scanboosters, radarboosters
 ## craftorders
-added commands for lazy mine, lazy salvage, lazy mine all, mine all.
+added commands for lazy mine, lazy salvage, lazy mine all, mine all, preparetransfer, finishtransfer. 
 added command to add entitydbg.lua to player entities
 ## defaultscripts.lua
 added entitydbg.lua to ships
