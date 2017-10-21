@@ -150,7 +150,6 @@ function AILazyMine.updateMining(timeStep)
     if ship.selectedObject == nil
     or ship.selectedObject.index ~= minedAsteroid.index
     or ai.state ~= AIState.Attack then
-
       ai:setAttack(minedAsteroid)
     end
 

@@ -122,7 +122,7 @@ function CraftOrders.initUI()
   window.showCloseButton = 1
   window.moveable = 1
 
-  local splitter = UIHorizontalMultiSplitter(Rect(window.size), 10, 10, 12)
+  local splitter = UIHorizontalMultiSplitter(Rect(window.size), 10, 10, 15)
 
   window:createButton(splitter:partition(0), "Idle"%_t, "onIdleButtonPressed")
   window:createButton(splitter:partition(1), "Passive"%_t, "onPassiveButtonPressed")
@@ -138,6 +138,9 @@ function CraftOrders.initUI()
 
   window:createButton(splitter:partition(11), "Mine All"%_t, "onMineAllButtonPressed")
   window:createButton(splitter:partition(12), "Lazy Mine All"%_t, "onLazyMineallButtonPressed")
+  window:createButton(splitter:partition(13), "Info on"%_t, "onInfoOnPressed")
+  window:createButton(splitter:partition(14), "Info off"%_t, "onInfoOffPressed") 
+  window:createButton(splitter:partition(15), "Prepare for Transfer"%_t, "PrepareforTransferPressed")
   --window:createButton(Rect(10, 250, 230 + 10, 30 + 250), "Attack My Targets", "onWingmanButtonPressed")
 
 end
@@ -464,6 +467,47 @@ function CraftOrders.onLazyMineallButtonPressed()
     Entity():addScript("ai/lazymineall.lua")
   end
 end
+
+function CraftOrders.onInfoOnPressed()
+  if onClient() then
+    invokeServerFunction("onInfoOnPressed")
+    ScriptUI():stopInteraction()
+    return
+  end
+
+  if checkCaptain() then
+    Entity():addScript("info.lua")
+  end
+end
+function CraftOrders.onInfoOffPressed()
+
+  if onClient() then
+    invokeServerFunction("onInfoOffPressed")
+    ScriptUI():stopInteraction()
+    return
+  end
+
+  if checkCaptain() then
+    if Entity():hasScript("info.lua") then
+      Entity():removeScript("info.lua")
+    end 
+  end
+end
+
+function CraftOrders.PrepareforTransferPressed()
+
+  if onClient() then
+    invokeServerFunction("PrepareforTransferPressed")
+    ScriptUI():stopInteraction()
+    return
+  end
+
+  if checkCaptain() then
+    removeSpecialOrders()
+    Entity():addScript("ai/preparefortransfer.lua")
+  end
+end
+
 
 
 -- this function will be executed every frame both on the server and the client

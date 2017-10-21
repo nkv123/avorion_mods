@@ -48,7 +48,7 @@ end
 -- this function will be executed every frame on the server only
 function AILasySalvage.updateServer(timeStep)
   local ship = Entity()
---  print(ship.name .. " is lazy salvaging!!",logLevels.trace)
+ print(ship.name .. " is lazy salvaging!!",logLevels.trace)
   if ship.hasPilot or ship:getCrewMembers(CrewProfessionType.Captain) == 0 then
     terminate()
     return
@@ -68,7 +68,7 @@ function AILasySalvage.findMinedLoot()
   for _, loot in pairs(loots) do
     if loot:isCollectable(ship) and distance2(loot.translationf, ship.translationf) < 150 * 150 then
       minedLoot = loot
- --     print(ship.name .. " has found loot!!",logLevels.trace)
+     print(ship.name .. " has found loot!!",logLevels.trace)
       break
     end
   end
@@ -105,7 +105,7 @@ function AILasySalvage.findMinedWreckage()
 
   if minedWreckage then
     broadcastInvokeClientFunction("setMinedWreckage", minedWreckage.index)
-  --  print(ship.name .. " has found a wreckage!!", logLevels.trace)
+   print(ship.name .. " has found a wreckage!!", logLevels.trace)
   else
     local player = Player(Entity().factionIndex)
     if player then
@@ -148,16 +148,6 @@ function AILasySalvage.updateSalvaging(timeStep)
     or ship.selectedObject.index ~= minedWreckage.index
     or ai.state ~= AIState.Attack then
 
-      if ship.numTurrets == 0 then
-        local player = Player(Entity().factionIndex)
-        if player then
-          player:sendChatMessage("Server", ChatMessageType.Error, "Your ship can't salvage without turrets."%_T)
-        end
-        terminate()
-        return
-      end
-
---           ai:setFly(minedWreckage.translationf, 0)
       ai:setAttack(minedWreckage)
 
     end
