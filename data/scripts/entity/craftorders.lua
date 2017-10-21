@@ -122,7 +122,7 @@ function CraftOrders.initUI()
   window.showCloseButton = 1
   window.moveable = 1
 
-  local splitter = UIHorizontalMultiSplitter(Rect(window.size), 10, 10, 15)
+  local splitter = UIHorizontalMultiSplitter(Rect(window.size), 10, 10, 14)
 
   window:createButton(splitter:partition(0), "Idle"%_t, "onIdleButtonPressed")
   window:createButton(splitter:partition(1), "Passive"%_t, "onPassiveButtonPressed")
@@ -138,9 +138,10 @@ function CraftOrders.initUI()
 
   window:createButton(splitter:partition(11), "Mine All"%_t, "onMineAllButtonPressed")
   window:createButton(splitter:partition(12), "Lazy Mine All"%_t, "onLazyMineallButtonPressed")
-  window:createButton(splitter:partition(13), "Info on"%_t, "onInfoOnPressed")
-  window:createButton(splitter:partition(14), "Info off"%_t, "onInfoOffPressed") 
-  window:createButton(splitter:partition(15), "Prepare for Transfer"%_t, "PrepareforTransferPressed")
+--  window:createButton(splitter:partition(13), "Info on"%_t, "onInfoOnPressed")
+--  window:createButton(splitter:partition(14), "Info off"%_t, "onInfoOffPressed") 
+    window:createButton(splitter:partition(13), "Prepare Transfer"%_t, "onPrepareTransferPressed")
+window:createButton(splitter:partition(14), "Finish Transfer"%_t, "onFinishTransferPressed")
   --window:createButton(Rect(10, 250, 230 + 10, 30 + 250), "Attack My Targets", "onWingmanButtonPressed")
 
 end
@@ -494,17 +495,32 @@ function CraftOrders.onInfoOffPressed()
   end
 end
 
-function CraftOrders.PrepareforTransferPressed()
+function CraftOrders.onPrepareTransferPressed()
 
   if onClient() then
-    invokeServerFunction("PrepareforTransferPressed")
+    invokeServerFunction("onPrepareTransferPressed")
     ScriptUI():stopInteraction()
     return
   end
 
   if checkCaptain() then
     removeSpecialOrders()
-    Entity():addScript("ai/preparefortransfer.lua")
+    Entity():addScript("ai/preparetransfer.lua")
+  end
+end
+
+
+function CraftOrders.onFinishTransferPressed()
+
+  if onClient() then
+    invokeServerFunction("onFinishTransferPressed")
+    ScriptUI():stopInteraction()
+    return
+  end
+
+  if checkCaptain() then
+    removeSpecialOrders()
+    Entity():addScript("ai/finishtransfer.lua")
   end
 end
 
