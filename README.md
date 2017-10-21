@@ -4,7 +4,8 @@
 1. data/scripts/entity/ai/lazymineall.lua
 1. data/scripts/entity/ai/lazysalvage.lua
 1. data/scripts/entity/ai/mineall.lua
-1. data/scripts/entity/ai/preparefortransfer.lua -- unfinished
+1. data/scripts/entity/ai/preparetransfer.lua 
+1. data/scripts/entity/ai/finishtransfer.lua 
 1. data/scripts/commands/turrets.lua
 1. data/scripts/commands/upgrades.lua
 1. data/scripts/commands/uturrets.lua
@@ -39,11 +40,20 @@ if there is one
 highest priority is collecting the resources
 first, check if there is loot to collect
 then, if there's no loot, check if there is an asteroid to mine
-## preparefortransfer
-its not working
-what it should do is ordered ship
-1. go to the front of player ship 2 km out 
-1. approuch until range is 0 km, then go passive. After that transfer of cargo/crew/fighters between them is possable.
+## preparetransfer
+follows waypoints:
+1. 3km in front of player ship
+1. 1.5 km in front of player ship, slowly approach
+1. intersection with radius of player ship in the front of player ship
+1. intersection with radius of player ship in the above which makes range is 0 km, then go passive.
+After that transfer of cargo/crew/fighters between them is possable.
+## finishtransfer
+follows waypoints:
+1. intersection with radius of player ship in the above which makes range is 0 km
+1. intersection with radius of player ship in the back of player ship
+1. 1.5 km in behind of player ship, slowly approach
+1. 3km in behind of player ship, then go passive.
+
 
 ## turrets
 adds 12 cannons, lasers, railguns plasmagun, lightningguns, teslaguns, pulseguns turrets
