@@ -42,17 +42,19 @@ first, check if there is loot to collect
 then, if there's no loot, check if there is an asteroid to mine
 ## preparetransfer
 follows waypoints:
-1. 3km in front of player ship
+1. 5km in front of player ship
 1. 1.5 km in front of player ship, slowly approach
 1. intersection with radius of player ship sphere and the front vector of player ship
 1. intersection with radius of player ship sphere and the above vector, then go passive.
+
+
 range from player ship and commanded ship should be 0 km sometimes 0.01 km, after that transfer of cargo/crew/fighters between them is possable.
 ## finishtransfer
 follows waypoints:
 1. intersection with radius x 2 of player ship sphere and the above vector which makes range is 0 km
 1. intersection with radius of player ship sphere and the back vector of player ship
 1. 1.5 km in behind of player ship, normal speed after waypoint
-1. 3km in behind of player ship, then go passive.
+1. 5km in behind of player ship, then go passive.
 
 
 ## turrets
