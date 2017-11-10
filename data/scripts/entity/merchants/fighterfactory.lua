@@ -3,12 +3,15 @@ package.path = package.path .. ";data/scripts/lib/?.lua"
 require ("stringutility")
 require ("randomext")
 require ("player")
+require ("merchantutility")
 local SellableFighter = require("sellablefighter")
 local Dialog = require("dialogutility")
 
 -- Don't remove or alter the following comment, it tells the game the namespace this script lives in. If you remove it, the script will break.
 -- namespace FighterFactory
 FighterFactory = {}
+
+FighterFactory.tax = 0.2
 
 local planSelection
 local turretSelection
@@ -18,8 +21,10 @@ local pointsLabels
 local statsLabels
 local buildButton
 local window
+local typeCombo
 
 local lastRarity
+local selectedType = FighterType.Fighter
 
 local maxPoints = 9
 local remainingPoints = 0
@@ -29,6 +34,34 @@ local turningSpeedPoints = 0
 local velocityPoints = 0
 
 local buttons = {}
+
+local function CargoShuttleRarity()
+    return Rarity(2)
+end
+
+local function getMostUsedMaterial(plan)
+    local material = Material()
+
+    local numBlocks = plan.numBlocks
+    local materials = {}
+    for i = 0, numBlocks - 1 do
+        local block = plan:getNthBlock(i)
+        local materialIndex = block.material.value
+        local amount = materials[materialIndex] or 0
+        amount = amount + 1
+        materials[materialIndex] = amount
+    end
+
+    local highest = 0
+    for index, amount in pairs(materials) do
+        if amount > highest then
+            material = Material(index)
+            highest = amount
+        end
+    end
+
+    return material
+end
 
 function FighterFactory.interactionPossible(playerIndex, option)
     return CheckFactionInteraction(playerIndex, 10000)
@@ -75,8 +108,9 @@ function FighterFactory.initUI()
 
     buildButton = window:createButton(hlsplit.bottom, "Create"%_t, "onCreatePressed")
 
-    local hmsplit = UIHorizontalSplitter(hlsplit.top, 10, 0, 0.65)
-    local hmsplit2 = UIHorizontalSplitter(hmsplit.top, 10, 0, 0.9)
+    local hmsplit = UIHorizontalSplitter(hlsplit.top, 10, 0, 0.7)
+    local hmsplit2 = UIHorizontalSplitter(hmsplit.top, 10, 0, 0.8)
+    local hmsplit3 = UIHorizontalSplitter(hmsplit2.bottom, 10, 0, 0.5)
 
     planDisplayer = window:createPlanDisplayer(hmsplit2.top)
     planDisplayer.showStats = false
@@ -84,10 +118,14 @@ function FighterFactory.initUI()
     turretSelection.onSelectedFunction = "onTurretSelected"
     turretSelection.onDeselectedFunction = "disableUI"
 
+    -- fighter type combo
+    typeCombo = window:createValueComboBox(hmsplit3.top, "onFighterTypeSelected")
+    typeCombo:addEntry(FighterType.Fighter, "Combat Fighter"%_t)
+    typeCombo:addEntry(FighterType.CargoShuttle, "Cargo Shuttle"%_t)
 
     -- remaining points label
-    window:createLabel(hmsplit2.bottom, "Remaining Points: "%_t, 14)
-    remainingPointsLabel = window:createLabel(hmsplit2.bottom, "", 14)
+    window:createLabel(hmsplit3.bottom, "Remaining Points: "%_t, 14)
+    remainingPointsLabel = window:createLabel(hmsplit3.bottom, "", 14)
     remainingPointsLabel:setRightAligned()
 
     -- Caption labels
@@ -110,7 +148,7 @@ function FighterFactory.initUI()
     labelLister:placeElementCenter(turningSpeedLabel)
     labelLister:placeElementCenter(maxVelocityLabel)
 
-    labelLister:nextRect(30)
+    labelLister:nextRect(20)
     labelLister:placeElementCenter(priceLabel)
 
     -- Value labels
@@ -148,7 +186,7 @@ function FighterFactory.initUI()
     labelLister:placeElementCenter(maxVelocityLabel)
 
     labelLister.marginRight = 0
-    labelLister:nextRect(30)
+    labelLister:nextRect(20)
     labelLister:placeElementCenter(priceLabel)
 
     -- buttons + point labels
@@ -243,9 +281,19 @@ function FighterFactory.refreshPointLabels(plan, turret)
 
     plan = plan or FighterFactory.getPlan()
     turret = turret or FighterFactory.getTurret()
-    if not plan or not turret then return end
+    if not plan then return end
 
-    local modifiedSize, modifiedDurability, modifiedTurningSpeed, modifiedVelocity = FighterFactory.addMaterialBonuses(turret.material, sizePoints, durabilityPoints, turningSpeedPoints, velocityPoints)
+    local material = Material()
+
+    if selectedType == FighterType.Fighter then
+        if not turret then return end
+
+        material = turret.material
+    else
+        material = getMostUsedMaterial(plan)
+    end
+
+    local modifiedSize, modifiedDurability, modifiedTurningSpeed, modifiedVelocity = FighterFactory.addMaterialBonuses(material, sizePoints, durabilityPoints, turningSpeedPoints, velocityPoints)
 
     remainingPointsLabel.caption = tostring(remainingPoints)
 
@@ -287,7 +335,7 @@ function FighterFactory.refreshPointLabels(plan, turret)
     end
 
 
-    local fighter = FighterFactory.makeFighter(plan, turret, sizePoints, durabilityPoints, turningSpeedPoints, velocityPoints)
+    local fighter = FighterFactory.makeFighter(selectedType, plan, turret, sizePoints, durabilityPoints, turningSpeedPoints, velocityPoints)
 
     statsLabels[1].caption = tostring(round(fighter.volume, 1))
     statsLabels[2].caption = tostring(round(fighter.durability, 1))
@@ -306,6 +354,18 @@ function FighterFactory.disableUI()
     for _, button in pairs(buttons) do
         button.active = false
     end
+
+    remainingPointsLabel.caption = ""
+
+    for _, label in pairs(statsLabels) do
+        label.caption = "-"
+        label.color = ColorRGB(1, 1, 1)
+    end
+    for _, label in pairs(pointsLabels) do
+        label.caption = "-"
+        label.color = ColorRGB(1, 1, 1)
+    end
+
 end
 
 function FighterFactory.enableUI()
@@ -323,9 +383,10 @@ function FighterFactory.renderUI()
     local plan = FighterFactory.getPlan()
     local turret = FighterFactory.getTurret()
 
-    if not plan or not turret then return end
+    if not plan then return end
+    if selectedType == FighterType.Fighter and not turret then return end
 
-    local fighter = FighterFactory.makeFighter(plan, turret, sizePoints, durabilityPoints, turningSpeedPoints, velocityPoints)
+    local fighter = FighterFactory.makeFighter(selectedType, plan, turret, sizePoints, durabilityPoints, turningSpeedPoints, velocityPoints)
 
     local renderer = TooltipRenderer(makeFighterTooltip(fighter))
     renderer:drawMouseTooltip(Mouse().position)
@@ -428,7 +489,8 @@ function FighterFactory.onPlanSelected()
     planDisplayer.plan = plan
 
     local turret = FighterFactory.getTurret()
-    if not turret then
+
+    if selectedType == FighterType.Fighter and not turret then
         FighterFactory.disableUI()
         return
     end
@@ -456,31 +518,65 @@ function FighterFactory.onFighterPartsSelected(plan, turret)
 
     FighterFactory.enableUI()
 
-    if not lastRarity or lastRarity ~= turret.rarity then
-        lastRarity = turret.rarity
+    local rarity = Rarity()
 
-        maxPoints = FighterFactory.getMaxInvestablePoints(turret.rarity)
-        remainingPoints = FighterFactory.getMaxAvailablePoints(turret.rarity)
+    if selectedType == FighterType.Fighter then
+        if not turret then
+            print ("Error: Parts selected callback for combat fighter without turret!")
+            return
+        end
 
-        sizePoints = 0
-        durabilityPoints = 0
-        turningSpeedPoints = 0
-        velocityPoints = 0
+        rarity = turret.rarity
+    elseif selectedType == FighterType.CargoShuttle then
+        rarity = CargoShuttleRarity()
     end
+
+    if not lastRarity or lastRarity ~= rarity then
+        lastRarity = rarity
+    end
+
+    maxPoints = FighterFactory.getMaxInvestablePoints(rarity)
+    remainingPoints = FighterFactory.getMaxAvailablePoints(rarity)
+
+    sizePoints = 0
+    durabilityPoints = 0
+    turningSpeedPoints = 0
+    velocityPoints = 0
 
     FighterFactory.refreshPointLabels(plan, turret)
 end
 
-function FighterFactory.onInvalidFighterPartsSelected()
-    -- disable UI
+function FighterFactory.onFighterTypeSelected(comboBoxIndex, value, selectedIndex)
+    selectedType = value
+
+    turretSelection:unselect()
+    planSelection:unselect()
+    planDisplayer.plan = BlockPlan()
+
+    FighterFactory.disableUI()
+
+    if value == FighterType.Fighter then
+        turretSelection.entriesHighlightable = true
+        turretSelection.entriesSelectable = true
+    elseif value == FighterType.CargoShuttle then
+        turretSelection.entriesHighlightable = false
+        turretSelection.entriesSelectable = false
+    end
+
 end
 
 function FighterFactory.onCreatePressed()
 
-    local inventoryItem = turretSelection.selected
-    if not inventoryItem then
-        displayChatMessage("You have no item selected."%_t, "Fighter Factory"%_t, 1)
-        return
+    local inventoryItemIndex = nil
+
+    if selectedType == FighterType.Fighter then
+        local inventoryItem = turretSelection.selected
+        if not inventoryItem then
+            displayChatMessage("You have no turret selected."%_t, "Fighter Factory"%_t, 1)
+            return
+        end
+
+        inventoryItemIndex = inventoryItem.index
     end
 
     local planItem = planSelection.selected
@@ -497,7 +593,7 @@ function FighterFactory.onCreatePressed()
         return
     end
 
-    invokeServerFunction("createFighter", planItem.plan, inventoryItem.index, sizePoints, durabilityPoints, turningSpeedPoints, velocityPoints)
+    invokeServerFunction("createFighter", selectedType, planItem.plan, inventoryItemIndex, sizePoints, durabilityPoints, turningSpeedPoints, velocityPoints)
 end
 
 function FighterFactory.getPlan()
@@ -585,8 +681,17 @@ function FighterFactory.getMaxInvestablePoints(rarity)
     return 8 + rarity.value
 end
 
-function FighterFactory.makeFighter(plan, turret, sizePoints, durabilityPoints, turningSpeedPoints, velocityPoints)
-    local material = turret.material
+function FighterFactory.makeFighter(type, plan, turret, sizePoints, durabilityPoints, turningSpeedPoints, velocityPoints)
+    local material = Material()
+    local rarity = Rarity()
+
+    if turret then
+        material = turret.material
+        rarity = turret.rarity
+    else
+        material = getMostUsedMaterial(plan)
+        rarity = CargoShuttleRarity()
+    end
 
     local fighter = FighterTemplate()
 
@@ -596,33 +701,36 @@ function FighterFactory.makeFighter(plan, turret, sizePoints, durabilityPoints, 
     plan:scale(vec3(scale, scale, scale))
     fighter.plan = plan
 
-    local size, durability, turningSpeed, maxVelocity = FighterFactory.getStats(turret.rarity, material, sizePoints, durabilityPoints, turningSpeedPoints, velocityPoints)
+    local size, durability, turningSpeed, maxVelocity = FighterFactory.getStats(rarity, material, sizePoints, durabilityPoints, turningSpeedPoints, velocityPoints)
 
     fighter.crew = 1
     fighter.diameter = size
     fighter.durability = durability * material.strengthFactor
     fighter.turningSpeed = turningSpeed
     fighter.maxVelocity = maxVelocity
+    fighter.type = type
 
-    local fireRateFactor = 1.0
-    if turret.coolingType == 0 and turret.heatPerShot > 0 then
-        fireRateFactor = turret.shootingTime / (turret.shootingTime + turret.coolingTime)
-    end
+    if turret then
+        local fireRateFactor = 1.0
+        if turret.coolingType == 0 and turret.heatPerShot > 0 then
+            fireRateFactor = turret.shootingTime / (turret.shootingTime + turret.coolingTime)
+        end
 
-    for _, weapon in pairs({turret:getWeapons()}) do
-        weapon.damage = weapon.damage * 0.3
-        weapon.fireRate = weapon.fireRate * fireRateFactor
-        fighter:addWeapon(weapon)
-    end
+        for _, weapon in pairs({turret:getWeapons()}) do
+            weapon.damage = weapon.damage * 0.3
+            weapon.fireRate = weapon.fireRate * fireRateFactor
+            fighter:addWeapon(weapon)
+        end
 
-    for desc, value in pairs(turret:getDescriptions()) do
-        fighter:addDescription(desc, value)
+        for desc, value in pairs(turret:getDescriptions()) do
+            fighter:addDescription(desc, value)
+        end
     end
 
     return fighter
 end
 
-function FighterFactory.createFighter(plan, turretIndex, sizePoints, durabilityPoints, turningSpeedPoints, velocityPoints)
+function FighterFactory.createFighter(type, plan, turretIndex, sizePoints, durabilityPoints, turningSpeedPoints, velocityPoints)
 
     local buyer, ship, player = getInteractingFaction(callingPlayer, AlliancePrivilege.SpendResources)
     if not buyer then return end
@@ -632,17 +740,25 @@ function FighterFactory.createFighter(plan, turretIndex, sizePoints, durabilityP
         return
     end
 
-    local turret = buyer:getInventory():find(turretIndex)
-    if not turret then return end
+    local turret
+    local rarity = Rarity()
+    if type == FighterType.Fighter then
+        turret = buyer:getInventory():find(turretIndex)
+        if not turret then return end
+
+        rarity = turret.rarity
+    elseif type == FighterType.CargoShuttle then
+        rarity = CargoShuttleRarity()
+    end
 
     -- make sure the player doesn't cheat
-    local availablePoints = FighterFactory.getMaxAvailablePoints(turret.rarity)
+    local availablePoints = FighterFactory.getMaxAvailablePoints(rarity)
     if sizePoints + durabilityPoints + turningSpeedPoints + velocityPoints > availablePoints then
         player:sendChatMessage("Fighter Factory"%_t, ChatMessageType.Error, "Invalid fighter stats."%_t)
         return
     end
 
-    local maxInvestablePoints = FighterFactory.getMaxInvestablePoints(turret.rarity)
+    local maxInvestablePoints = FighterFactory.getMaxInvestablePoints(rarity)
     if sizePoints > maxInvestablePoints
         or durabilityPoints > maxInvestablePoints
         or turningSpeedPoints > maxInvestablePoints
@@ -652,7 +768,7 @@ function FighterFactory.createFighter(plan, turretIndex, sizePoints, durabilityP
         return
     end
 
-    local fighter = FighterFactory.makeFighter(plan, turret, sizePoints, durabilityPoints, turningSpeedPoints, velocityPoints)
+    local fighter = FighterFactory.makeFighter(type, plan, turret, sizePoints, durabilityPoints, turningSpeedPoints, velocityPoints)
     local boughtFighter = SellableFighter(fighter)
 
     local price = boughtFighter:getPrice()
@@ -677,8 +793,13 @@ function FighterFactory.createFighter(plan, turretIndex, sizePoints, durabilityP
         return
     end
 
-    buyer:getInventory():remove(turretIndex)
-    buyer:pay(price)
+    if turret then
+        buyer:getInventory():remove(turretIndex)
+    end
+
+    receiveTransactionTax(station, price * FighterFactory.tax)
+
+    buyer:pay("Paid %1% credits to build a fighter."%_T, price)
 
     invokeClientFunction(player, "refreshUI")
 end

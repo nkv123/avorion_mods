@@ -14,6 +14,9 @@ rechargeDelay = 300
 rechargeTime = 5
 rechargeAmount = 0.25
 
+-- optimization so that energy requirement doesn't have to be read every frame
+FixedEnergyRequirement = true
+
 function getUpdateInterval()
     return 0.25
 end

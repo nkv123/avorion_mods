@@ -4,6 +4,7 @@ package.path = package.path .. ";data/scripts/?.lua"
 
 require ("utility")
 require ("faction")
+require ("productions")
 require ("stationextensions")
 local SectorSpecifics = require ("sectorspecifics")
 local SectorGenerator = require ("SectorGenerator")
@@ -30,19 +31,21 @@ local scripts
 local addScriptButton
 local removeScriptButton
 local templateButtons
+local factoryButtons
 
 local numButtons = 0
-function ButtonRect(w, h)
+function ButtonRect(w, h, p)
 
     local width = w or 280
     local height = h or 35
+    local padding = p or 10
 
-    local space = math.floor((window.size.y - 60) / (height + 10))
+    local space = math.floor((window.size.y - 60) / (height + padding))
 
     local row = math.floor(numButtons % space)
     local col = math.floor(numButtons / space)
 
-    local lower = vec2((width + 10) * col, (height + 10) * row)
+    local lower = vec2((width + padding) * col, (height + padding) * row)
     local upper = lower + vec2(width, height)
 
     numButtons = numButtons + 1
@@ -97,8 +100,12 @@ function initUI()
     tab:createButton(ButtonRect(), "Own", "onOwnButtonPressed")
     tab:createButton(ButtonRect(), "Add Crew", "onAddCrewButtonPressed")
     tab:createButton(ButtonRect(), "Add Cargo", "onAddCargoButtonPressed")
+    tab:createButton(ButtonRect(), "Add Fighters", "onAddFightersButtonPressed")
+    tab:createButton(ButtonRect(), "Add Cargo Shuttles", "onAddCargoShuttlesButtonPressed")
     tab:createButton(ButtonRect(), "Clear Cargo", "onClearCargoButtonPressed")
     tab:createButton(ButtonRect(), "Clear Crew", "onClearCrewButtonPressed")
+    tab:createButton(ButtonRect(), "Clear Hangar", "onClearHangarButtonPressed")
+    tab:createButton(ButtonRect(), "Start Fighter", "onStartFighterButtonPressed")
     tab:createButton(ButtonRect(), "Destroy", "onDestroyButtonPressed")
     tab:createButton(ButtonRect(), "Delete", "onDeleteButtonPressed")
     tab:createButton(ButtonRect(), "Toggle Invincible", "onInvincibleButtonPressed")
@@ -108,7 +115,6 @@ function initUI()
     tab:createButton(ButtonRect(), "Dislike", "onDislikePressed")
     tab:createButton(ButtonRect(), "Damage", "onDamagePressed")
     tab:createButton(ButtonRect(), "Title", "onTitlePressed")
-    tab:createButton(ButtonRect(), "Add Fighters", "onAddFightersButtonPressed")
 
     local tab = tabbedWindow:createTab("Inventory", "data/textures/icons/greek-temple.png", "Player Commands")
     numButtons = 0
@@ -129,6 +135,7 @@ function initUI()
     tab:createButton(ButtonRect(), "Sector Values", "onSectorValuesButtonPressed")
     tab:createButton(ButtonRect(), "Server Values", "onServerValuesButtonPressed")
     tab:createButton(ButtonRect(), "Clear Sector", "onClearButtonPressed")
+    tab:createButton(ButtonRect(), "Clear Fighters", "onClearFightersButtonPressed")
     tab:createButton(ButtonRect(), "Infect Asteroids", "onInfectAsteroidsButtonPressed")
     tab:createButton(ButtonRect(), "Align", "onAlignButtonPressed")
     tab:createButton(ButtonRect(), "Resolve Intersections", "onResolveIntersectionsButtonPressed")
@@ -188,6 +195,15 @@ function initUI()
     tab:createButton(ButtonRect(), "The 4", "onSpawnThe4ButtonPressed")
     tab:createButton(ButtonRect(), "Guardian", "onSpawnGuardianButtonPressed")
 
+    local tab = tabbedWindow:createTab("Factory Spawn", "data/textures/icons/cog.png", "Spawn Factory")
+    numButtons = 0
+
+    factoryButtons = {}
+    for i, production in pairs(productions) do
+        local button = tab:createButton(ButtonRect(190, 20, 3), getTranslatedFactoryName(production, ""), "onGenerateFactoryButtonPressed")
+        table.insert(factoryButtons, {button = button, production = production});
+        button.maxTextSize = 10
+    end
 
     local tab = tabbedWindow:createTab("Generate Sectors", "data/textures/icons/gears.png", "Generator Scripts")
     numButtons = 0
@@ -352,6 +368,38 @@ function syncDocks(docks_in)
     end
 end
 
+function onGenerateFactoryButtonPressed(arg)
+    if onClient() then
+        local button = arg
+        for _, p in pairs(factoryButtons) do
+            if button.index == p.button.index then
+                invokeServerFunction("onGenerateFactoryButtonPressed", p.production)
+                break
+            end
+        end
+
+        return
+    end
+
+    local production = arg
+    print (production.index)
+    print (production.results[1].name)
+
+    if Entity().isStation then
+        Entity():removeScript("merchants/factory.lua")
+        Entity():addScript("data/scripts/entity/merchants/factory.lua", production.results[1].name)
+        return
+    end
+
+    local generator = SectorGenerator(Sector():getCoordinates())
+
+    local faction = Galaxy():createRandomFaction(Sector():getCoordinates())
+    local station = generator:createStation(faction)
+    station.position = Matrix()
+    station:addScript("data/scripts/entity/merchants/factory.lua", production.results[1].name)
+
+    Placer.resolveIntersections()
+end
 
 
 function onGenerateTemplateButtonPressed(arg)
@@ -596,6 +644,37 @@ function onClearCrewButtonPressed()
     end
 
     Entity().crew = Crew()
+end
+
+function onClearHangarButtonPressed()
+    if onClient() then
+        invokeServerFunction("onClearHangarButtonPressed")
+        return
+    end
+
+    Hangar():clear()
+end
+
+function onStartFighterButtonPressed()
+    if onClient() then
+        invokeServerFunction("onStartFighterButtonPressed")
+        return
+    end
+
+    local controller = FighterController()
+    local fighter, error = controller:startFighter(0, nil);
+
+    if error ~= 0 then
+        print ("error starting fighter: " .. error)
+        return
+    end
+
+    local station = Sector():getEntitiesByType(EntityType.Station)
+
+    local ai = FighterAI(fighter.id)
+    ai.ignoreMothershipOrders = true
+    ai:setOrders(FighterOrders.FlyToLocation, station.id)
+
 end
 
 function onDestroyButtonPressed(destroyer)
@@ -913,7 +992,7 @@ function onSpawnSwoksButtonPressed()
     local safe = prepareCleanUp()
 
     dofile("data/scripts/player/story/spawnswoks.lua")
-    spawnEnemies(Player(), Sector():getCoordinates())
+    SpawnSwoks.spawnEnemies(Player(), Sector():getCoordinates())
 
     safe.cleanUp(safe)
 end
@@ -927,7 +1006,7 @@ function onSpawnTheAIButtonPressed()
     local safe = prepareCleanUp()
 
     dofile("data/scripts/player/story/spawnai.lua")
-    spawnEnemies(Player(), Sector():getCoordinates())
+    SpawnAI.spawnEnemies(Player(), Sector():getCoordinates())
 
     safe.cleanUp(safe)
 
@@ -2004,6 +2083,38 @@ function onAddFightersButtonPressed()
 
 end
 
+function onAddCargoShuttlesButtonPressed()
+    if onClient() then
+        invokeServerFunction("onAddCargoShuttlesButtonPressed")
+        return
+    end
+
+    local ship = Entity()
+    local hangar = Hangar(ship.index)
+    if hangar == nil then return end
+
+    local x, y = Sector():getCoordinates()
+
+    for i = 1, 10 do
+        hangar:addSquad("Script Squad")
+    end
+
+    local squads = {hangar:getSquads()}
+
+    -- fill all present squads
+    for _, squad in pairs(squads) do
+        local fighter = FighterGenerator.generateCargoShuttle(x, y)
+        fighter.diameter = 1
+
+        for i = hangar:getSquadFighters(squad), hangar:getSquadMaxFighters(squad) - 1 do
+            if hangar.freeSpace < fighter.volume then return end
+
+            hangar:addFighter(squad, fighter)
+        end
+    end
+
+end
+
 function onDamagePressed()
     if onClient() then
         invokeServerFunction("onDamagePressed")
@@ -2227,6 +2338,24 @@ function onClearButtonPressed()
 
     for _, entity in pairs({sector:getEntities()}) do
         if entity.factionIndex == nil or (entity.factionIndex ~= callingPlayer and entity.factionIndex ~= self.factionIndex) then
+            sector:deleteEntity(entity)
+        end
+    end
+
+end
+
+function onClearFightersButtonPressed()
+    if onClient() then
+        invokeServerFunction("onClearFightersButtonPressed")
+        return
+    end
+
+    -- portion that is executed on server
+    local sector = Sector()
+    local self = Entity()
+
+    for _, entity in pairs({sector:getEntities()}) do
+        if entity.type == EntityType.Fighter then
             sector:deleteEntity(entity)
         end
     end

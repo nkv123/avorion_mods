@@ -8,6 +8,7 @@ require ("productions")
 require ("faction")
 require ("stationextensions")
 require ("stringutility")
+local TradingUtility = require ("tradingutility")
 local TradingAPI = require ("tradingmanager")
 local Dialog = require("dialogutility")
 
@@ -19,20 +20,51 @@ Factory = TradingAPI:CreateNamespace()
 local tabbedWindow = 0
 
 
-local production = {}
+local production = nil
 
 local factorySize = 1
 
 local maxDuration = 15
 local currentProductions = {}
 
-local buyTab = nil
-local sellTab = nil
+local deliveryShuttles
+local deliveredStations = {}
+local deliveringStations = {}
 
+local buyTab
+local sellTab
+local configTab
 
+local marginLabel
+local marginSlider
+local allowBuyCheckBox
+local allowSellCheckBox
+local activelyRequestCheckBox
+local activelySellCheckBox
+
+local deliveredStationsCombos = {}
+local deliveringStationsCombos = {}
+
+local deliveredStationsErrorLabels = {}
+local deliveringStationsErrorLabels = {}
+
+local deliveredStationsErrors = {}
+local deliveringStationsErrors = {}
+
+local newDeliveredStationsErrors = {}
+local newDeliveringStationsErrors = {}
+
+Factory.MinimumCapacity = 100
+Factory.PlanCapacityFactor = 1.0
+Factory.MinimumTimeToProduce = 15.0
+
+Factory.timeToProduce = Factory.MinimumTimeToProduce
+Factory.productionCapacity = Factory.MinimumCapacity
 Factory.maxNumProductions = 2
+
 Factory.lowestPriceFactor = 0.7
 Factory.highestPriceFactor = 1.3
+Factory.traderRequestCooldown = random():getFloat(1, 120)
 
 -- this is only important for initialization, won't be used afterwards
 Factory.minLevel = nil
@@ -54,6 +86,8 @@ function Factory.restore(data)
     production = data.production
     currentProductions = data.currentProductions
     Factory.restoreTradingGoods(data.tradingData)
+
+    Factory.refreshProductionTime()
 end
 
 function Factory.secure()
@@ -71,118 +105,135 @@ end
 function Factory.initialize(producedGood, productionIndex, size)
 
     if onServer() then
+        local self = Entity()
+        local productionInitialized = self:getValue("factory_production_initialized")
 
-        local station = Entity()
-        local seed = Sector().seed + Sector().numEntities
-
-        math.randomseed(seed);
-
-        -- determine the ratio with which the factory will set its sell/buy prices
-        Factory.setBuySellFactor(math.random() * (Factory.highestPriceFactor - Factory.lowestPriceFactor) + Factory.lowestPriceFactor)
-
-        if producedGood and productionIndex == nil then
-
-            if producedGood == "nothing" then
-                return
-            end
-
-            local numProductions = tablelength(productionsByGood[producedGood])
-            if numProductions == nil or numProductions == 0 then
-                -- good is not produced, skip and choose randomly
-                print("No productions found for " .. producedGood .. ", choosing production at random")
-
-                producedGood = nil
-            else
-                productionIndex = 1
-            end
+        if producedGood or productionIndex or size or not productionInitialized then
+            Factory.initializeProduction(producedGood, productionIndex, size)
         end
 
-        if producedGood == nil or productionIndex == nil then
-            -- choose a production by evaluating importance
-            Factory.minLevel = Factory.minLevel or 0
-            Factory.maxLevel = Factory.maxLevel or 10000
+        self:registerCallback("onFighterLanded", "onFighterLanded")
+        self:registerCallback("onBlockPlanChanged", "onBlockPlanChanged")
 
-            -- choose a product by level
-            -- read all levels of all products
-            local potentialGoods = {}
-            local highestLevel = 0
+        -- execute the callback for initialization, to be sure
+        Factory.onBlockPlanChanged(self.id, true)
+    else
+        Factory.requestProductionStats()
+        Factory.requestGoods()
+        Factory.sync()
+    end
 
-            for _, good in pairs(goodsArray) do
-                if good.level ~= nil then -- if it has no level, it is not produced
-                    if good.level >= Factory.minLevel and good.level <= Factory.maxLevel then
+end
 
-                        table.insert(potentialGoods, good)
+function Factory.initializeProduction(producedGood, productionIndex, size)
+    local station = Entity()
+    station:setValue("factory_production_initialized", true)
 
-                        -- increase max level
-                        if highestLevel < good.level then
-                            highestLevel = good.level;
-                        end
+    local seed = Sector().seed + Sector().numEntities
+    math.randomseed(seed)
+
+    -- determine the ratio with which the factory will set its sell/buy prices
+    Factory.setBuySellFactor(math.random() * (Factory.highestPriceFactor - Factory.lowestPriceFactor) + Factory.lowestPriceFactor)
+
+    if producedGood and productionIndex == nil then
+
+        if producedGood == "nothing" then
+            return
+        end
+
+        local numProductions = tablelength(productionsByGood[producedGood])
+        if numProductions == nil or numProductions == 0 then
+            -- good is not produced, skip and choose randomly
+            print("No productions found for " .. producedGood .. ", choosing production at random")
+
+            producedGood = nil
+        else
+            productionIndex = 1
+        end
+    end
+
+    if producedGood == nil or productionIndex == nil then
+        -- choose a production by evaluating importance
+        Factory.minLevel = Factory.minLevel or 0
+        Factory.maxLevel = Factory.maxLevel or 10000
+
+        -- choose a product by level
+        -- read all levels of all products
+        local potentialGoods = {}
+        local highestLevel = 0
+
+        for _, good in pairs(goodsArray) do
+            if good.level ~= nil then -- if it has no level, it is not produced
+                if good.level >= Factory.minLevel and good.level <= Factory.maxLevel then
+
+                    table.insert(potentialGoods, good)
+
+                    -- increase max level
+                    if highestLevel < good.level then
+                        highestLevel = good.level
                     end
                 end
             end
-
-            -- calculate the probability that a certain production is chosen
-            local probabilities = {}
-            for i, good in pairs(potentialGoods) do
-                -- highestlevel - good.level makes sure the higher goods have a smaller probability of being chosen
-                -- +3 to add a little more randomness, so not only the "important" factories are created
-                probabilities[i] = (highestLevel - good.level) + good.importance + 3
-            end
-
-            -- choose produced good
-            local numProductions = nil
-
-            while ((numProductions == nil) or (numProductions == 0)) do
-
-                -- choose produced good at random from probability table
-                local i = getValueFromDistribution(probabilities)
-                producedGood = potentialGoods[i].name
-
-                -- choose a production type, a good may be produced in multiple factories
-                numProductions = tablelength(productionsByGood[producedGood])
-
-                if numProductions == nil or numProductions == 0 then
-                    -- good is not produced, skip and take next
-                    -- print("product is invalid: " .. product .. "\n")
-                    probabilities[i] = nil
-                end
-            end
-
-            productionIndex = math.random(1, numProductions)
         end
 
-        if size == nil then
-            local distanceFromCenter = length(vec2(Sector():getCoordinates()))
-            local probabilities = {}
-
-            probabilities[1] = 1.0
-
-            if distanceFromCenter < 450 then
-                probabilities[2] = 0.5
-            end
-
-            if distanceFromCenter < 400 then
-                probabilities[3] = 0.35
-            end
-
-            if distanceFromCenter < 350 then
-                probabilities[4] = 0.25
-            end
-
-            if distanceFromCenter < 300 then
-                probabilities[5] = 0.15
-            end
-
-            size = getValueFromDistribution(probabilities)
+        -- calculate the probability that a certain production is chosen
+        local probabilities = {}
+        for i, good in pairs(potentialGoods) do
+            -- highestlevel - good.level makes sure the higher goods have a smaller probability of being chosen
+            -- +3 to add a little more randomness, so not only the "important" factories are created
+            probabilities[i] = (highestLevel - good.level) + good.importance + 3
         end
 
-        local chosenProduction = productionsByGood[producedGood][productionIndex]
-        if chosenProduction then
-            Factory.setProduction(chosenProduction, size)
+        -- choose produced good
+        local numProductions = nil
+
+        while ((numProductions == nil) or (numProductions == 0)) do
+
+            -- choose produced good at random from probability table
+            local i = getValueFromDistribution(probabilities)
+            producedGood = potentialGoods[i].name
+
+            -- choose a production type, a good may be produced in multiple factories
+            numProductions = tablelength(productionsByGood[producedGood])
+
+            if numProductions == nil or numProductions == 0 then
+                -- good is not produced, skip and take next
+                -- print("product is invalid: " .. product .. "\n")
+                probabilities[i] = nil
+            end
         end
-    else
-        Factory.requestGoods()
-        Factory.sync()
+
+        productionIndex = math.random(1, numProductions)
+    end
+
+    if size == nil then
+        local distanceFromCenter = length(vec2(Sector():getCoordinates()))
+        local probabilities = {}
+
+        probabilities[1] = 1.0
+
+        if distanceFromCenter < 450 then
+            probabilities[2] = 0.5
+        end
+
+        if distanceFromCenter < 400 then
+            probabilities[3] = 0.35
+        end
+
+        if distanceFromCenter < 350 then
+            probabilities[4] = 0.25
+        end
+
+        if distanceFromCenter < 300 then
+            probabilities[5] = 0.15
+        end
+
+        size = getValueFromDistribution(probabilities)
+    end
+
+    local chosenProduction = productionsByGood[producedGood][productionIndex]
+    if chosenProduction then
+        Factory.setProduction(chosenProduction, size)
     end
 
 end
@@ -273,6 +324,8 @@ function Factory.setProduction(production_in, size)
 
     end
 
+    Factory.refreshProductionTime()
+
     Factory.initializeTrading(bought, sold)
 end
 
@@ -288,6 +341,7 @@ function Factory.sync(data)
 
             InteractionText().text = Dialog.generateStationInteractionText(Entity(), random())
 
+            Factory.onShowWindow()
         end
     else
         local data = {}
@@ -309,8 +363,8 @@ function Factory.initUI()
     local size = vec2(950, 650)
 
     local menu = ScriptUI()
-    local window = menu:createWindow(Rect(res * 0.5 - size * 0.5, res * 0.5 + size * 0.5));
-    menu:registerWindow(window, "Buy/Sell Goods"%_t);
+    local window = menu:createWindow(Rect(res * 0.5 - size * 0.5, res * 0.5 + size * 0.5))
+    menu:registerWindow(window, "Buy/Sell Goods"%_t)
 
     window.caption = "Factory"%_t
     window.showCloseButton = 1
@@ -327,16 +381,242 @@ function Factory.initUI()
     sellTab = tabbedWindow:createTab("Sell"%_t, "data/textures/icons/coins.png", "Sell to station"%_t)
     Factory.buildSellGui(sellTab)
 
+    configTab = tabbedWindow:createTab("Configure"%_t, "data/textures/icons/cog.png", "Factory configuration"%_t)
+    Factory.buildConfigGui(configTab)
+
     Factory.trader.guiInitialized = true
 
     Factory.requestGoods()
 end
 
+function Factory.buildConfigGui(tab)
+    local vsplit = UIVerticalMultiSplitter(Rect(tab.size), 10, 5, 2)
+    local lister = UIVerticalLister(vsplit:partition(0), 5, 0)
+
+    marginLabel = tab:createLabel(Rect(), "Buy/Sell price margin %"%_t, 12)
+    lister:placeElementTop(marginLabel)
+    marginLabel.centered = true
+
+    marginSlider = tab:createSlider(Rect(), -50, 50, 100, "", "onMarginSliderChanged")
+    lister:placeElementTop(marginSlider)
+    marginSlider:setValueNoCallback(0)
+    marginSlider.unit = "%"
+
+    lister:nextRect(15)
+
+    allowBuyCheckBox = tab:createCheckBox(Rect(), "Buy goods from others"%_t, "onAllowBuyChecked")
+    lister:placeElementTop(allowBuyCheckBox)
+    allowBuyCheckBox:setCheckedNoCallback(true)
+    allowBuyCheckBox.tooltip = "If checked, the station will buy goods from traders from other factions than you."%_t
+
+    allowSellCheckBox = tab:createCheckBox(Rect(), "Sell goods to others"%_t, "onAllowSellChecked")
+    lister:placeElementTop(allowSellCheckBox)
+    allowSellCheckBox:setCheckedNoCallback(true)
+    allowSellCheckBox.tooltip = "If checked, the station will sell goods to traders from other factions than you."%_t
+
+    lister:nextRect(10)
+
+    activelyRequestCheckBox = tab:createCheckBox(Rect(), "Actively request goods"%_t, "onActivelyRequestChecked")
+    lister:placeElementTop(activelyRequestCheckBox)
+    activelyRequestCheckBox:setCheckedNoCallback(true)
+    activelyRequestCheckBox.tooltip = "If checked, the station will request traders to deliver goods when it's empty."%_t
+
+    activelySellCheckBox = tab:createCheckBox(Rect(), "Actively sell goods"%_t, "onActivelySellChecked")
+    lister:placeElementTop(activelySellCheckBox)
+    activelySellCheckBox:setCheckedNoCallback(true)
+    activelySellCheckBox.tooltip = "If checked, the station will request traders that will buy its goods when it's full."%_t
+
+    -- delivery UI
+    local lister = UIVerticalLister(vsplit:partition(1), 8, 0)
+    local label = tab:createLabel(Rect(), "Deliver goods to stations:"%_t, 12)
+    lister:placeElementTop(label)
+    label.centered = true
+
+    lister:nextRect(5)
+
+    local combo = tab:createValueComboBox(Rect(), "sendConfig")
+    lister:placeElementTop(combo)
+    table.insert(deliveredStationsCombos, combo)
+
+    local combo = tab:createValueComboBox(Rect(), "sendConfig")
+    lister:placeElementTop(combo)
+    table.insert(deliveredStationsCombos, combo)
+
+    local combo = tab:createValueComboBox(Rect(), "sendConfig")
+    lister:placeElementTop(combo)
+    table.insert(deliveredStationsCombos, combo)
+
+    lister:nextRect(50)
+
+
+    local label = tab:createLabel(Rect(), "Fetch goods from stations:"%_t, 12)
+    lister:placeElementTop(label)
+    label.centered = true
+
+    lister:nextRect(5)
+
+    local combo = tab:createValueComboBox(Rect(), "sendConfig")
+    lister:placeElementTop(combo)
+    table.insert(deliveringStationsCombos, combo)
+
+    local combo = tab:createValueComboBox(Rect(), "sendConfig")
+    lister:placeElementTop(combo)
+    table.insert(deliveringStationsCombos, combo)
+
+    local combo = tab:createValueComboBox(Rect(), "sendConfig")
+    lister:placeElementTop(combo)
+    table.insert(deliveringStationsCombos, combo)
+
+    -- error labels
+    local lister = UIVerticalLister(vsplit:partition(2), 15, 0)
+    local label = tab:createLabel(Rect(), ""%_t, 6)
+    lister:placeElementTop(label)
+    label.centered = true
+    lister:nextRect(0)
+
+    local label = tab:createLabel(Rect(), "No more shuttles!", 14)
+    lister:placeElementTop(label)
+    table.insert(deliveredStationsErrorLabels, label)
+
+    local label = tab:createLabel(Rect(), "No more shuttles!", 14)
+    lister:placeElementTop(label)
+    table.insert(deliveredStationsErrorLabels, label)
+
+    local label = tab:createLabel(Rect(), "No more shuttles!", 14)
+    lister:placeElementTop(label)
+    table.insert(deliveredStationsErrorLabels, label)
+
+    lister:nextRect(32)
+
+
+    local label = tab:createLabel(Rect(), ""%_t, 12)
+    lister:placeElementTop(label)
+    label.centered = true
+
+    lister:nextRect(5)
+
+    local label = tab:createLabel(Rect(), "No more shuttles!", 14)
+    lister:placeElementTop(label)
+    table.insert(deliveringStationsErrorLabels, label)
+
+    local label = tab:createLabel(Rect(), "No more shuttles!", 14)
+    lister:placeElementTop(label)
+    table.insert(deliveringStationsErrorLabels, label)
+
+    local label = tab:createLabel(Rect(), "No more shuttles!", 14)
+    lister:placeElementTop(label)
+    table.insert(deliveringStationsErrorLabels, label)
+
+    for _, labels in pairs({deliveringStationsErrorLabels, deliveredStationsErrorLabels}) do
+        for _, label in pairs(labels) do
+            label.caption = ""
+            label.color = ColorRGB(1, 1, 0)
+        end
+    end
+
+end
+
+function Factory.sendConfig()
+    local config = {}
+    if onClient() then
+        -- read new config from ui elements
+        config.priceFactor = 1.0 + marginSlider.value / 100.0
+        config.activelyRequest = activelyRequestCheckBox.checked
+        config.activelySell = activelySellCheckBox.checked
+        config.buyFromOthers = allowBuyCheckBox.checked
+        config.sellToOthers = allowSellCheckBox.checked
+
+        config.deliveringStations = {}
+        config.deliveredStations = {}
+
+        for _, combo in pairs(deliveredStationsCombos) do
+            local id = combo.selectedValue
+
+            if id then
+                local trades = deliveredStations[id] or {}
+                config.deliveredStations[id] = trades
+            end
+        end
+
+        for _, combo in pairs(deliveringStationsCombos) do
+            local id = combo.selectedValue
+
+            if id then
+                local trades = deliveringStations[id] or {}
+                config.deliveringStations[id] = trades
+            end
+        end
+
+        invokeServerFunction("setConfig", config)
+    else
+        -- read config from factory settings
+        config.priceFactor = Factory.trader.buyPriceFactor
+
+        config.buyFromOthers = Factory.trader.buyFromOthers
+        config.sellToOthers = Factory.trader.sellToOthers
+        config.activelyRequest = Factory.trader.activelyRequest
+        config.activelySell = Factory.trader.activelySell
+        config.deliveredStations = Factory.trader.deliveredStations
+        config.deliveringStations = Factory.trader.deliveringStations
+
+        invokeClientFunction(Player(callingPlayer), "setConfig", config)
+    end
+end
+
+function Factory.setConfig(config)
+    if onClient() then
+        -- apply config to UI elements
+        marginSlider:setValueNoCallback(round((config.priceFactor - 1.0) * 100.0))
+        marginLabel.tooltip = "This station will buy and sell its goods for ${percentage}% of the normal price."%_t % {percentage = round(config.priceFactor * 100.0)}
+
+        allowBuyCheckBox:setCheckedNoCallback(config.buyFromOthers)
+        allowSellCheckBox:setCheckedNoCallback(config.sellToOthers)
+        activelyRequestCheckBox:setCheckedNoCallback(config.activelyRequest)
+        activelySellCheckBox:setCheckedNoCallback(config.activelySell)
+
+        local i = 1
+        for id, trades in pairs(config.deliveredStations) do
+            deliveredStationsCombos[i]:setSelectedValueNoCallback(id)
+            i = i + 1
+        end
+
+        for a = i, 3 do
+            deliveredStationsCombos[a]:setSelectedIndexNoCallback(0)
+        end
+
+        local i = 1
+        for id, trades in pairs(config.deliveringStations) do
+            deliveringStationsCombos[i]:setSelectedValueNoCallback(id)
+            i = i + 1
+        end
+
+        for a = i, 3 do
+            deliveringStationsCombos[a]:setSelectedIndexNoCallback(0)
+        end
+    else
+        -- apply config to factory settings
+        local owner, station, player = checkEntityInteractionPermissions(Entity(), AlliancePrivilege.ManageStations)
+        if not owner then return end
+
+        Factory.trader.buyPriceFactor = config.priceFactor
+        Factory.trader.sellPriceFactor = config.priceFactor + 0.2
+
+        Factory.trader.buyFromOthers = config.buyFromOthers
+        Factory.trader.sellToOthers = config.sellToOthers
+        Factory.trader.activelyRequest = config.buyFromOthers and config.activelyRequest
+        Factory.trader.activelySell = config.sellToOthers and config.activelySell
+        Factory.trader.deliveredStations = config.deliveredStations or {}
+        Factory.trader.deliveringStations = config.deliveringStations or {}
+
+        Factory.sendConfig()
+    end
+end
+
 -- this functions gets called when the indicator of the station is rendered on the client
 function Factory.renderUIIndicator(px, py, size)
 
-    x = px - size / 2;
-    y = py + size / 2;
+    x = px - size / 2
+    y = py + size / 2
 
     local index = 0
     for i, progress in pairs(currentProductions) do
@@ -349,7 +629,7 @@ function Factory.renderUIIndicator(px, py, size)
         sx = size + 2
         sy = 4
 
-        drawRect(Rect(dx, dy, sx + dx, sy + dy), ColorRGB(0, 0, 0));
+        drawRect(Rect(dx, dy, sx + dx, sy + dy), ColorRGB(0, 0, 0))
 
         -- inner rect
         dx = dx + 1
@@ -358,9 +638,9 @@ function Factory.renderUIIndicator(px, py, size)
         sx = sx - 2
         sy = sy - 2
 
-        sx = sx * progress / maxDuration
+        sx = sx * progress
 
-        drawRect(Rect(dx, dy, sx + dx, sy + dy), ColorRGB(0.66, 0.66, 1.0));
+        drawRect(Rect(dx, dy, sx + dx, sy + dy), ColorRGB(0.66, 0.66, 1.0))
     end
 
 end
@@ -384,37 +664,176 @@ function Factory.onShowWindow()
         end
     end
 
+    if configTab then
+        local player = Player()
+        local faction = Faction()
+
+        if player.index == faction.index or player.allianceIndex == faction.index then
+            tabbedWindow:activateTab(configTab)
+            Factory.refreshConfigCombos()
+            Factory.refreshConfigErrors()
+
+            invokeServerFunction("sendConfig")
+            invokeServerFunction("sendShuttleErrors")
+        else
+            tabbedWindow:deactivateTab(configTab)
+        end
+    end
+
     Factory.requestGoods()
 
 end
+
+function Factory.refreshConfigCombos()
+    if not production then return end
+    if not production.ingredients then return end
+    if not production.results then return end
+    if not production.garbages then return end
+
+    local stations = {Sector():getEntitiesByType(EntityType.Station)}
+
+    deliveredStations = {}
+    deliveringStations = {}
+
+    for _, station in pairs(stations) do
+        for _, ingredient in pairs(production.ingredients) do
+            local good = ingredient.name
+            local script = TradingUtility.getEntitySellsGood(station, good)
+            if script then
+                local trades = deliveringStations[station.id.string] or {}
+                table.insert(trades, {good = good, script = script})
+
+                deliveringStations[station.id.string] = trades
+            end
+        end
+
+        for _, result in pairs(production.results) do
+            local good = result.name
+            local script = TradingUtility.getEntityBuysGood(station, good)
+            if script then
+                local trades = deliveredStations[station.id.string] or {}
+                table.insert(trades, {good = good, script = script})
+
+                deliveredStations[station.id.string] = trades
+            end
+        end
+
+        for _, garbage in pairs(production.garbages) do
+            local good = garbage.name
+            local script = TradingUtility.getEntityBuysGood(station, good)
+            if script then
+                local trades = deliveredStations[station.id.string] or {}
+                table.insert(trades, {good = good, script = script})
+
+                deliveredStations[station.id.string] = trades
+            end
+        end
+    end
+
+    for _, combo in pairs(deliveredStationsCombos) do
+        combo:clear()
+        combo:addEntry(nil, "- None -"%_t)
+
+        for id, _ in pairs(deliveredStations) do
+            local station = Entity(id)
+            local name = station.translatedTitle .. " " .. station.name
+
+            local faction = Faction(station.factionIndex)
+            if faction then
+                name = name .. "(" .. faction.translatedName .. ")"
+            end
+
+            combo:addEntry(id, name)
+        end
+    end
+
+    for _, combo in pairs(deliveringStationsCombos) do
+        combo:clear()
+        combo:addEntry(nil, "- None -"%_t)
+
+        for id, _ in pairs(deliveringStations) do
+            local station = Entity(id)
+            local name = station.translatedTitle .. " - " .. station.name
+
+            local faction = Faction(station.factionIndex)
+            if faction then
+                name = name .. " - (" .. faction.translatedName .. ")"
+            end
+
+            combo:addEntry(id, name)
+        end
+    end
+
+end
+
+function Factory.onMarginSliderChanged() Factory.sendConfig() end
+function Factory.onAllowBuyChecked() Factory.sendConfig() end
+function Factory.onAllowSellChecked() Factory.sendConfig() end
+function Factory.onActivelyRequestChecked() Factory.sendConfig() end
+function Factory.onActivelySellChecked() Factory.sendConfig() end
+function Factory.onDeliveringStationsChanged() Factory.sendConfig() end
+
+function Factory.refreshConfigErrors()
+    if not Factory.trader.guiInitialized then return end
+
+    for _, labels in pairs({deliveringStationsErrorLabels, deliveredStationsErrorLabels}) do
+        for _, label in pairs(labels) do
+            label.caption = ""
+            label.color = ColorRGB(1, 1, 0)
+        end
+    end
+
+    for index, error in pairs(deliveredStationsErrors) do
+        if index and error then
+            deliveredStationsErrorLabels[index].caption = GetLocalizedString(error)
+        end
+    end
+
+    for index, error in pairs(deliveringStationsErrors) do
+        if index and error then
+            print (error)
+            deliveringStationsErrorLabels[index].caption = GetLocalizedString(error)
+        end
+    end
+end
+
 
 -- this function gets called every time the window is closed on the client
 --function onCloseWindow()
 --
 --end
 
-function Factory.startProduction()
+function Factory.startProduction(timeStep)
 
-    table.insert(currentProductions, 0)
+    table.insert(currentProductions, timeStep / Factory.timeToProduce)
 
     if onServer() then
-        broadcastInvokeClientFunction("startProduction")
+        broadcastInvokeClientFunction("startProduction", timeStep)
     end
 end
 
+local interval = random():getFloat(0.98, 1.02)
 function Factory.getUpdateInterval()
-    return 1.0
+
+    if onServer() and ReadOnlySector().numPlayers == 0 then
+        -- only update every 5 seconds when no players are around
+        -- this is also used to balance fighter delivery a little
+        -- since otherwise delivery fighters would start every second,
+        -- leading to goods being transferred every second,
+        -- since no delivery shuttles actually start without players in the sector
+        return interval + 4
+    else
+        return interval
+    end
 end
 
--- this function gets called once each frame, on client and server
-function Factory.update(timeStep)
-
+function Factory.updateParallelSelf(timeStep)
     local numProductions = 0
     for i, duration in pairs(currentProductions) do
-        duration = duration + timeStep
+        duration = duration + timeStep / Factory.timeToProduce
+        -- print ("duration: " .. duration)
 
-        if duration >= maxDuration then
-
+        if duration >= 1.0 then
             -- production finished
             currentProductions[i] = nil
 
@@ -434,7 +853,14 @@ function Factory.update(timeStep)
         end
     end
 
+    if onServer() then
+        Factory.updateProduction(timeStep)
+    end
 end
+
+-- function Factory.updateParallelRead(timeStep)
+    -- print ("parallel update, read")
+-- end
 
 function Factory.updateClient(timeStep)
     if EntityIcon().icon == "" then
@@ -451,12 +877,482 @@ function Factory.updateClient(timeStep)
             EntityIcon().icon = "data/textures/icons/pixel/factory.png"
         end
     end
+
+    Factory.updateStepDone = true
 end
 
----- this function gets called once each frame, on server only
-function Factory.updateServer(timeStep)
+function Factory.updateUI()
+    if Factory.updateStepDone then
+        Factory.updateStepDone = false
+        Factory.requestGoods()
+    end
+end
 
-    -- if the result hasn't yet been received, don't produce
+function Factory.updateServer(timeStep)
+    local profiler = Profiler("Factory.updateServer: " .. Entity().name)
+
+    Factory.requestTraders(timeStep)
+
+    Factory.refreshDeliveryShuttles()
+    Factory.recallDeliveryShuttles()
+
+    Factory.updateDeliveryShuttleStarts(timeStep)
+    Factory.updateFetchingShuttleStarts(timeStep)
+
+    Factory.updateOrganizeGoodsBulletins(timeStep)
+    Factory.updateDeliveryBulletins(timeStep)
+
+    if Owner().isPlayer then
+        Factory.sendShuttleErrors()
+    end
+end
+
+function Factory.sendShuttleErrors()
+    local messages = {}
+    local send = false
+
+    for i = 1, 3 do
+        local error = deliveredStationsErrors[i]
+        local newError = newDeliveredStationsErrors[i]
+
+        if error ~= newError then
+            send = true
+        end
+    end
+
+    deliveredStationsErrors = newDeliveredStationsErrors
+    newDeliveredStationsErrors = {}
+
+    for i = 1, 3 do
+        local error = deliveringStationsErrors[i]
+        local newError = newDeliveringStationsErrors[i]
+
+        if error ~= newError then
+            send = true
+        end
+    end
+
+    deliveringStationsErrors = newDeliveringStationsErrors
+    newDeliveringStationsErrors = {}
+
+    if send then
+        local player = Player()
+        local x, y = Sector():getCoordinates()
+        local px, py = Player():getSectorCoordinates()
+
+        if x == px and y == py then
+            invokeClientFunction(player, "receiveShuttleErrors", deliveredStationsErrors, deliveringStationsErrors)
+        end
+    end
+
+end
+
+function Factory.receiveShuttleErrors(delivered, delivering)
+    deliveredStationsErrors = delivered
+    deliveringStationsErrors = delivering
+
+    Factory.refreshConfigErrors()
+end
+
+
+function Factory.refreshDeliveryShuttles()
+
+    if deliveryShuttles then
+        if tablelength(deliveryShuttles) > 0 then return end
+        if #Factory.trader.deliveredStations == 0 then return end
+        if #Factory.trader.deliveringStations == 0 then return end
+    else
+        deliveryShuttles = {}
+    end
+
+    local id = Entity().id
+    local fighters = {Sector():getEntitiesByType(EntityType.Fighter)}
+
+    for _, entity in pairs(fighters) do
+        local ai = FighterAI(entity.id)
+
+        if ai.mothershipId == id and entity:hasComponent(ComponentType.CargoBay) then
+            deliveryShuttles[entity.id] = entity
+        end
+    end
+end
+
+function Factory.recallDeliveryShuttles()
+
+    for key, shuttle in pairs(deliveryShuttles) do
+        if not valid(shuttle) then
+            deliveryShuttles[key] = nil
+            goto continue
+        end
+
+        local ai = FighterAI(shuttle.id)
+        if ai.orders == FighterOrders.Attack or ai.orders == FighterOrders.Defend then
+            ai:setOrders(FighterOrders.Return, Uuid())
+            ai:clearFeedback()
+        end
+
+        if ai.reachedTarget then
+            -- order them to come back
+            ai:setOrders(FighterOrders.Return, Uuid())
+            ai:clearFeedback()
+
+            local otherId = shuttle:getValue("cargo_recipient")
+            if otherId then
+                -- make sure that the shuttle actually carries cargo
+                local good, amount = shuttle:getCargo(0)
+                if not good or not amount then goto continue end
+
+                -- make sure the receiver exists
+                local receiver = Entity(otherId)
+                if not receiver then goto continue end
+
+                receiver:addCargo(good, amount)
+                shuttle:removeCargo(good, amount)
+            else
+                local otherId = shuttle:getValue("cargo_giver")
+                if not otherId then
+                    print ("no other id")
+                    goto continue
+                end
+
+                -- make sure the giver exists
+                local giver = Entity(otherId)
+                if not giver then
+                    print ("no other station")
+                    goto continue
+                end
+
+                local script = shuttle:getValue("cargo_giver_script")
+                if not script then
+                    print ("no other script")
+                    goto continue
+                end
+
+                local goodName = shuttle:getValue("cargo_requested")
+                if not goodName then goto continue end
+
+                local good = goods[goodName]:good()
+                if not good then goto continue end
+
+                local error1, error2 = giver:invokeFunction(script, "sellGoods", good, 1, shuttle.factionIndex)
+                if error1 ~= 0 or error2 ~= 0 then
+                    print ("error1: " .. error1 .. ", error2: " .. error2)
+                    goto continue
+                end
+
+                shuttle:addCargo(good, 1)
+            end
+        end
+
+        ::continue::
+    end
+end
+
+function Factory.updateDeliveryShuttleStarts(timeStep)
+    if tablelength(deliveryShuttles) >= 20 then return end
+
+    local sector = Sector()
+    local self = Entity()
+    local controller = FighterController()
+
+    local ids = {}
+    for id, trades in pairs(Factory.trader.deliveredStations) do
+        if #trades > 0 then
+            table.insert(ids, id)
+        end
+    end
+
+    shuffle(random(), ids)
+
+    for index, id in pairs(ids) do
+        local trades = Factory.trader.deliveredStations[id]
+        local trade = randomEntry(random(), trades)
+
+        local station = Entity(id)
+        if not station then
+            newDeliveredStationsErrors[index] = "Error with partner station!"%_T
+            goto continue
+        end
+
+        -- make sure that a fighter of the type we want can actually start
+        local errorCode = controller:getFighterTypeStartError(FighterType.CargoShuttle)
+        if errorCode then
+            newDeliveredStationsErrors[index] = Factory.getFighterStartErrorMessage(errorCode)
+            goto continue
+        end
+
+        local amount = self:getCargoAmount(trade.good)
+        if amount == 0 then
+            newDeliveredStationsErrors[index] = "No more goods!"%_T
+            goto continue
+        end
+
+        local good = Factory.getSoldGoodByName(trade.good)
+        if not good then
+            newDeliveredStationsErrors[index] = "Partner station doesn't buy this!"%_T
+            goto continue
+        end
+
+        -- do the transaction, use 1 good
+        local errorCode1, errorCode2 = station:invokeFunction(trade.script, "buyGoods", good, 1, self.factionIndex, true)
+        if errorCode1 ~= 0 then
+            newDeliveredStationsErrors[index] = "Error with partner station!"%_T
+            goto continue
+        end
+
+        if errorCode2 ~= 0 then
+            newDeliveredStationsErrors[index] = Factory.getBuyGoodsErrorMessage(errorCode2)
+            goto continue
+        end
+
+        if Sector().numPlayers > 0 then
+            -- start a shuttle
+            local shuttle, errorCode = controller:startFighterOfType(FighterType.CargoShuttle)
+            if not shuttle then
+                newDeliveredStationsErrors[index] = Factory.getFighterStartErrorMessage(errorCode)
+                print ("FATAL error starting fighter: " .. errorCode)
+                goto continue
+            end
+
+            -- assign cargo
+            local ai = FighterAI(shuttle.id)
+            ai.ignoreMothershipOrders = true
+            ai.clearFeedbackEachTick = false
+            ai:setOrders(FighterOrders.FlyToLocation, station.id)
+
+            shuttle:setValue("cargo_recipient", station.id.string)
+            shuttle:setValue("cargo_recipient_script", trade.script)
+
+            shuttle:addCargo(good, 1)
+            deliveryShuttles[shuttle.id] = shuttle
+        else
+            station:addCargo(good, 1)
+        end
+
+        Factory.decreaseGoods(trade.good, 1)
+
+        if true then return end -- lua grammar doesn't allow statements in a block after a 'return'
+        ::continue::
+
+    end
+
+end
+
+function Factory.updateFetchingShuttleStarts(timeStep)
+    if tablelength(deliveryShuttles) >= 20 then return end
+
+    local sector = Sector()
+    local self = Entity()
+    local controller = FighterController()
+
+    local ids = {}
+    for id, trades in pairs(Factory.trader.deliveringStations) do
+        if #trades > 0 then
+            table.insert(ids, id)
+        end
+    end
+
+    shuffle(random(), ids)
+
+    for index, id in pairs(ids) do
+        local trades = Factory.trader.deliveringStations[id]
+        local trade = randomEntry(random(), trades)
+
+        local station = Entity(id)
+        if not station then goto continue end
+
+        -- make sure that a fighter of the type we want can actually start exists
+        local errorCode = controller:getFighterTypeStartError(FighterType.CargoShuttle)
+        if errorCode then
+            newDeliveringStationsErrors[index] = Factory.getFighterStartErrorMessage(errorCode)
+            goto continue
+        end
+
+        local errorCode, amount, maxAmount = station:invokeFunction(trade.script, "getStock", trade.good)
+        if errorCode ~= 0 then
+            newDeliveringStationsErrors[index] = "Error with partner station!"%_T
+            print ("error requesting goods from other station: " .. errorCode .. " " .. station.title)
+            goto continue
+        end
+
+        if amount == 0 then
+            newDeliveringStationsErrors[index] = "No more goods on partner station!"%_T
+            goto continue
+        end
+
+        local amount, maxAmount = Factory.getStock(trade.good)
+        if amount >= maxAmount then
+            newDeliveringStationsErrors[index] = "Station at full capacity!"%_T
+            goto continue
+        end
+
+        local good = goods[trade.good]:good()
+        if not good then return end
+
+        if self.freeCargoSpace < good.size then
+            newDeliveringStationsErrors[index] = "Station at full capacity!"%_T
+            goto continue
+        end
+
+        if Sector().numPlayers > 0 then
+            -- start a shuttle
+            local shuttle, errorCode = controller:startFighterOfType(FighterType.CargoShuttle)
+            if not shuttle then
+                newDeliveringStationsErrors[index] = Factory.getFighterStartErrorMessage(errorCode)
+                goto continue
+            end
+
+            -- assign cargo
+            local ai = FighterAI(shuttle.id)
+            ai.ignoreMothershipOrders = true
+            ai.clearFeedbackEachTick = false
+            ai:setOrders(FighterOrders.FlyToLocation, station.id)
+
+            shuttle:setValue("cargo_requested", trade.good)
+            shuttle:setValue("cargo_giver", station.id.string)
+            shuttle:setValue("cargo_giver_script", trade.script)
+
+            deliveryShuttles[shuttle.id] = shuttle
+        else
+            local error1, error2 = station:invokeFunction(trade.script, "sellGoods", good, 1, self.factionIndex)
+            if error1 ~= 0 then
+                newDeliveringStationsErrors[index] = "Error with partner station!"%_T
+                goto continue
+            end
+
+            if error2 ~= 0 then
+                newDeliveringStationsErrors[index] = Factory.getSellGoodsErrorMessage(error2)
+                goto continue
+            end
+
+            self:addCargo(good, 1)
+        end
+
+        if true then return end -- lua grammar doesn't allow statements in a block after a 'return'
+        ::continue::
+
+    end
+
+end
+
+function Factory.onFighterLanded(entityId, squad, fighterId)
+    if not deliveryShuttles then return end
+    deliveryShuttles[fighterId] = nil
+end
+
+function Factory.onBlockPlanChanged(entityId, allBlocks)
+    Factory.productionCapacity = Plan():getStats().productionCapacity * Factory.PlanCapacityFactor
+    Factory.productionCapacity = math.max(Factory.MinimumCapacity, Factory.productionCapacity)
+
+    Factory.refreshProductionTime()
+end
+
+function Factory.refreshProductionTime()
+    if not production then return end
+
+    local value = 0
+    for _, result in pairs(production.results) do
+        local good = goods[result.name]
+        if good then
+            value = value + good.price * result.amount * math.max(1, good.level)
+        end
+    end
+
+    if production.garbages then
+        for i, garbage in pairs(production.garbages) do
+            local good = goods[garbage.name]
+            if good then
+                value = value + good.price * garbage.amount
+            end
+        end
+    end
+
+    Factory.timeToProduce = math.max(Factory.MinimumTimeToProduce, value / Factory.productionCapacity)
+end
+
+function Factory.requestProductionStats()
+    invokeServerFunction("sendProductionStats")
+end
+
+function Factory.sendProductionStats()
+    invokeClientFunction(Player(callingPlayer), "receiveProductionStats", Factory.timeToProduce)
+end
+
+function Factory.receiveProductionStats(timeToProduce)
+    Factory.timeToProduce = timeToProduce
+end
+
+function Factory.requestTraders(timeStep)
+    Factory.traderRequestCooldown = Factory.traderRequestCooldown - timeStep
+    if Factory.traderRequestCooldown > 0 then
+        -- print ("cooldown: " .. Factory.traderRequestCooldown)
+        return
+    end
+
+    -- if the result isn't there yet, can't call for new goods or buyers
+    if not production then
+        -- print ("no productions")
+        return
+    end
+
+    local self = Entity()
+    if TradingUtility.hasTraders(self) then
+        -- print ("has traders")
+        return
+    end
+
+    local sector = Sector()
+    local immediate = sector.numPlayers == 0
+
+    -- call for buyers first
+    -- this decreases the time until the factory generates profit
+    if Factory.trader.activelySell then
+        for _, result in pairs(production.results) do
+            Factory.checkSpawnBuyer(self, result, immediate)
+        end
+
+        for _, garbage in pairs(production.garbages) do
+            Factory.checkSpawnBuyer(self, garbage, immediate)
+        end
+    end
+
+    -- then call for ingredients
+    if Factory.trader.activelyRequest then
+        for _, ingredient in pairs(production.ingredients) do
+            local have = Factory.getNumGoods(ingredient.name)
+            if have < ingredient.amount then
+                local maximum = Factory.getMaxGoods(ingredient.name)
+
+                maximum = math.min(maximum, 500)
+
+                local amount = maximum - have
+                if immediate then amount = round(amount * 0.3) end
+
+                TradingUtility.spawnSeller(self.id, getScriptPath(), ingredient.name, amount, Factory, immediate)
+                Factory.traderRequestCooldown = 120
+                return
+            end
+        end
+    end
+end
+
+function Factory.checkSpawnBuyer(self, good, immediate)
+    local newAmount = Factory.getNumGoods(good.name) + good.amount
+    local maxGoods = Factory.getMaxGoods(good.name)
+
+    local value = newAmount * goods[good.name].price
+
+    -- print("newAmount: " .. newAmount .. ", maxGoods: " .. maxGoods .. ", value: " .. value)
+
+    if newAmount > maxGoods * 0.8 or (value > 100 * 1000 and random():test(0.3)) then
+        TradingUtility.spawnBuyer(self.id, getScriptPath(), good.name, Factory, immediate)
+        Factory.traderRequestCooldown = 120
+        return
+    end
+end
+
+function Factory.updateProduction(timeStep)
+    -- if the result isn't there yet, don't produce
     if not production then return end
 
     -- if not yet fully used, start producing
@@ -468,10 +1364,10 @@ function Factory.updateServer(timeStep)
         -- print("can't produce as there are no more slots free for production")
     end
 
-    if math.random() < 0.5 then
-        canProduce = false
-        -- print("can't produce due to random not producing")
-    end
+    -- if math.random() < 0.5 then
+    --     canProduce = false
+    --     -- print("can't produce due to random not producing")
+    -- end
 
     -- only start if there are actually enough ingredients for producing
     for i, ingredient in pairs(production.ingredients) do
@@ -509,20 +1405,45 @@ function Factory.updateServer(timeStep)
         -- print("start production")
 
         -- start production
-        Factory.startProduction()
+        Factory.startProduction(timeStep)
     end
 
-    Factory.updateOrganizeGoodsBulletins(timeStep)
-    Factory.updateDeliveryBulletins(timeStep)
+end
+
+function Factory.getBuysFromOthers()
+    return Factory.trader.buyFromOthers
+end
+
+function Factory.getSellsToOthers()
+    return Factory.trader.sellToOthers
+end
+
+function Factory.getFighterStartErrorMessage(code)
+
+    if code == FighterStartError.NoError then
+        return "No error."%_T
+    elseif code == FighterStartError.NoHangar then
+        return "No hangar!"%_T
+    elseif code == FighterStartError.SquadNotFound then
+        return "Squad not found!"%_T
+    elseif code == FighterStartError.SquadEmpty then
+        return "Squad empty!"%_T
+    elseif code == FighterStartError.NoStartPosition then
+        return "No start position!"%_T
+    elseif code == FighterStartError.MaximumFightersStarted then
+        return "Maximum fighters started!"%_T
+    elseif code == FighterStartError.MaximumFightersStarted then
+        return "Fighter not found!"%_T
+    elseif code == FighterStartError.NoPilots then
+        return "Not enough pilots!"%_T
+    elseif code == FighterStartError.NoFighterFound then
+        return "No cargo shuttles!"%_T
+    end
+
+    return "Unknown error"%_T
 end
 
 
----- this function gets called once each frame, on client only
---function updateClient(timeStep)
---
---end
-
---
 ---- this function gets called whenever the ui window gets rendered, AFTER the window was rendered (client only)
 --function renderUI()
 --

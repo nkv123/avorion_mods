@@ -53,7 +53,7 @@ function initUI()
     allianceCheckBox.active = false
     allianceCheckBox.captionLeft = false
 
- -- button at the bottom
+    -- button at the bottom
     local button = window:createButton(hmsplit:partition(3), "OK"%_t, "onFoundButtonPress");
     button.textSize = 14
 end
@@ -66,6 +66,12 @@ end
 
 local function foundShip(faction, player, name)
 
+    local settings = GameSettings()
+    if settings.maximumPlayerShips > 0 and faction.numShips >= settings.maximumPlayerShips then
+        player:sendChatMessage("Server"%_t, 1, "Maximum ship limit per faction (%s) of this server reached!"%_t, settings.maximumPlayerShips)
+        return
+    end
+
     if faction:ownsShip(name) then
         player:sendChatMessage("Server"%_t, 1, "You already have a ship called '%s'."%_t, name)
         return
@@ -77,7 +83,7 @@ local function foundShip(faction, player, name)
         return
     end
 
-    faction:pay(0, 500)
+    faction:pay("Paid %2% iron to found a ship."%_T, 0, 500)
 
     local self = Entity()
 

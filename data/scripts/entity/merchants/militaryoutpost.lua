@@ -4,6 +4,7 @@ package.path = package.path .. ";data/scripts/?.lua;"
 
 local SectorSpecifics = require ("sectorspecifics")
 local Balancing = require ("galaxy")
+local Dialog = require("dialogutility")
 require ("stringutility")
 
 -- Don't remove or alter the following comment, it tells the game the namespace this script lives in. If you remove it, the script will break.
@@ -11,8 +12,13 @@ require ("stringutility")
 MilitaryOutpost = {}
 
 function MilitaryOutpost.initialize()
+    if onServer() and Entity().title == "" then
+        Entity().title = "Military Outpost"%_t
+    end
+
     if onClient() and EntityIcon().icon == "" then
         EntityIcon().icon = "data/textures/icons/pixel/military.png"
+        InteractionText().text = Dialog.generateStationInteractionText(Entity(), random())
     end
 end
 

@@ -333,7 +333,7 @@ function WormholeGuardian.createWormhole(center)
 
     local size = random():getFloat(75, 150)
 
-    local wormhole = desc.cpwormhole
+    local wormhole = desc:getComponent(ComponentType.WormHole)
     wormhole:setTargetCoordinates(random():getInt(-400, 400), random():getInt(-400, 400))
     wormhole.visible = true
     wormhole.visualSize = size

@@ -8,18 +8,18 @@ local Rewards = {}
 
 local messages1 =
 {
-    "Thank you."%_t,
-    "Thank you so much."%_t,
-    "We thank you."%_t,
-    "Thank you for helping us."%_t,
+    "Thank you."%_T,
+    "Thank you so much."%_T,
+    "We thank you."%_T,
+    "Thank you for helping us."%_T,
 }
 
 local messages2 =
 {
-    "You have our endless gratitude."%_t,
-    "We transferred a reward to your account."%_t,
-    "We have a reward for you."%_t,
-    "Please take this as a sign of our gratitude."%_t,
+    "You have our endless gratitude."%_T,
+    "We transferred a reward to your account."%_T,
+    "We have a reward for you."%_T,
+    "Please take this as a sign of our gratitude."%_T,
 }
 
 function standard(player, faction, msg, money, reputation, turret, system)
@@ -28,7 +28,7 @@ function standard(player, faction, msg, money, reputation, turret, system)
 
     -- give payment to players who participated
     player:sendChatMessage(faction.name, 0, msg)
-    player:receive(money)
+    player:receive("Received a reward of %1% credits."%_T, money)
     Galaxy():changeFactionRelations(player, faction, reputation)
 
     local x, y = Sector():getCoordinates()

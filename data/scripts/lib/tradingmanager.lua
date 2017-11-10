@@ -6,7 +6,7 @@ require ("goods")
 require ("stringutility")
 require ("player")
 require ("faction")
-
+require ("merchantutility")
 
 local PublicNamespace = {}
 
@@ -18,12 +18,23 @@ local function new()
 
     instance.buyPriceFactor = 1
     instance.sellPriceFactor = 1
+    instance.tax = 0.0 -- tax is the amount of money the owner of the entity gets from transactions
+    instance.factionPaymentFactor = 1.0 -- the amount of money the owner of the entity pays or receives directly through transactions
 
     instance.boughtGoods = {}
     instance.soldGoods = {}
 
     instance.numSold = 0
     instance.numBought = 0
+
+    instance.buyFromOthers = true
+    instance.sellToOthers = true
+
+    instance.activelyRequest = false
+    instance.activelySell = false
+
+    instance.deliveredStations = {}
+    instance.deliveringStations = {}
 
     instance.policies =
     {
@@ -46,6 +57,22 @@ local function new()
     instance.useUpGoodsEnabled = true
 
     return setmetatable(instance, TradingManager)
+end
+
+function TradingManager:getBuysFromOthers()
+    return self.buyFromOthers
+end
+
+function TradingManager:getSellsToOthers()
+    return self.sellToOthers
+end
+
+function TradingManager:setBuysFromOthers(value)
+    self.buyFromOthers = value
+end
+
+function TradingManager:setSellsToOthers(value)
+    self.sellToOthers = value
 end
 
 -- help functions
@@ -156,6 +183,14 @@ function TradingManager:restoreTradingGoods(data)
 
     self.numBought = #self.boughtGoods
     self.numSold = #self.soldGoods
+
+    self.buyFromOthers = data.buyFromOthers or true
+    self.sellToOthers = data.sellToOthers or true
+    self.activelyRequest = data.activelyRequest or false
+    self.activelySell = data.activelySell or false
+
+    self.deliveredStations = data.deliveredStations or {}
+    self.deliveringStations = data.deliveringStations or {}
 end
 
 function TradingManager:secureTradingGoods()
@@ -163,6 +198,15 @@ function TradingManager:secureTradingGoods()
     data.buyPriceFactor = self.buyPriceFactor
     data.sellPriceFactor = self.sellPriceFactor
     data.policies = self.policies
+
+    data.buyFromOthers = self.buyFromOthers
+    data.sellToOthers = self.sellToOthers
+    data.activelyRequest = self.activelyRequest
+    data.activelySell = self.activelySell
+
+    data.deliveredStations = self.deliveredStations
+    data.deliveringStations = self.deliveringStations
+
 
     data.boughtGoods = {}
     for _, g in pairs(self.boughtGoods) do
@@ -212,8 +256,8 @@ function TradingManager:initializeTrading(boughtGoodsIn, soldGoodsIn, policiesIn
                 else
                     amount = math.random(1, maxStock)
 
-                    -- limit to 500k value at max
-                    local maxValue = 200 * 1000 * Balancing_GetSectorRichnessFactor(Sector():getCoordinates())
+                    -- limit to a max value
+                    local maxValue = 300 * 1000 * Balancing_GetSectorRichnessFactor(Sector():getCoordinates())
                     amount = math.min(maxStock, math.floor(maxValue / v.price))
 
                     -- but have at least 7 - 10
@@ -713,6 +757,25 @@ function TradingManager:sendError(faction, msg, ...)
     end
 end
 
+function TradingManager:transferMoney(owner, from, to, amount, fromDescription, toDescription)
+    if from.index == to.index then return end
+
+    local ownerMoney = amount * self.factionPaymentFactor
+
+    if owner.index == from.index then
+        from:pay(fromDescription or "", ownerMoney)
+        to:receive(toDescription or "", amount)
+    elseif owner.index == to.index then
+        from:pay(fromDescription or "", amount)
+        to:receive(toDescription or "", ownerMoney)
+    else
+        from:pay(fromDescription or "", amount)
+        to:receive(toDescription or "", amount)
+    end
+
+    receiveTransactionTax(Entity(), amount * self.tax)
+end
+
 function TradingManager:buyFromShip(shipIndex, goodName, amount, noDockCheck)
 
     -- check if the good can be bought
@@ -760,7 +823,7 @@ function TradingManager:buyFromShip(shipIndex, goodName, amount, noDockCheck)
         amount = maxAmountPlaceable
 
         if maxAmountPlaceable == 0 then
-            self:sendError(shipFaction, "This station is not able to take any more %s."%_t, good.plural)
+            self:sendError(shipFaction, "This station is not able to take any more %s."%_t, good.translatablePlural)
         end
     end
 
@@ -771,11 +834,11 @@ function TradingManager:buyFromShip(shipIndex, goodName, amount, noDockCheck)
         amount = amountOnShip
 
         if amountOnShip == 0 then
-            self:sendError(shipFaction, "You don't have any %s on your ship"%_t, good.plural)
+            self:sendError(shipFaction, "You don't have any %s on your ship"%_t, good.translatablePlural)
         end
     end
 
-    if amount == 0 then
+    if amount <= 0 then
         return
     end
 
@@ -799,9 +862,12 @@ function TradingManager:buyFromShip(shipIndex, goodName, amount, noDockCheck)
         end
     end
 
+    local x, y = Sector():getCoordinates()
+    local fromDescription = Format("\\s(%1%:%2%) %3% bought %4% %5% for %6% credits."%_T, x, y, station.title, math.floor(amount), good.translatablePlural, createMonetaryString(price))
+    local toDescription = Format("\\s(%1%:%2%) %3% sold %4% %5% for %6% credits."%_T, x, y, ship.name, math.floor(amount), good.translatablePlural, createMonetaryString(price))
+
     -- give money to ship faction
-    shipFaction:receive(price)
-    stationFaction:pay(price)
+    self:transferMoney(stationFaction, stationFaction, shipFaction, price, fromDescription, toDescription)
 
     -- remove goods from ship
     ship:removeCargo(good, amount)
@@ -841,7 +907,7 @@ function TradingManager:sellToShip(shipIndex, goodName, amount, noDockCheck)
         amount = amountBuyable
 
         if amountBuyable == 0 then
-             self:sendError(shipFaction, "This station has no more %s to sell."%_t, good.plural)
+             self:sendError(shipFaction, "This station has no more %s to sell."%_t, good.translatablePlural)
         end
     end
 
@@ -852,11 +918,11 @@ function TradingManager:sellToShip(shipIndex, goodName, amount, noDockCheck)
         amount = maxShipHold
 
         if maxShipHold == 0 then
-            self:sendError(shipFaction, "Your ship can not take more %s."%_t, good.plural)
+            self:sendError(shipFaction, "Your ship can not take more %s."%_t, good.translatablePlural)
         end
     end
 
-    if amount == 0 then
+    if amount <= 0 then
         return
     end
 
@@ -880,9 +946,12 @@ function TradingManager:sellToShip(shipIndex, goodName, amount, noDockCheck)
         end
     end
 
+    local x, y = Sector():getCoordinates()
+    local fromDescription = Format("\\s(%1%:%2%) %3% bought %4% %5% for %6% credits."%_T, x, y, ship.title, math.floor(amount), good.translatablePlural, createMonetaryString(price))
+    local toDescription = Format("\\s(%1%:%2%) %3% sold %4% %5% for %6% credits."%_T, x, y, station.name, math.floor(amount), good.translatablePlural, createMonetaryString(price))
+
     -- make player pay
-    shipFaction:pay(price)
-    stationFaction:receive(price)
+    self:transferMoney(stationFaction, shipFaction, stationFaction, price, fromDescription, toDescription)
 
     -- give goods to player
     ship:addCargo(good, amount)
@@ -900,8 +969,8 @@ function TradingManager:sellToShip(shipIndex, goodName, amount, noDockCheck)
 
 end
 
--- convenience function for buying goods from another faction, meant to be called from external
-function TradingManager:buyGoods(good, amount, otherFactionIndex)
+-- convenience function for buying goods from another faction, meant to be called from external. They're not removed from another ship, they just appear
+function TradingManager:buyGoods(good, amount, otherFactionIndex, monetaryTransactionOnly)
 
     -- check if the good is even bought by the station
     if not self:getBoughtGoodByName(good.name) == nil then return 1 end
@@ -915,7 +984,7 @@ function TradingManager:buyGoods(good, amount, otherFactionIndex)
     -- make sure the transaction can not sell more than the station can have in stock
     local buyable = self:getMaxStock(good.size) - self:getNumGoods(good.name);
     amount = math.min(buyable, amount)
-    if amount == 0 then return 2 end
+    if amount <= 0 then return 2 end
 
     -- begin transaction
     -- calculate price. if the seller is the owner of the station, the price is 0
@@ -924,12 +993,17 @@ function TradingManager:buyGoods(good, amount, otherFactionIndex)
     local canPay, msg, args = stationFaction:canPay(price);
     if not canPay then return 3 end
 
-    -- give money to ship faction
-    otherFaction:receive(price)
-    stationFaction:pay(price)
+    local x, y = Sector():getCoordinates()
+    local fromDescription = Format("\\s(%1%:%2%) %3% bought %4% %5% for %6% credits."%_T, x, y, Entity().title, math.floor(amount), good.translatablePlural, createMonetaryString(price))
+    local toDescription = Format("\\s(%1%:%2%): sold %3% %4% for %5% credits."%_T, x, y, math.floor(amount), good.translatablePlural, createMonetaryString(price))
 
-    -- add goods to station
-    self:increaseGoods(good.name, amount)
+    -- give money to other faction
+    self:transferMoney(stationFaction, stationFaction, otherFaction, price, fromDescription, toDescription)
+
+    if not monetaryTransactionOnly then
+        -- add goods to station
+        self:increaseGoods(good.name, amount)
+    end
 
     local relationsChange = GetRelationChangeFromMoney(price)
     Galaxy():changeFactionRelations(otherFaction, stationFaction, relationsChange)
@@ -937,26 +1011,31 @@ function TradingManager:buyGoods(good, amount, otherFactionIndex)
     return 0
 end
 
--- convenience function for selling goods to another faction
-function TradingManager:sellGoods(good, amount, otherFactionIndex)
+-- convenience function for selling goods to another faction. They're not added to another ship, they just disappear
+function TradingManager:sellGoods(good, amount, otherFactionIndex, monetaryTransactionOnly)
 
     local stationFaction = Faction()
     local otherFaction = Faction(otherFactionIndex)
 
     local sellable = self:getNumGoods(good.name)
     amount = math.min(sellable, amount)
-    if amount == 0 then return 1 end
+    if amount <= 0 then return 1 end
 
     local price = self:getSellPrice(good.name, otherFactionIndex) * amount
     local canPay = otherFaction:canPay(price);
     if not canPay then return 2 end
 
-    -- make player pay
-    otherFaction:pay(price)
-    stationFaction:receive(price)
+    local x, y = Sector():getCoordinates()
+    local toDescription = Format("\\s(%1%:%2%) %3% sold %4% %5% for %6% credits."%_T, x, y, Entity().title, math.floor(amount), good.translatablePlural, createMonetaryString(price))
+    local fromDescription = Format("\\s(%1%:%2%): Bought %3% %4% for %5% credits."%_T, x, y, math.floor(amount), good.translatablePlural, createMonetaryString(price))
 
-    -- remove goods from station
-    self:decreaseGoods(good.name, amount)
+    -- make other faction pay
+    self:transferMoney(stationFaction, otherFaction, stationFaction, price, fromDescription, toDescription)
+
+    if not monetaryTransactionOnly then
+        -- remove goods from station
+        self:decreaseGoods(good.name, amount)
+    end
 
     local relationsChange = GetRelationChangeFromMoney(price)
     Galaxy():changeFactionRelations(otherFaction, stationFaction, relationsChange)
@@ -1202,7 +1281,10 @@ function TradingManager:getBuyPrice(goodName, sellingFaction)
         end
     end
 
-    return round(good.price * relationFactor * factor * self.buyPriceFactor)
+    local basePrice = round(good.price * self.buyPriceFactor)
+    local price = round(good.price * relationFactor * factor * self.buyPriceFactor)
+
+    return price, basePrice
 end
 
 -- price for which goods are sold from this to others
@@ -1249,7 +1331,10 @@ function TradingManager:getSellPrice(goodName, buyingFaction)
 
     end
 
-    return round(good.price * relationFactor * factor * self.sellPriceFactor)
+    local price = round(good.price * relationFactor * factor * self.sellPriceFactor)
+    local basePrice = round(good.price * self.sellPriceFactor)
+
+    return price, basePrice
 end
 
 
@@ -1462,6 +1547,37 @@ function TradingManager:updateDeliveryBulletins(timeStep)
 
 end
 
+function TradingManager:getBuyGoodsErrorMessage(code)
+    if code == 0 then
+        return "No error."%_T
+    elseif code == 1 then
+        return "Good isn't bought."%_T
+    elseif code == 2 then
+        return "No more space."%_T
+    elseif code == 3 then
+        return "Not enough money."%_T
+    elseif code == 4 then
+        return "Good isn't bought."%_T
+    end
+
+    return "Unknown error."%_T
+end
+
+function TradingManager:getSellGoodsErrorMessage(code)
+    if code == 0 then
+        return "No error."%_T
+    elseif code == 1 then
+        return "No more goods."%_T
+    elseif code == 2 then
+        return "Not enough money."%_T
+    end
+
+    return "Unknown error."%_T
+end
+
+
+
+
 PublicNamespace.CreateTradingManager = setmetatable({new = new}, {__call = function(_, ...) return new(...) end})
 
 function PublicNamespace.CreateNamespace()
@@ -1507,7 +1623,14 @@ function PublicNamespace.CreateNamespace()
     result.sendError = function(...) return trader:sendError(...) end
     result.buyGoods = function(...) return trader:buyGoods(...) end
     result.sellGoods = function(...) return trader:sellGoods(...) end
+    result.getBuysFromOthers = function(...) return trader:getBuysFromOthers(...) end
+    result.getSellsToOthers = function(...) return trader:getSellsToOthers(...) end
+    result.setBuysFromOthers = function(...) return trader:setBuysFromOthers(...) end
+    result.setSellsToOthers = function(...) return trader:setSellsToOthers(...) end
+
     result.setUseUpGoodsEnabled = function(enabled) trader.useUpGoodsEnabled = enabled end
+    result.getBuyGoodsErrorMessage = function(enabled) trader.getBuyGoodsErrorMessage = enabled end
+    result.getSellGoodsErrorMessage = function(enabled) trader.getSellGoodsErrorMessage = enabled end
 
     return result
 end

@@ -2,6 +2,7 @@ package.path = package.path .. ";data/scripts/lib/?.lua"
 
 require ("galaxy")
 require ("randomext")
+local PlanGenerator = require ("plangenerator")
 
 local rand = random()
 
@@ -68,6 +69,29 @@ function FighterGenerator.generateArmed(x, y, offset_in, rarity_in, material_in)
     local weaponType = getValueFromDistribution(types)
 
     return FighterGenerator.generate(x, y, offset_in, rarity_in, weaponType, material_in)
+end
+
+function FighterGenerator.generateCargoShuttle(x, y, material_in) -- server
+
+    local seed = rand:createSeed()
+
+    local materialProbabilities = Balancing_GetMaterialProbability(x, y)
+    local material = material_in or Material(getValueFromDistribution(materialProbabilities))
+
+    local fighter = GenerateFighterTemplate(seed, nil, 0, 0, Rarity(), material)
+
+    local plan = fighter.plan
+    local container = PlanGenerator.makeContainerPlan()
+
+    local size = 0.95 / container.radius
+    container:scale(vec3(size, size, size))
+    container:displace(vec3(0, -0.7, 0))
+    plan:addPlan(plan.rootIndex, container, container.rootIndex)
+
+    fighter.plan = plan
+    fighter.type = FighterType.CargoShuttle
+
+    return fighter
 end
 
 return FighterGenerator

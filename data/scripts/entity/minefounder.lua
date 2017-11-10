@@ -242,6 +242,12 @@ function foundFactory(goodName, productionIndex, name)
     local buyer, asteroid, player = checkEntityInteractionPermissions(Entity(), AlliancePrivilege.FoundStations)
     if not buyer then return end
 
+    local settings = GameSettings()
+    if settings.maximumPlayerStations > 0 and buyer.numStations >= settings.maximumPlayerStations then
+        player:sendChatMessage("Server"%_t, 1, "Maximum station limit per faction (%s) of this server reached!"%_t, settings.maximumPlayerStations)
+        return
+    end
+
     -- don't allow empty names
     name = name or ""
     if name == "" then
@@ -268,7 +274,7 @@ function foundFactory(goodName, productionIndex, name)
         return
     end
 
-    buyer:payMoney(cost)
+    buyer:pay("Paid %1% credits to found a mine."%_T, cost)
 
     local station = transformToStation(asteroid, name)
     station.title = "${good} Mine"%_t % {good = goodName}

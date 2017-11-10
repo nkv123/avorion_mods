@@ -3,6 +3,7 @@ package.path = package.path .. ";data/scripts/lib/?.lua"
 require ("stringutility")
 require ("goods")
 require ("randomext")
+require ("merchantutility")
 require ("stringutility")
 local TradingAPI = require ("tradingmanager")
 
@@ -10,6 +11,7 @@ local TradingAPI = require ("tradingmanager")
 -- namespace SmugglersMarket
 SmugglersMarket = {}
 SmugglersMarket = TradingAPI:CreateNamespace()
+SmugglersMarket.trader.tax = 0.2
 
 local brandLines = {}
 local playerCargos = {}
@@ -342,9 +344,29 @@ function SmugglersMarket.buyIllegalGood(goodName, amount)
         end
     end
 
+    local x, y = Sector():getCoordinates()
+    local fromDescription = "\\s(${x}:${y}) ${title} bought ${amount} ${plural} for ${credits} credits."%_T %
+    {
+        x = x,
+        y = y,
+        amount = amount,
+        plural = good.plural,
+        credits = createMonetaryString(price),
+        title = station.title
+    }
+
+    local toDescription = "\\s(${x}:${y}): ${name} sold ${amount} ${plural} for ${credits} credits."%_T %
+    {
+        x = x,
+        y = y,
+        amount = amount,
+        plural = good.plural,
+        credits = createMonetaryString(price),
+        name = ship.name,
+    }
+
     -- give money to ship faction
-    buyer:receive(price)
-    stationFaction:pay(price)
+    self:transferMoney(stationFaction, stationFaction, buyer, price, fromDescription, toDescription)
 
     -- remove goods from ship
     ship:removeCargo(good, amount)
@@ -409,7 +431,9 @@ function SmugglersMarket.unbrand(goodName, amount)
     end
 
     -- pay and exchange
-    buyer:pay(price)
+    receiveTransactionTax(station, price * SmugglersMarket.trader.tax)
+
+    buyer:pay("Paid %1% credits to unbrand stolen goods."%_T, price)
 
     local purified = copy(good)
     purified.stolen = false

@@ -3,7 +3,11 @@ package.path = package.path .. ";data/scripts/lib/?.lua"
 require ("basesystem")
 require ("utility")
 require ("randomext")
+local TradingUtility = require ("tradingutility")
 local RingBuffer = require ("ringbuffer")
+
+-- optimization so that energy requirement doesn't have to be read every frame
+FixedEnergyRequirement = true
 
 local tabbedWindow = nil
 local routesTab = nil
@@ -155,86 +159,7 @@ function getDescriptionLines(seed, rarity)
 end
 
 function gatherData()
-    local sellable = {}
-    local buyable = {}
-    local scripts =
-    {
-        "/consumer.lua",
-        "/seller.lua",
-        "/turretfactoryseller.lua",
-        "/factory.lua",
-        "/highfactory.lua",
-        "/basefactory.lua",
-        "/midfactory.lua",
-        "/lowfactory.lua",
-        "/tradingpost.lua",
-        "/planetarytradingpost.lua",
-        "/casino.lua",
-        "/habitat.lua",
-        "/biotope.lua"
-    }
-
-    local entities = {Sector():getEntitiesByType(EntityType.Station)}
-    for _, entity in pairs({Sector():getEntitiesByType(EntityType.Ship)}) do
-        table.insert(entities, entity)
-    end
-
-    for _, station in pairs(entities) do
-        for _, script in pairs(scripts) do
-
-            local results = {station:invokeFunction(script, "getBoughtGoods")}
-            local callResult = results[1]
-
-            if callResult == 0 then -- call was successful, the station buys goods
-
-                for i = 2, #results do
-                    local name = results[i];
-
-                    local callOk, good = station:invokeFunction(script, "getGoodByName", name)
-                    if callOk ~= 0 then print("getGoodByName failed: " .. callOk) end
-
-                    local callOk, stock, maxStock = station:invokeFunction(script, "getStock", name)
-                    if callOk ~= 0 then print("getStock failed" .. callOk) end
-
-                    local callOk, price = station:invokeFunction(script, "getBuyPrice", name, Faction().index)
-                    if callOk ~= 0 then print("getBuyPrice failed" .. callOk) end
-
-                    if maxStock > 0 then
-                        table.insert(sellable, {good = good, price = price, stock = stock, maxStock = maxStock, station = station.title, titleArgs = station:getTitleArguments(), stationIndex = station.index, coords = vec2(Sector():getCoordinates())})
-                    end
-                end
-            else
-                -- print("getBoughtGoods failed " .. callResult)
-            end
-
-            local results = {station:invokeFunction(script, "getSoldGoods")}
-            local callResult = results[1]
-
-            if callResult == 0 then -- call was successful, the station sells goods
-
-                for i = 2, #results do
-                    local name = results[i];
-
-                    local callOk, good = station:invokeFunction(script, "getGoodByName", name)
-                    if callOk ~= 0 then print("getGoodByName failed: " .. callOk) end
-
-                    local callOk, stock, maxStock = station:invokeFunction(script, "getStock", name)
-                    if callOk ~= 0 then print("getStock failed" .. callOk) end
-
-                    local callOk, price = station:invokeFunction(script, "getSellPrice", name, Faction().index)
-                    if callOk ~= 0 then print("getSellPrice failed" .. callOk) end
-
-                    if maxStock > 0 then
-                        table.insert(buyable, {good = good, price = price, stock = stock, maxStock = maxStock, station = station.title, titleArgs = station:getTitleArguments(), stationIndex = station.index, coords = vec2(Sector():getCoordinates())})
-                    end
-                end
-            else
-                -- print("getSoldGoods failed " .. callResult)
-            end
-        end
-    end
-
-    return sellable, buyable
+    return TradingUtility.detectBuyableAndSellableGoods()
 end
 
 function onSectorChanged()
@@ -300,7 +225,7 @@ function analyzeSectorHistory()
         if offer.stock > 0 then
             local sellable = sellables[name]
 
-            if sellable ~= nil and sellable.price > offer.price then
+            if sellable ~= nil and (sellable.price > offer.price or (sellable.price == 0 and offer.price == 0)) then
                 table.insert(routes, {sellable=sellable, buyable=offer})
 
     --            print(string.format("found trading route for %s, buy price (in sector %s): %i, sell price (in sector %s): %i", name, tostring(offer.coords), offer.price, tostring(sellable.coords), sellable.price))

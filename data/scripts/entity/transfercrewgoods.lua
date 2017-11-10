@@ -1127,19 +1127,37 @@ function TransferCrewGoods.transferFighter(sender, squad, index, receiver, recei
         return
     end
 
+    if sender ~= receiver and receiverHangar.freeSpace < fighter.volume then
+        player:sendChatMessage("Server"%_t, 1, "Not enough space in hangar."%_t)
+        return
+    end
+
     if receiverHangar:getSquadFreeSlots(receiverSquad) == 0 then
-        player:sendChatMessage("Server"%_t, 1, "Not enough space in squad."%_t)
-    else
-        local canTransfer = true
-        if sender ~= receiver and receiverHangar.freeSpace < fighter.volume then
-            canTransfer = false
-            player:sendChatMessage("Server"%_t, 1, "Not enough space in hangar."%_t)
+        receiverSquad = nil
+
+        -- find other squad
+        local receiverSquads = {receiverHangar:getSquads()}
+
+        for _, newSquad in pairs(receiverSquads) do
+            if receiverHangar:getSquadFreeSlots(newSquad) > 0 then
+                receiverSquad = newSquad
+                break
+            end
         end
 
-        if canTransfer then
-            senderHangar:removeFighter(index, squad)
-            receiverHangar:addFighter(receiverSquad, fighter)
+        if receiverSquad == nil then
+            if #receiverSquads < receiverHangar.maxSquads then
+                receiverSquad = receiverHangar:addSquad("New Squad"%_t)
+            else
+                player:sendChatMessage("Server"%_t, 1, "Not enough space in squad."%_t)
+            end
         end
+
+    end
+
+    if receiverHangar:getSquadFreeSlots(receiverSquad) > 0 then
+        senderHangar:removeFighter(index, squad)
+        receiverHangar:addFighter(receiverSquad, fighter)
     end
 
     invokeClientFunction(player, "updateData")

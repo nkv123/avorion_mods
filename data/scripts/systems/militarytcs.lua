@@ -5,6 +5,9 @@ require ("basesystem")
 require ("randomext")
 require ("utility")
 
+-- optimization so that energy requirement doesn't have to be read every frame
+FixedEnergyRequirement = true
+
 function getNumTurrets(seed, rarity)
     return math.max(1, rarity.value + 1)
 end

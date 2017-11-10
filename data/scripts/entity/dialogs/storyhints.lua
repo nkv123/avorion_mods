@@ -123,7 +123,7 @@ end
 function StoryHints.exodus1()
     local d0_IfYoureTheTreas = {}
 
-    d0_IfYoureTheTreas.text = "If you're the treasure hunting type, the you should check asteroid fields in the no man's space for beacons. \n\nI've seen lots of beacons on my travels, and they seem to have some message for all members of 'Operation Exodus'. Whatever this may be."%_t
+    d0_IfYoureTheTreas.text = "If you're the treasure hunting type, you should check asteroid fields in the no man's space for beacons. \n\nI've seen lots of beacons on my travels, and they seem to have some message for all members of 'Operation Exodus'. Whatever that may be."%_t
     d0_IfYoureTheTreas.answers = {
         {answer = "Thanks, I'll check it out."%_t}
     }

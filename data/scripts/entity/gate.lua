@@ -63,7 +63,7 @@ end
 function Gate.initialize()
 
     local entity = Entity()
-    local wormhole = entity.cpwormhole
+    local wormhole = entity:getWormholeComponent()
 
     local tx, ty = wormhole:getTargetCoordinates()
     local x, y = Sector():getCoordinates()
@@ -199,7 +199,7 @@ function Gate.canTransfer(index)
         player:sendChatMessage("Gate Control"%_t, 3, "You paid %i credits passage fee."%_t, fee)
     end
 
-    buyer:pay(fee)
+    buyer:pay("Paid %1% credits gate passage fee."%_T, fee)
 
     return 1
 end

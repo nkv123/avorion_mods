@@ -11,6 +11,9 @@ interestingEntities = {}
 detections = {}
 highlightRange = 0
 
+-- optimization so that energy requirement doesn't have to be read every frame
+FixedEnergyRequirement = true
+
 function getBonuses(seed, rarity)
     math.randomseed(seed)
 
@@ -21,7 +24,7 @@ function getBonuses(seed, rarity)
 
     if rarity.value >= RarityType.Uncommon then
         table.insert(detections, "entity/stash.lua")
-        table.insert(detections, "entity/exodusbeacon.lua")
+        table.insert(detections, "entity/story/exodusbeacon.lua")
     end
 
     local highlightRange = 0

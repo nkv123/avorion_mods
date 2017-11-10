@@ -368,10 +368,18 @@ function makeFighterTooltip(fighter)
 
     -- create tool tip
     local tooltip = Tooltip()
-    tooltip.icon = fighter.weaponIcon
 
     -- title
-    local title = "${weaponPrefix} Fighter"%_t % fighter
+    local title
+    if fighter.type == FighterType.Fighter then
+        title = "${weaponPrefix} Fighter"%_t % fighter
+        tooltip.icon = fighter.weaponIcon
+    elseif fighter.type == FighterType.CargoShuttle then
+        title = "Cargo Shuttle"%_t
+        tooltip.icon = "data/textures/icons/wooden-crate.png"
+    elseif fighter.type == FighterType.CrewShuttle then
+        title = "Crew Shuttle"%_t
+    end
 
     local line = TooltipLine(headLineSize, headLineFont)
     line.ctext = title
@@ -382,8 +390,9 @@ function makeFighterTooltip(fighter)
     local fontSize = 14
     local lineHeight = 20
 
-    fillWeaponTooltipData(fighter, tooltip)
-
+    if fighter.type == FighterType.Fighter then
+        fillWeaponTooltipData(fighter, tooltip)
+    end
     -- empty line
     tooltip:addLine(TooltipLine(15, 15))
 

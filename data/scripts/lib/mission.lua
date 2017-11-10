@@ -83,7 +83,7 @@ end
 
 else
 
-function sync(data_in)
+function sync()
     local player
     if callingPlayer then
         player = Player(callingPlayer)

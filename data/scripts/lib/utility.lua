@@ -390,3 +390,13 @@ function execute(code, ...)
 
     return unpack(returnValues)
 end
+
+function makeReadOnlyTable(table)
+   return setmetatable({}, {
+     __index = table,
+     __newindex = function(table, key, value)
+                    error("Attempt to modify read-only table")
+                  end,
+     __metatable = false
+   });
+end

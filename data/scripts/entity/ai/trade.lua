@@ -1,8 +1,8 @@
 package.path = package.path .. ";data/scripts/lib/?.lua"
 package.path = package.path .. ";data/scripts/entity/?.lua"
 
-require ("ai/dock")
 require ("randomext")
+local DockAI = require ("ai/dock")
 
 local stationIndex
 local script
@@ -22,18 +22,22 @@ function restore(values)
     script = values.script
     stage = values.stage
     waitCount = values.waitCount
-    dockStage = values.dockStage
+
+    DockAI.restore(values)
 end
 
 function secure()
-    return
+    local values =
     {
         stationIndex = stationIndex.string,
         script = script,
         stage = stage,
         waitCount = waitCount,
-        dockStage = dockStage,
     }
+
+    DockAI.secure(values)
+
+    return values
 end
 
 function initialize(stationIndex_in, script_in)
@@ -68,7 +72,7 @@ function updateServer(timeStep)
 
         -- stage 0 is flying towards the light-line
         if stage == 0 then
-            if flyToDock(ship, station) then
+            if DockAI.flyToDock(ship, station) then
                 stage = 2
             end
         end
@@ -87,18 +91,7 @@ function updateServer(timeStep)
 
         -- fly back to the end of the lights
         if stage == 3 then
-            local pos, dir = station:getDockingPositions()
-            local target = station.position:transformCoord(pos + dir * 300)
-
-            local ai = ShipAI()
-            if ai.state ~= AIState.Fly then
-                ai:setFlyLinear(target, 0)
-            end
-
-            local dist = distance(target, ship:getBoundingSphere().center)
-
-            -- once the ship reached the end of the light line, trading is done
-            if dist < ship:getBoundingSphere().radius * 2.0 then
+            if DockAI.flyAwayFromDock(ship, station) then
                 onTradingFinished(ship)
             end
         end

@@ -27,10 +27,13 @@
 <a href="#numShips">numShips</a>
 </td></tr>
 <tr><td>
-<a href="#leader">leader</a>
+<a href="#numStations">numStations</a>
 </td></tr>
 <tr><td>
-<a href="#newMemberRank">newMemberRank</a>
+<a href="#numCrafts">numCrafts</a>
+</td></tr>
+<tr><td>
+<a href="#leader">leader</a>
 </td></tr>
 <tr><td>
 <a class="inheritedproperty" href="#money">money</a>
@@ -166,6 +169,12 @@
 <tr><td>
 <a class="code" href="#sendChatMessage">sendChatMessage</a>
 </td></tr>
+<tr><td>
+<a class="code" href="#getNewMemberRank">getNewMemberRank</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#setNewMemberRank">setNewMemberRank</a>
+</td></tr>
 <tr>
 <td>
 <a class="inheritedcode" href="#getRelations">getRelations</a>
@@ -193,12 +202,12 @@
 </tr>
 <tr>
 <td>
-<a class="inheritedcode" href="#payMoney">payMoney</a>
+<a class="inheritedcode" href="#payResource">payResource</a>
 </td>
 </tr>
 <tr>
 <td>
-<a class="inheritedcode" href="#payResource">payResource</a>
+<a class="inheritedcode" href="#payWithoutNotify">payWithoutNotify</a>
 </td>
 </tr>
 <tr>
@@ -208,12 +217,12 @@
 </tr>
 <tr>
 <td>
-<a class="inheritedcode" href="#receiveMoney">receiveMoney</a>
+<a class="inheritedcode" href="#receiveResource">receiveResource</a>
 </td>
 </tr>
 <tr>
 <td>
-<a class="inheritedcode" href="#receiveResource">receiveResource</a>
+<a class="inheritedcode" href="#receiveWithoutNotify">receiveWithoutNotify</a>
 </td>
 </tr>
 <tr>
@@ -332,7 +341,7 @@
 <div id="Alliance", class="codecontainer">
 <div id="Alliance", class="function">
 <p>
-<span class="keyword">function </span> Alliance(<span class="type">var</span> <span class="parameter"></span>) <br/>
+<span class="keyword">function </span> Alliance(<span class="type">var</span> <span class="parameter">index</span>) <br/>
 </p>
 </div>
 <div id="Alliance", class="">
@@ -348,15 +357,19 @@ A new instance of Alliance
 <div id="Properties", class="codecontainer">
 <div id="numShips">
 <table style="width:100%;"><tr>
-<td><span class="keyword">property</span> <span class="type">var </span> numShips</td><td align="right"><span>[read-only]</span></td></tr></table>
+<td><span class="keyword">property</span> <span class="type">int </span> numShips</td><td align="right"><span>[read-only]</span></td></tr></table>
+</div>
+<div id="numStations">
+<table style="width:100%;"><tr>
+<td><span class="keyword">property</span> <span class="type">int </span> numStations</td><td align="right"><span>[read-only]</span></td></tr></table>
+</div>
+<div id="numCrafts">
+<table style="width:100%;"><tr>
+<td><span class="keyword">property</span> <span class="type">unsigned int </span> numCrafts</td><td align="right"><span>[read-only]</span></td></tr></table>
 </div>
 <div id="leader">
 <table style="width:100%;"><tr>
 <td><span class="keyword">property</span> <span class="type">int </span> leader</td><td align="right"></td></tr></table>
-</div>
-<div id="newMemberRank">
-<table style="width:100%;"><tr>
-<td><span class="keyword">property</span> <span class="type">string </span> newMemberRank</td><td align="right"></td></tr></table>
 </div>
 <div id="money">
 <table style="width:100%;"><tr>
@@ -364,35 +377,35 @@ A new instance of Alliance
 </div>
 <div id="name">
 <table style="width:100%;"><tr>
-<td><span class="keyword">property</span> <span class="type">var </span> name</td><td align="right"><span>[read-only]</span></td></tr></table>
+<td><span class="keyword">property</span> <span class="type">string </span> name</td><td align="right"><span>[read-only]</span></td></tr></table>
 </div>
 <div id="index">
 <table style="width:100%;"><tr>
-<td><span class="keyword">property</span> <span class="type">var </span> index</td><td align="right"><span>[read-only]</span></td></tr></table>
+<td><span class="keyword">property</span> <span class="type">int </span> index</td><td align="right"><span>[read-only]</span></td></tr></table>
 </div>
 <div id="isPlayer">
 <table style="width:100%;"><tr>
-<td><span class="keyword">property</span> <span class="type">var </span> isPlayer</td><td align="right"><span>[read-only]</span></td></tr></table>
+<td><span class="keyword">property</span> <span class="type">bool </span> isPlayer</td><td align="right"><span>[read-only]</span></td></tr></table>
 </div>
 <div id="isAlliance">
 <table style="width:100%;"><tr>
-<td><span class="keyword">property</span> <span class="type">var </span> isAlliance</td><td align="right"><span>[read-only]</span></td></tr></table>
+<td><span class="keyword">property</span> <span class="type">bool </span> isAlliance</td><td align="right"><span>[read-only]</span></td></tr></table>
 </div>
 <div id="isAIFaction">
 <table style="width:100%;"><tr>
-<td><span class="keyword">property</span> <span class="type">var </span> isAIFaction</td><td align="right"><span>[read-only]</span></td></tr></table>
+<td><span class="keyword">property</span> <span class="type">bool </span> isAIFaction</td><td align="right"><span>[read-only]</span></td></tr></table>
 </div>
 <div id="color1">
 <table style="width:100%;"><tr>
-<td><span class="keyword">property</span> <span class="type">var </span> color1</td><td align="right"><span>[read-only]</span></td></tr></table>
+<td><span class="keyword">property</span> <span class="type">Color </span> color1</td><td align="right"><span>[read-only]</span></td></tr></table>
 </div>
 <div id="color2">
 <table style="width:100%;"><tr>
-<td><span class="keyword">property</span> <span class="type">var </span> color2</td><td align="right"><span>[read-only]</span></td></tr></table>
+<td><span class="keyword">property</span> <span class="type">Color </span> color2</td><td align="right"><span>[read-only]</span></td></tr></table>
 </div>
 <div id="color3">
 <table style="width:100%;"><tr>
-<td><span class="keyword">property</span> <span class="type">var </span> color3</td><td align="right"><span>[read-only]</span></td></tr></table>
+<td><span class="keyword">property</span> <span class="type">Color </span> color3</td><td align="right"><span>[read-only]</span></td></tr></table>
 </div>
 <div id="initialRelations">
 <table style="width:100%;"><tr>
@@ -422,7 +435,7 @@ A new instance of Alliance
 <div id="contains", class="codecontainer">
 <div id="contains", class="function">
 <p>
-<span class="keyword">function var</span> contains(<span class="type">int</span> <span class="parameter"></span>) <br/>
+<span class="keyword">function bool</span> contains(<span class="type">int</span> <span class="parameter">playerIndex</span>) <br/>
 </p>
 </div>
 <div id="contains", class="">
@@ -432,7 +445,7 @@ A new instance of Alliance
 <div id="getMemberRank", class="codecontainer">
 <div id="getMemberRank", class="function">
 <p>
-<span class="keyword">function var</span> getMemberRank(<span class="type">int</span> <span class="parameter"></span>) <br/>
+<span class="keyword">function bool</span> getMemberRank(<span class="type">int</span> <span class="parameter">playerIndex</span>) <br/>
 </p>
 </div>
 <div id="getMemberRank", class="">
@@ -442,7 +455,7 @@ A new instance of Alliance
 <div id="getRank", class="codecontainer">
 <div id="getRank", class="function">
 <p>
-<span class="keyword">function var</span> getRank(<span class="type">string</span> <span class="parameter"></span>) <br/>
+<span class="keyword">function bool</span> getRank(<span class="type">string</span> <span class="parameter">name</span>) <br/>
 </p>
 </div>
 <div id="getRank", class="">
@@ -452,7 +465,7 @@ A new instance of Alliance
 <div id="rankExists", class="codecontainer">
 <div id="rankExists", class="function">
 <p>
-<span class="keyword">function var</span> rankExists(<span class="type">string</span> <span class="parameter"></span>) <br/>
+<span class="keyword">function bool</span> rankExists(<span class="type">string</span> <span class="parameter">rank</span>) <br/>
 </p>
 </div>
 <div id="rankExists", class="">
@@ -462,7 +475,7 @@ A new instance of Alliance
 <div id="getMemberLocation", class="codecontainer">
 <div id="getMemberLocation", class="function">
 <p>
-<span class="keyword">function var</span> getMemberLocation(<span class="type">int</span> <span class="parameter"></span>) <br/>
+<span class="keyword">function bool</span> getMemberLocation(<span class="type">int</span> <span class="parameter">playerIndex</span>) <br/>
 </p>
 </div>
 <div id="getMemberLocation", class="">
@@ -472,7 +485,7 @@ A new instance of Alliance
 <div id="hasPrivilege", class="codecontainer">
 <div id="hasPrivilege", class="function">
 <p>
-<span class="keyword">function var</span> hasPrivilege(<span class="type">int</span> <span class="parameter"></span>, <span class="type">int</span> <span class="parameter"></span>) <br/>
+<span class="keyword">function bool</span> hasPrivilege(<span class="type">int</span> <span class="parameter">playerIndex</span>, <span class="type">int</span> <span class="parameter">privilege</span>) <br/>
 </p>
 </div>
 <div id="hasPrivilege", class="">
@@ -482,7 +495,7 @@ A new instance of Alliance
 <div id="addRank", class="codecontainer">
 <div id="addRank", class="function">
 <p>
-<span class="keyword">function </span> addRank(<span class="type">string</span> <span class="parameter"></span>, <span class="type">string</span> <span class="parameter"></span>) <br/>
+<span class="keyword">function var</span> addRank(<span class="type">string</span> <span class="parameter">name</span>, <span class="type">string</span> <span class="parameter">lowerName</span>) <br/>
 </p>
 </div>
 <div id="addRank", class="">
@@ -498,7 +511,7 @@ nothing
 <div id="removeRank", class="codecontainer">
 <div id="removeRank", class="function">
 <p>
-<span class="keyword">function </span> removeRank(<span class="type">string</span> <span class="parameter"></span>) <br/>
+<span class="keyword">function var</span> removeRank(<span class="type">string</span> <span class="parameter">name</span>) <br/>
 </p>
 </div>
 <div id="removeRank", class="">
@@ -514,7 +527,7 @@ nothing
 <div id="moveRank", class="codecontainer">
 <div id="moveRank", class="function">
 <p>
-<span class="keyword">function </span> moveRank(<span class="type">string</span> <span class="parameter"></span>, <span class="type">string</span> <span class="parameter"></span>) <br/>
+<span class="keyword">function var</span> moveRank(<span class="type">string</span> <span class="parameter">name</span>, <span class="type">string</span> <span class="parameter">lowerName</span>) <br/>
 </p>
 </div>
 <div id="moveRank", class="">
@@ -530,7 +543,7 @@ nothing
 <div id="setMemberRank", class="codecontainer">
 <div id="setMemberRank", class="function">
 <p>
-<span class="keyword">function </span> setMemberRank(<span class="type">int</span> <span class="parameter"></span>, <span class="type">string</span> <span class="parameter"></span>) <br/>
+<span class="keyword">function var</span> setMemberRank(<span class="type">int</span> <span class="parameter">playerIndex</span>, <span class="type">string</span> <span class="parameter">rank</span>) <br/>
 </p>
 </div>
 <div id="setMemberRank", class="">
@@ -546,7 +559,7 @@ nothing
 <div id="addRankPrivilege", class="codecontainer">
 <div id="addRankPrivilege", class="function">
 <p>
-<span class="keyword">function </span> addRankPrivilege(<span class="type">string</span> <span class="parameter"></span>, <span class="type">int</span> <span class="parameter"></span>) <br/>
+<span class="keyword">function var</span> addRankPrivilege(<span class="type">string</span> <span class="parameter">rank</span>, <span class="type">int</span> <span class="parameter">privilege</span>) <br/>
 </p>
 </div>
 <div id="addRankPrivilege", class="">
@@ -562,7 +575,7 @@ nothing
 <div id="removeRankPrivilege", class="codecontainer">
 <div id="removeRankPrivilege", class="function">
 <p>
-<span class="keyword">function </span> removeRankPrivilege(<span class="type">string</span> <span class="parameter"></span>, <span class="type">int</span> <span class="parameter"></span>) <br/>
+<span class="keyword">function var</span> removeRankPrivilege(<span class="type">string</span> <span class="parameter">rankName</span>, <span class="type">int</span> <span class="parameter">privilege</span>) <br/>
 </p>
 </div>
 <div id="removeRankPrivilege", class="">
@@ -578,7 +591,7 @@ nothing
 <div id="ownsShip", class="codecontainer">
 <div id="ownsShip", class="function">
 <p>
-<span class="keyword">function var</span> ownsShip(<span class="type">string</span> <span class="parameter"></span>) <br/>
+<span class="keyword">function bool</span> ownsShip(<span class="type">string</span> <span class="parameter">name</span>) <br/>
 </p>
 </div>
 <div id="ownsShip", class="">
@@ -588,7 +601,7 @@ nothing
 <div id="getShipNames", class="codecontainer">
 <div id="getShipNames", class="function">
 <p>
-<span class="keyword">function var</span> getShipNames() <br/>
+<span class="keyword">function string...</span> getShipNames() <br/>
 </p>
 </div>
 <div id="getShipNames", class="">
@@ -598,7 +611,7 @@ nothing
 <div id="getShipCargo", class="codecontainer">
 <div id="getShipCargo", class="function">
 <p>
-<span class="keyword">function var</span> getShipCargo(<span class="type">string</span> <span class="parameter"></span>) <br/>
+<span class="keyword">function CargoBay</span> getShipCargo(<span class="type">string</span> <span class="parameter">name</span>) <br/>
 </p>
 </div>
 <div id="getShipCargo", class="">
@@ -608,7 +621,7 @@ nothing
 <div id="getShipPaymentTime", class="codecontainer">
 <div id="getShipPaymentTime", class="function">
 <p>
-<span class="keyword">function var</span> getShipPaymentTime(<span class="type">string</span> <span class="parameter"></span>) <br/>
+<span class="keyword">function float</span> getShipPaymentTime(<span class="type">string</span> <span class="parameter">name</span>) <br/>
 </p>
 </div>
 <div id="getShipPaymentTime", class="">
@@ -618,7 +631,7 @@ nothing
 <div id="getShipCrew", class="codecontainer">
 <div id="getShipCrew", class="function">
 <p>
-<span class="keyword">function var</span> getShipCrew(<span class="type">string</span> <span class="parameter"></span>) <br/>
+<span class="keyword">function Crew</span> getShipCrew(<span class="type">string</span> <span class="parameter">name</span>) <br/>
 </p>
 </div>
 <div id="getShipCrew", class="">
@@ -628,7 +641,7 @@ nothing
 <div id="getShipPayment", class="codecontainer">
 <div id="getShipPayment", class="function">
 <p>
-<span class="keyword">function var</span> getShipPayment(<span class="type">string</span> <span class="parameter"></span>) <br/>
+<span class="keyword">function float</span> getShipPayment(<span class="type">string</span> <span class="parameter">name</span>) <br/>
 </p>
 </div>
 <div id="getShipPayment", class="">
@@ -638,7 +651,7 @@ nothing
 <div id="getShipPlan", class="codecontainer">
 <div id="getShipPlan", class="function">
 <p>
-<span class="keyword">function var</span> getShipPlan(<span class="type">string</span> <span class="parameter"></span>) <br/>
+<span class="keyword">function BlockPlan</span> getShipPlan(<span class="type">string</span> <span class="parameter">name</span>) <br/>
 </p>
 </div>
 <div id="getShipPlan", class="">
@@ -648,7 +661,7 @@ nothing
 <div id="getShipPosition", class="codecontainer">
 <div id="getShipPosition", class="function">
 <p>
-<span class="keyword">function var</span> getShipPosition(<span class="type">string</span> <span class="parameter"></span>) <br/>
+<span class="keyword">function Coordinates</span> getShipPosition(<span class="type">string</span> <span class="parameter">name</span>) <br/>
 </p>
 </div>
 <div id="getShipPosition", class="">
@@ -658,7 +671,7 @@ nothing
 <div id="getShipType", class="codecontainer">
 <div id="getShipType", class="function">
 <p>
-<span class="keyword">function var</span> getShipType(<span class="type">string</span> <span class="parameter"></span>) <br/>
+<span class="keyword">function int</span> getShipType(<span class="type">string</span> <span class="parameter">name</span>) <br/>
 </p>
 </div>
 <div id="getShipType", class="">
@@ -678,7 +691,7 @@ nothing
 <div id="invokeFunction", class="codecontainer">
 <div id="invokeFunction", class="function">
 <p>
-<span class="keyword">function var...</span> invokeFunction(<span class="type">string</span> <span class="parameter">script</span>, <span class="type">string</span> <span class="parameter">functionName</span>, <span class="type">var...</span> <span class="parameter">arguments</span>) <br/>
+<span class="keyword">function var...</span> invokeFunction() <br/>
 </p>
 </div>
 <div id="invokeFunction", class="">
@@ -688,7 +701,7 @@ nothing
 <div id="addScript", class="codecontainer">
 <div id="addScript", class="function">
 <p>
-<span class="keyword">function var</span> addScript(<span class="type">string</span> <span class="parameter">scriptPath</span>, <span class="type">var...</span> <span class="parameter">arguments</span>) <br/>
+<span class="keyword">function var</span> addScript() <br/>
 </p>
 </div>
 <div id="addScript", class="">
@@ -698,7 +711,7 @@ nothing
 <div id="addScriptOnce", class="codecontainer">
 <div id="addScriptOnce", class="function">
 <p>
-<span class="keyword">function var</span> addScriptOnce(<span class="type">string</span> <span class="parameter">scriptPath</span>, <span class="type">var...</span> <span class="parameter">arguments</span>) <br/>
+<span class="keyword">function var</span> addScriptOnce() <br/>
 </p>
 </div>
 <div id="addScriptOnce", class="">
@@ -708,7 +721,7 @@ nothing
 <div id="removeScript", class="codecontainer">
 <div id="removeScript", class="function">
 <p>
-<span class="keyword">function </span> removeScript(<span class="type">var</span> <span class="parameter">script</span>) <br/>
+<span class="keyword">function var</span> removeScript(<span class="type">var</span> <span class="parameter">script</span>) <br/>
 </p>
 </div>
 <div id="removeScript", class="">
@@ -744,7 +757,7 @@ nothing
 <div id="sendChatMessage", class="codecontainer">
 <div id="sendChatMessage", class="function">
 <p>
-<span class="keyword">function </span> sendChatMessage(<span class="type">string</span> <span class="parameter">sender</span>, <span class="type">int</span> <span class="parameter">messageType</span>, <span class="type">string</span> <span class="parameter">message</span>, <span class="type">string...</span> <span class="parameter">arguments</span>) <br/>
+<span class="keyword">function var</span> sendChatMessage() <br/>
 </p>
 </div>
 <div id="sendChatMessage", class="">
@@ -757,10 +770,36 @@ nothing
 </p>
 </div>
 </div>
+<div id="getNewMemberRank", class="codecontainer">
+<div id="getNewMemberRank", class="function">
+<p>
+<span class="keyword">function string</span> getNewMemberRank() <br/>
+</p>
+</div>
+<div id="getNewMemberRank", class="">
+</p>
+</div>
+</div>
+<div id="setNewMemberRank", class="codecontainer">
+<div id="setNewMemberRank", class="function">
+<p>
+<span class="keyword">function var</span> setNewMemberRank(<span class="type">string</span> <span class="parameter">rank</span>) <br/>
+</p>
+</div>
+<div id="setNewMemberRank", class="">
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
 <div id="getRelations", class="codecontainer">
 <div id="getRelations", class="function">
 <p>
-<span class="keyword">function var</span> getRelations(<span class="type">int</span> <span class="parameter"></span>) <br/>
+<span class="keyword">function Relation</span> getRelations(<span class="type">int</span> <span class="parameter">factionIndex</span>) <br/>
 </p>
 </div>
 <div id="getRelations", class="">
@@ -774,7 +813,7 @@ nothing
 <div id="knowsFaction", class="codecontainer">
 <div id="knowsFaction", class="function">
 <p>
-<span class="keyword">function var</span> knowsFaction(<span class="type">int</span> <span class="parameter"></span>) <br/>
+<span class="keyword">function bool</span> knowsFaction(<span class="type">int</span> <span class="parameter">factionIndex</span>) <br/>
 </p>
 </div>
 <div id="knowsFaction", class="">
@@ -788,7 +827,7 @@ nothing
 <div id="getHomeSectorCoordinates", class="codecontainer">
 <div id="getHomeSectorCoordinates", class="function">
 <p>
-<span class="keyword">function var</span> getHomeSectorCoordinates() <br/>
+<span class="keyword">function Coordinates</span> getHomeSectorCoordinates() <br/>
 </p>
 </div>
 <div id="getHomeSectorCoordinates", class="">
@@ -802,7 +841,7 @@ nothing
 <div id="setHomeSectorCoordinates", class="codecontainer">
 <div id="setHomeSectorCoordinates", class="function">
 <p>
-<span class="keyword">function </span> setHomeSectorCoordinates(<span class="type">int</span> <span class="parameter"></span>, <span class="type">int</span> <span class="parameter"></span>) <br/>
+<span class="keyword">function var</span> setHomeSectorCoordinates(<span class="type">int</span> <span class="parameter">x</span>, <span class="type">int</span> <span class="parameter">y</span>) <br/>
 </p>
 </div>
 <div id="setHomeSectorCoordinates", class="">
@@ -822,34 +861,23 @@ nothing
 <div id="pay", class="codecontainer">
 <div id="pay", class="function">
 <p>
-<span class="keyword">function </span> pay(<span class="type">int64_t</span> <span class="parameter"></span>, <span class="type">int64_t...</span> <span class="parameter"></span>) <br/>
+<span class="keyword">function var</span> pay(<span class="type">string or Format [optional]</span> <span class="parameter">description</span>, <span class="type">int</span> <span class="parameter">money</span>, <span class="type">int...</span> <span class="parameter">resources</span>) <br/>
 </p>
 </div>
 <div id="pay", class="">
 <p>
-<span class="inheritedcode">Inherited from <a href="Faction [Server].html">Faction [Server]</a></span>
+Makes the faction pay a certain amount of money and resources. If the faction can't pay, the respective money and resources will be set to 0. This function accepts an optional string for Format as first argument, as an economy notification describing the transaction that will be sent to the player, in case the faction is a player. <br/>To ease handling of transaction descriptions, the format description (if set) will receive all the remaining arguments given to the pay() function as format arguments, in the same order as they are given to the function. Dots for easier reading will be inserted as well. Examples:<br/><br/> faction:pay("Paid %1% credits and %2% iron.", 50000, 250) <br/> -> "Paid 50.000 credits and 250 iron."<br/><br/> faction:pay(Format("%1% paid %2% credits and %3% iron.", "Excelsior"), 50, 25000) <br/> -> "Excelsior paid 50 credits and 25.000 iron."<br/><br/> <span class="inheritedcode">Inherited from <a href="Faction [Server].html">Faction [Server]</a></span>
 
 </p>
-<p><span class="docheader">Returns</span></p>
+<p><span class="docheader">Parameters</span></p>
 <div class="indented">
-<p>
-nothing
-</p>
+<span class="parameter">description</span>
+[optional] A description for the transaction. Can either be a string or a Format. If this variable is set, money and resources will be appended to the end of the list of arguments passed to the description format string. <br/>
+<span class="parameter">money</span>
+Money that will be removed from the faction <br/>
+<span class="parameter">resources</span>
+A list of resources, starting with iron, that will be removed from the faction <br/>
 </div>
-</p>
-</div>
-</div>
-<div id="payMoney", class="codecontainer">
-<div id="payMoney", class="function">
-<p>
-<span class="keyword">function </span> payMoney(<span class="type">int64_t</span> <span class="parameter"></span>) <br/>
-</p>
-</div>
-<div id="payMoney", class="">
-<p>
-<span class="inheritedcode">Inherited from <a href="Faction [Server].html">Faction [Server]</a></span>
-
-</p>
 <p><span class="docheader">Returns</span></p>
 <div class="indented">
 <p>
@@ -862,14 +890,52 @@ nothing
 <div id="payResource", class="codecontainer">
 <div id="payResource", class="function">
 <p>
-<span class="keyword">function </span> payResource(<span class="type">Material</span> <span class="parameter"></span>, <span class="type">int64_t</span> <span class="parameter"></span>) <br/>
+<span class="keyword">function var</span> payResource(<span class="type">string or Format</span> <span class="parameter">description</span>, <span class="type">Material</span> <span class="parameter">material</span>, <span class="type">int</span> <span class="parameter">amount</span>) <br/>
 </p>
 </div>
 <div id="payResource", class="">
 <p>
-<span class="inheritedcode">Inherited from <a href="Faction [Server].html">Faction [Server]</a></span>
+Makes the faction pay a certain amount of resources. If the faction can't pay, the respective resource will be set to 0. This function accepts a string for Format as first argument, as an economy notification describing the transaction that will be sent to the player, in case the faction is a player. <span class="inheritedcode">Inherited from <a href="Faction [Server].html">Faction [Server]</a></span>
 
 </p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">description</span>
+A description for the transaction. Can either be a string or a Format. <br/>
+<span class="parameter">material</span>
+The kind of material that will be removed from the faction <br/>
+<span class="parameter">amount</span>
+Amount that will be removed from the faction <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="payWithoutNotify", class="codecontainer">
+<div id="payWithoutNotify", class="function">
+<p>
+<span class="keyword">function var</span> payWithoutNotify(<span class="type">string or Format</span> <span class="parameter">description</span>, <span class="type">int</span> <span class="parameter">money</span>, <span class="type">int...</span> <span class="parameter">args</span>) <br/>
+</p>
+</div>
+<div id="payWithoutNotify", class="">
+<p>
+Similar behavior to pay(), except there will not be a notification popping up in case the faction is a player, and the description for the transaction is this function isn't optional. <span class="inheritedcode">Inherited from <a href="Faction [Server].html">Faction [Server]</a></span>
+
+</p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">description</span>
+A description for the transaction. Can either be a string or a Format. Money and resources will be appended to the end of the list of arguments passed to the description format string. <br/>
+<span class="parameter">money</span>
+Money that will be removed from the faction <br/>
+<span class="parameter">args</span>
+A list of resources, starting with iron, that will be removed from the faction <br/>
+</div>
 <p><span class="docheader">Returns</span></p>
 <div class="indented">
 <p>
@@ -882,34 +948,23 @@ nothing
 <div id="receive", class="codecontainer">
 <div id="receive", class="function">
 <p>
-<span class="keyword">function </span> receive(<span class="type">int64_t</span> <span class="parameter"></span>, <span class="type">int64_t...</span> <span class="parameter"></span>) <br/>
+<span class="keyword">function var</span> receive(<span class="type">string or Format [optional]</span> <span class="parameter">description</span>, <span class="type">int</span> <span class="parameter">money</span>, <span class="type">int...</span> <span class="parameter">resources</span>) <br/>
 </p>
 </div>
 <div id="receive", class="">
 <p>
-<span class="inheritedcode">Inherited from <a href="Faction [Server].html">Faction [Server]</a></span>
+Makes the faction receive a certain amount of money and resources. This function accepts an optional string for Format as first argument, as an economy notification describing the transaction that will be sent to the player, in case the faction is a player. <br/>To ease handling of transaction descriptions, the format description (if set) will receive all the remaining arguments given to the receive() function as format arguments, in the same order as they are given to the function. Dots for easier reading will be inserted as well. Examples:<br/><br/> faction:receive("Got %1% credits and %2% iron.", 50000, 250) <br/> -> "Got 50.000 credits and 250 iron."<br/><br/> faction:receive(Format("%1% received %2% credits and %3% iron.", "Excelsior"), 50, 25000) <br/> -> "Excelsior received 50 credits and 25.000 iron."<br/><br/> <span class="inheritedcode">Inherited from <a href="Faction [Server].html">Faction [Server]</a></span>
 
 </p>
-<p><span class="docheader">Returns</span></p>
+<p><span class="docheader">Parameters</span></p>
 <div class="indented">
-<p>
-nothing
-</p>
+<span class="parameter">description</span>
+[optional] A description for the transaction. Can either be a string or a Format. If this variable is set, money and resources will be appended to the end of the list of arguments passed to the description format string. <br/>
+<span class="parameter">money</span>
+Money that will be given to the faction <br/>
+<span class="parameter">resources</span>
+A list of resources, starting with iron, that will be given to the faction <br/>
 </div>
-</p>
-</div>
-</div>
-<div id="receiveMoney", class="codecontainer">
-<div id="receiveMoney", class="function">
-<p>
-<span class="keyword">function </span> receiveMoney(<span class="type">int64_t</span> <span class="parameter"></span>) <br/>
-</p>
-</div>
-<div id="receiveMoney", class="">
-<p>
-<span class="inheritedcode">Inherited from <a href="Faction [Server].html">Faction [Server]</a></span>
-
-</p>
 <p><span class="docheader">Returns</span></p>
 <div class="indented">
 <p>
@@ -922,14 +977,52 @@ nothing
 <div id="receiveResource", class="codecontainer">
 <div id="receiveResource", class="function">
 <p>
-<span class="keyword">function </span> receiveResource(<span class="type">Material</span> <span class="parameter"></span>, <span class="type">int64_t</span> <span class="parameter"></span>) <br/>
+<span class="keyword">function var</span> receiveResource(<span class="type">string or Format</span> <span class="parameter">description</span>, <span class="type">Material</span> <span class="parameter">material</span>, <span class="type">int</span> <span class="parameter">amount</span>) <br/>
 </p>
 </div>
 <div id="receiveResource", class="">
 <p>
-<span class="inheritedcode">Inherited from <a href="Faction [Server].html">Faction [Server]</a></span>
+Makes the faction receive a certain amount of resources. This function accepts a string for Format as first argument, as an economy notification describing the transaction that will be sent to the player, in case the faction is a player. <span class="inheritedcode">Inherited from <a href="Faction [Server].html">Faction [Server]</a></span>
 
 </p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">description</span>
+A description for the transaction. Can either be a string or a Format. <br/>
+<span class="parameter">material</span>
+The kind of material that will be given to the faction <br/>
+<span class="parameter">amount</span>
+Amount that will be given to the faction <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="receiveWithoutNotify", class="codecontainer">
+<div id="receiveWithoutNotify", class="function">
+<p>
+<span class="keyword">function var</span> receiveWithoutNotify(<span class="type">string or Format</span> <span class="parameter">description</span>, <span class="type">int</span> <span class="parameter">money</span>, <span class="type">int...</span> <span class="parameter">args</span>) <br/>
+</p>
+</div>
+<div id="receiveWithoutNotify", class="">
+<p>
+Similar behavior to receive(), except there will not be a notification popping up in case the faction is a player, and the description for the transaction is this function isn't optional. <span class="inheritedcode">Inherited from <a href="Faction [Server].html">Faction [Server]</a></span>
+
+</p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">description</span>
+A description for the transaction. Can either be a string or a Format. Money and resources will be appended to the end of the list of arguments passed to the description format string. <br/>
+<span class="parameter">money</span>
+Money that will be given to the faction <br/>
+<span class="parameter">args</span>
+A list of resources, starting with iron, that will be given to the faction <br/>
+</div>
 <p><span class="docheader">Returns</span></p>
 <div class="indented">
 <p>
@@ -942,7 +1035,7 @@ nothing
 <div id="canPay", class="codecontainer">
 <div id="canPay", class="function">
 <p>
-<span class="keyword">function var</span> canPay(<span class="type">int64_t</span> <span class="parameter"></span>, <span class="type">int64_t...</span> <span class="parameter"></span>) <br/>
+<span class="keyword">function bool</span> canPay() <br/>
 </p>
 </div>
 <div id="canPay", class="">
@@ -956,7 +1049,7 @@ nothing
 <div id="canPayMoney", class="codecontainer">
 <div id="canPayMoney", class="function">
 <p>
-<span class="keyword">function var</span> canPayMoney(<span class="type">int64_t</span> <span class="parameter"></span>) <br/>
+<span class="keyword">function bool, string, table&lt;int, string&gt;</span> canPayMoney(<span class="type">int</span> <span class="parameter">money</span>) <br/>
 </p>
 </div>
 <div id="canPayMoney", class="">
@@ -970,7 +1063,7 @@ nothing
 <div id="canPayResource", class="codecontainer">
 <div id="canPayResource", class="function">
 <p>
-<span class="keyword">function var</span> canPayResource(<span class="type">Material</span> <span class="parameter"></span>, <span class="type">int64_t</span> <span class="parameter"></span>) <br/>
+<span class="keyword">function bool, string, table&lt;int, string&gt;</span> canPayResource(<span class="type">Material</span> <span class="parameter">material</span>, <span class="type">int</span> <span class="parameter">amount</span>) <br/>
 </p>
 </div>
 <div id="canPayResource", class="">
@@ -984,7 +1077,7 @@ nothing
 <div id="setResources", class="codecontainer">
 <div id="setResources", class="function">
 <p>
-<span class="keyword">function </span> setResources(<span class="type">int64_t...</span> <span class="parameter"></span>) <br/>
+<span class="keyword">function var</span> setResources() <br/>
 </p>
 </div>
 <div id="setResources", class="">
@@ -1004,7 +1097,7 @@ nothing
 <div id="getResources", class="codecontainer">
 <div id="getResources", class="function">
 <p>
-<span class="keyword">function var</span> getResources() <br/>
+<span class="keyword">function Resources</span> getResources() <br/>
 </p>
 </div>
 <div id="getResources", class="">
@@ -1046,7 +1139,7 @@ nothing
 <div id="getShipStyle", class="codecontainer">
 <div id="getShipStyle", class="function">
 <p>
-<span class="keyword">function var</span> getShipStyle(<span class="type">string</span> <span class="parameter"></span>) <br/>
+<span class="keyword">function bool</span> getShipStyle(<span class="type">string</span> <span class="parameter">name</span>) <br/>
 </p>
 </div>
 <div id="getShipStyle", class="">
@@ -1060,7 +1153,7 @@ nothing
 <div id="getStationStyle", class="codecontainer">
 <div id="getStationStyle", class="function">
 <p>
-<span class="keyword">function var</span> getStationStyle(<span class="type">string</span> <span class="parameter"></span>) <br/>
+<span class="keyword">function bool</span> getStationStyle(<span class="type">string</span> <span class="parameter">name</span>) <br/>
 </p>
 </div>
 <div id="getStationStyle", class="">
@@ -1074,7 +1167,7 @@ nothing
 <div id="getShipStyleNames", class="codecontainer">
 <div id="getShipStyleNames", class="function">
 <p>
-<span class="keyword">function var</span> getShipStyleNames() <br/>
+<span class="keyword">function string...</span> getShipStyleNames() <br/>
 </p>
 </div>
 <div id="getShipStyleNames", class="">
@@ -1088,7 +1181,7 @@ nothing
 <div id="getStationStyleNames", class="codecontainer">
 <div id="getStationStyleNames", class="function">
 <p>
-<span class="keyword">function var</span> getStationStyleNames() <br/>
+<span class="keyword">function string...</span> getStationStyleNames() <br/>
 </p>
 </div>
 <div id="getStationStyleNames", class="">
@@ -1102,7 +1195,7 @@ nothing
 <div id="createShipStyle", class="codecontainer">
 <div id="createShipStyle", class="function">
 <p>
-<span class="keyword">function var</span> createShipStyle(<span class="type">string</span> <span class="parameter"></span>) <br/>
+<span class="keyword">function CraftStyle</span> createShipStyle(<span class="type">string</span> <span class="parameter">name</span>) <br/>
 </p>
 </div>
 <div id="createShipStyle", class="">
@@ -1116,7 +1209,7 @@ nothing
 <div id="createStationStyle", class="codecontainer">
 <div id="createStationStyle", class="function">
 <p>
-<span class="keyword">function var</span> createStationStyle(<span class="type">string</span> <span class="parameter"></span>) <br/>
+<span class="keyword">function CraftStyle</span> createStationStyle(<span class="type">string</span> <span class="parameter">name</span>) <br/>
 </p>
 </div>
 <div id="createStationStyle", class="">
@@ -1130,7 +1223,7 @@ nothing
 <div id="setStaticRelationsToFaction", class="codecontainer">
 <div id="setStaticRelationsToFaction", class="function">
 <p>
-<span class="keyword">function </span> setStaticRelationsToFaction(<span class="type">int</span> <span class="parameter"></span>, <span class="type">bool</span> <span class="parameter"></span>) <br/>
+<span class="keyword">function var</span> setStaticRelationsToFaction(<span class="type">int</span> <span class="parameter">factionIndex</span>, <span class="type">bool</span> <span class="parameter">in</span>) <br/>
 </p>
 </div>
 <div id="setStaticRelationsToFaction", class="">
@@ -1150,7 +1243,7 @@ nothing
 <div id="hasStaticRelationsToFaction", class="codecontainer">
 <div id="hasStaticRelationsToFaction", class="function">
 <p>
-<span class="keyword">function var</span> hasStaticRelationsToFaction(<span class="type">int</span> <span class="parameter"></span>) <br/>
+<span class="keyword">function bool</span> hasStaticRelationsToFaction(<span class="type">int</span> <span class="parameter">factionIndex</span>) <br/>
 </p>
 </div>
 <div id="hasStaticRelationsToFaction", class="">
@@ -1209,7 +1302,7 @@ A table containing all custom key-value pairs
 <div id="setValue", class="codecontainer">
 <div id="setValue", class="function">
 <p>
-<span class="keyword">function </span> setValue(<span class="type">string</span> <span class="parameter">key</span>, <span class="type">var</span> <span class="parameter">value</span>) <br/>
+<span class="keyword">function var</span> setValue(<span class="type">string</span> <span class="parameter">key</span>, <span class="type">var</span> <span class="parameter">value</span>) <br/>
 </p>
 </div>
 <div id="setValue", class="">
@@ -1236,7 +1329,7 @@ nothing
 <div id="setTrait", class="codecontainer">
 <div id="setTrait", class="function">
 <p>
-<span class="keyword">function </span> setTrait(<span class="type">string</span> <span class="parameter">trait</span>, <span class="type">float</span> <span class="parameter">value</span>) <br/>
+<span class="keyword">function var</span> setTrait(<span class="type">string</span> <span class="parameter">trait</span>, <span class="type">float</span> <span class="parameter">value</span>) <br/>
 </p>
 </div>
 <div id="setTrait", class="">
@@ -1315,7 +1408,7 @@ A table containing all custom key-value pairs
 </div><div class="headerlisting">
 <span class="docheader">Callbacks</span>
 <br><a href="Callbacks.html"> Callbacks</a>
-<a href="ClientSector Callbacks.html">ClientSector  Callbacks</a>
+<a href="ClientPlayer Callbacks.html">ClientPlayer  Callbacks</a>
 <a href="Entity Callbacks.html">Entity  Callbacks</a>
 <a href="Galaxy Callbacks.html">Galaxy  Callbacks</a>
 <a href="Player Callbacks.html">Player  Callbacks</a>
@@ -1323,20 +1416,44 @@ A table containing all custom key-value pairs
 <a href="Server Callbacks.html">Server  Callbacks</a>
 <a href="Turret Callbacks.html">Turret  Callbacks</a>
 </div><div class="headerlisting">
+<span class="docheader">Predefined Functions</span>
+<br><a href="CommandFunctions.html">Command</a>
+<a href="EntityFunctions.html">Entity</a>
+<a href="FactionDatabaseFunctions.html">FactionDatabase</a>
+<a href="PlayerFunctions.html">Player</a>
+<a href="SectorFunctions.html">Sector</a>
+<a href="ServerFunctions.html">Server</a>
+</div><div class="headerlisting">
 <span class="docheader">Common Components</span>
-<br><a href="Hangar.html">Hangar</a>
+<br><a href="DockingPositions.html">DockingPositions</a>
+<a href="Hangar.html">Hangar</a>
+<a href="ReadOnlyHangar.html">ReadOnlyHangar</a>
 <a href="BspTree.html">BspTree</a>
+<a href="ReadOnlyBspTree.html">ReadOnlyBspTree</a>
 <a href="DeletionTimer.html">DeletionTimer</a>
+<a href="ReadOnlyDeletionTimer.html">ReadOnlyDeletionTimer</a>
 <a href="Engine.html">Engine</a>
+<a href="ReadOnlyEngine.html">ReadOnlyEngine</a>
 <a href="Weapons.html">Weapons</a>
+<a href="ReadOnlyWeapons.html">ReadOnlyWeapons</a>
 <a href="FighterAI.html">FighterAI</a>
+<a href="ReadOnlyFighterAI.html">ReadOnlyFighterAI</a>
 <a href="Physics.html">Physics</a>
+<a href="ReadOnlyPhysics.html">ReadOnlyPhysics</a>
 <a href="Plan.html">Plan</a>
+<a href="ReadOnlyPlan.html">ReadOnlyPlan</a>
+<a href="Owner.html">Owner</a>
+<a href="ReadOnlyOwner.html">ReadOnlyOwner</a>
 <a href="ShipAI.html">ShipAI</a>
+<a href="ReadOnlyShipAI.html">ReadOnlyShipAI</a>
 <a href="Velocity.html">Velocity</a>
+<a href="ReadOnlyVelocity.html">ReadOnlyVelocity</a>
 <a href="InteractionText.html">InteractionText</a>
+<a href="ReadOnlyInteractionText.html">ReadOnlyInteractionText</a>
 <a href="EnergySystem.html">EnergySystem</a>
+<a href="ReadOnlyEnergySystem.html">ReadOnlyEnergySystem</a>
 <a href="WormHole.html">WormHole</a>
+<a href="ReadOnlyWormHole.html">ReadOnlyWormHole</a>
 </div><div class="headerlisting">
 <span class="docheader">Common Objects</span>
 <br><a href="Tooltip.html">Tooltip</a>
@@ -1360,9 +1477,11 @@ A table containing all custom key-value pairs
 <a href="Rect.html">Rect</a>
 <a href="Matrix.html">Matrix</a>
 <a href="Sphere.html">Sphere</a>
+<a href="Format.html">Format</a>
 <a href="Seed.html">Seed</a>
 <a href="Random.html">Random</a>
 <a href="FighterTemplate.html">FighterTemplate</a>
+<a href="BlockStatistics.html">BlockStatistics</a>
 <a href="VanillaInventoryItem.html">VanillaInventoryItem</a>
 <a href="Rarity.html">Rarity</a>
 <a href="PlanetSpecifics.html">PlanetSpecifics</a>
@@ -1383,6 +1502,7 @@ A table containing all custom key-value pairs
 <a href="TradingGood.html">TradingGood</a>
 <a href="AllianceMember.html">AllianceMember</a>
 <a href="Entity.html">Entity</a>
+<a href="ReadOnlyEntity.html">ReadOnlyEntity</a>
 <a href="Mail.html">Mail</a>
 <a href="Material.html">Material</a>
 <a href="SystemUpgradeTemplate.html">SystemUpgradeTemplate</a>
@@ -1390,8 +1510,11 @@ A table containing all custom key-value pairs
 </div><div class="headerlisting">
 <span class="docheader">Client Components</span>
 <br><a href="EntityIcon.html">EntityIcon</a>
+<a href="ReadOnlyIcon.html">ReadOnlyIcon</a>
 <a href="EntityTooltip.html">EntityTooltip</a>
+<a href="ReadOnlyTooltip.html">ReadOnlyTooltip</a>
 <a href="ScriptUI.html">ScriptUI</a>
+<a href="ReadOnlyScriptUI.html">ReadOnlyScriptUI</a>
 </div><div class="headerlisting">
 <span class="docheader">Client Objects</span>
 <br><a href="InventorySelectionItem.html">InventorySelectionItem</a>
@@ -1425,6 +1548,7 @@ A table containing all custom key-value pairs
 <a href="TabbedWindow.html">TabbedWindow</a>
 <a href="StatisticsBar.html">StatisticsBar</a>
 <a href="ComboBox.html">ComboBox</a>
+<a href="ValueComboBox.html">ValueComboBox</a>
 <a href="MultiLineTextBox.html">MultiLineTextBox</a>
 <a href="InventorySelection.html">InventorySelection</a>
 <a href="UIElement.html">UIElement</a>
@@ -1448,16 +1572,22 @@ A table containing all custom key-value pairs
 </div><div class="headerlisting">
 <span class="docheader">Server Components</span>
 <br><a href="WreckageCreator.html">WreckageCreator</a>
+<a href="ReadOnlyWreckageCreator.html">ReadOnlyWreckageCreator</a>
 <a href="EntityTransferrer.html">EntityTransferrer</a>
+<a href="ReadOnlyEntityTransferrer.html">ReadOnlyEntityTransferrer</a>
 <a href="FighterController.html">FighterController</a>
+<a href="ReadOnlyFighterController.html">ReadOnlyFighterController</a>
 <a href="Loot.html">Loot</a>
+<a href="ReadOnlyLoot.html">ReadOnlyLoot</a>
 </div><div class="headerlisting">
 <span class="docheader">Server Objects</span>
 <br><a href="Sector [Server].html">Sector [Server]</a>
+<a href="ReadOnlySector.html">ReadOnlySector</a>
 <a href="Server.html">Server</a>
 <a href="Galaxy [Server].html">Galaxy [Server]</a>
 <a href="Alliance [Server].html">Alliance [Server]</a>
 <a href="Faction [Server].html">Faction [Server]</a>
+<a href="GameSettings.html">GameSettings</a>
 <a href="Player [Server].html">Player [Server]</a>
 </div><div class="lastheaderlisting">
 <span class="docheader">Enums</span>
@@ -1474,21 +1604,24 @@ A table containing all custom key-value pairs
 <a href="Enums.html#BlockType">BlockType</a>
 <a href="Enums.html#InventoryItemType">InventoryItemType</a>
 <a href="Enums.html#WeaponType">WeaponType</a>
+<a href="Enums.html#RelationStatus">RelationStatus</a>
 <a href="Enums.html#CrewProfessionType">CrewProfessionType</a>
 <a href="Enums.html#DamageType">DamageType</a>
 <a href="Enums.html#StatsBonuses">StatsBonuses</a>
 <a href="Enums.html#EntityType">EntityType</a>
 <a href="Enums.html#AIState">AIState</a>
 <a href="Enums.html#MaterialType">MaterialType</a>
+<a href="Enums.html#FighterStartError">FighterStartError</a>
 <a href="Enums.html#FighterOrders">FighterOrders</a>
+<a href="Enums.html#FighterType">FighterType</a>
 </div></div>
 <div class="disclaimer">
 <p>This is the official documentation for the scripting API of Avorion. This documentation is automatically generated and <strong>not</strong> necessarily complete. Depending on the context in which functions exist, some documentation such as descriptions, return values or variable names or types may be missing.</p>
-<p>Work in Progress. Documentation of Avorion Version: Beta 0.14.5 r9490</p>
+<p>Work in Progress. Documentation of Avorion Version: Beta 0.15 r9816</p>
 </div>
 <div class="footer">
 <p align="center">Work in Progress.</p>
-<p align="center">Copyright &copy; 2017 Konstantin Kronfeldner, Boxelware. All rights reserved.</p>
+<p align="center">Copyright &copy; 2017 Boxelware GmbH i.Gr. All rights reserved.</p>
 </div>
 </div>
 </body>

@@ -61,6 +61,10 @@ end
 function FighterPrice(fighter)
     local value = ArmedObjectPrice(fighter) * 3.0
 
+    if value == 0 then
+        value = 100000
+    end
+
     -- the smaller the fighter, the more expensive
     local sizeFactor = lerp(fighter.diameter, 1, 2, 1.3, 1)
     value = value * sizeFactor

@@ -4,6 +4,7 @@ require ("utility")
 require ("stringutility")
 require ("faction")
 require ("player")
+require ("merchantutility")
 
 local availableCrewMembers = 0;
 local slider = 0;
@@ -62,14 +63,70 @@ function CrewBoard.initialize()
         table.insert(probabilities, {profession = CrewProfessionType.General, probability = 0.15, number = math.floor(math.random(1, 2) * scaling)})
         table.insert(probabilities, {profession = CrewProfessionType.Captain, probability = 0.75, number = math.random(1, 2)})
 
+        local station = Entity()
+        -- crew for specific stations
+        if station:hasScript("shipyard.lua") or
+                station:hasScript("repairdock.lua") then
+            CrewBoard.setProbability(probabilities, CrewProfessionType.Repair)
+            CrewBoard.setProbability(probabilities, CrewProfessionType.Engine)
+        elseif station:hasScript("militaryoutpost.lua") then
+            CrewBoard.setProbability(probabilities, CrewProfessionType.Gunner)
+            CrewBoard.setProbability(probabilities, CrewProfessionType.Lieutenant)
+            CrewBoard.setProbability(probabilities, CrewProfessionType.Commander)
+            CrewBoard.setProbability(probabilities, CrewProfessionType.General)
+            CrewBoard.setProbability(probabilities, CrewProfessionType.Pilot)
+        elseif station:hasScript("researchstation.lua") or
+                station:hasScript("turretfactory.lua") or
+                station:hasScript("fighterfactory.lua") then
+            CrewBoard.setProbability(probabilities, CrewProfessionType.Engine)
+            CrewBoard.setProbability(probabilities, CrewProfessionType.Gunner)
+
+            if station:hasScript("fighterfactory.lua") then
+                CrewBoard.setProbability(probabilities, CrewProfessionType.Pilot)
+            end
+        elseif station:hasScript("headquarters.lua") then
+            CrewBoard.setProbability(probabilities, CrewProfessionType.Captain)
+            CrewBoard.setProbability(probabilities, CrewProfessionType.General)
+            CrewBoard.setProbability(probabilities, CrewProfessionType.Commander)
+        elseif station:hasScript("planetarytradingpost.lua") then
+            CrewBoard.setProbability(probabilities, CrewProfessionType.Pilot)
+        elseif station:hasScript("tradingpost.lua") then
+            CrewBoard.setProbability(probabilities, CrewProfessionType.None)
+            CrewBoard.setProbability(probabilities, CrewProfessionType.Security)
+        elseif station:hasScript("equipmentdock.lua") then
+            CrewBoard.setProbability(probabilities, CrewProfessionType.Gunner)
+            CrewBoard.setProbability(probabilities, CrewProfessionType.Miner)
+            CrewBoard.setProbability(probabilities, CrewProfessionType.Pilot)
+        elseif station:hasScript("smugglersmarket.lua") then
+            CrewBoard.setProbability(probabilities, CrewProfessionType.Security)
+        elseif string.match(station.title, " Mine") then
+            CrewBoard.setProbability(probabilities, CrewProfessionType.Miner)
+        end
+
+        -- first insert all with probability >= 1
         for _, crew in pairs(probabilities) do
-            if math.random() < crew.probability and #availableCrew < 6 then
+            if crew.probability >= 1.0 and #availableCrew < 6 then
                 table.insert(availableCrew, crew)
             end
         end
 
+        for _, crew in pairs(probabilities) do
+            if crew.probability < 1.0 and math.random() < crew.probability and #availableCrew < 6 then
+                table.insert(availableCrew, crew)
+            end
+        end
     end
+end
 
+function CrewBoard.setProbability(probabilities, profession, p)
+    if not p then p = 1 end
+
+    for _, crew in pairs(probabilities) do
+        if crew.profession == profession then
+            crew.probability = p
+            return
+        end
+    end
 end
 
 -- this function gets called on creation of the entity the script is attached to, on client only
@@ -197,6 +254,7 @@ function CrewBoard.refreshUI()
         group.bar:addEntry(number, tostring(number) .. " " .. profession.plural, profession.color)
         group.bar.tooltip = profession.name .. "\n" .. profession.description
 
+        group.slider:setValueNoCallback(0)
         group.slider.min = 0
         group.slider.max = number
         group.slider.segments = number
@@ -241,6 +299,14 @@ function CrewBoard.hireCrew(i, num)
 
     local costs = profession.price * num
 
+    -- reduce the price right away if the buyer owns the station
+    local tax = round(costs * 0.2)
+    if stationFaction.index == buyer.index then
+        costs = costs - tax
+        -- don't pay out for the second time
+        tax = 0
+    end
+
     local canPay, msg, args = buyer:canPay(costs)
     if not canPay then
         player:sendChatMessage(station.title, 1, msg, unpack(args))
@@ -260,7 +326,9 @@ function CrewBoard.hireCrew(i, num)
         return
     end
 
-    buyer:pay(costs);
+    receiveTransactionTax(station, tax)
+
+    buyer:pay("Paid %1% credits to hire crew."%_T, costs);
 
     ship:addCrew(num, CrewMan(profession, profession ~= CrewProfessionType.None, 1));
 

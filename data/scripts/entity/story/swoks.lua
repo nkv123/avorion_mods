@@ -46,7 +46,7 @@ function payUp()
     local canPay, msg, args = player:canPayMoney(sum)
 
     if canPay then
-        player:pay(sum)
+        player:pay("Paid Swoks %1% credits."%_T, sum)
         invokeClientFunction(player, "paySuccessful")
     else
         invokeClientFunction(player, "payFailed")

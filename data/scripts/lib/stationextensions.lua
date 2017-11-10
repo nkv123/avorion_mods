@@ -129,7 +129,6 @@ function addProductionCenters(entity, numAdditions, sizeX, sizeY)
     local glowColor = ColorHSV(math.random() * 360, math.random(), 1.0)
 
     local hull = BlockType.Hull
-    local blank = BlockType.CargoBay
 
     local middleDiameter = 1
     local middle = vec3(middleDiameter, 10.0, middleDiameter)
@@ -147,7 +146,8 @@ function addProductionCenters(entity, numAdditions, sizeX, sizeY)
     local rows = sizeY or getInt(5, 8)
 
     -- build box
-    local box = BlockPlan()
+    local box1 = BlockPlan()
+    local box2 = BlockPlan()
 
     local types = {}
     types[0] = 1
@@ -157,64 +157,72 @@ function addProductionCenters(entity, numAdditions, sizeX, sizeY)
 
     local panelType = getValueFromDistribution(types)
 
-    if panelType == 0 then
+    for _, box in pairs({box1, box2}) do
 
-        local pi = box:addBlock(vec3(0, 0, 0), panel, -1, -1, c, m, o, blank)
-        local ui = box:addBlock(vec3(0, 0, panel.z * 0.5 + glow.z * 0.5), glow, pi, -1, glowColor, m, o, BlockType.Glow)
-        local ui = box:addBlock(vec3(0, 0, panel.z * 0.5 + glow.z + upper.z * 0.5), upper, ui, -1, c, m, o, blank)
+        local bottom = BlockType.CargoBay
+        if box == box2 then bottom = BlockType.Assembly end
 
-    elseif panelType == 1 then
+        if panelType == 0 then
 
-        local pi = box:addBlock(vec3(0, 0, 0), panel, -1, -1, c, m, o, blank)
-        local ui = box:addBlock(vec3(0, 0, panel.z * 0.5 + glow.z * 0.5), glow, pi, -1, glowColor, m, o, BlockType.Glow)
-        local ui = box:addBlock(vec3(0, 0, panel.z * 0.5 + glow.z * 1.5), glow, ui, -1, c, m, o, blank)
+            local pi = box:addBlock(vec3(0, 0, 0), panel, -1, -1, c, m, o, bottom)
+            local ui = box:addBlock(vec3(0, 0, panel.z * 0.5 + glow.z * 0.5), glow, pi, -1, glowColor, m, o, BlockType.Glow)
+            local ui = box:addBlock(vec3(0, 0, panel.z * 0.5 + glow.z + upper.z * 0.5), upper, ui, -1, c, m, o, bottom)
 
-        local u = upper * vec3(0.25, 0.25, 1.0)
-        local z = panel.z * 0.5 + glow.z * 2.0 + u.z * 0.5
+        elseif panelType == 1 then
 
-        box:addBlock(vec3(panel.x * 0.25, panel.y * 0.25, z), u, ui, -1, c, m, o, blank)
-        box:addBlock(vec3(-panel.x * 0.25, panel.y * 0.25, z), u, ui, -1, c, m, o, blank)
-        box:addBlock(vec3(-panel.x * 0.25, -panel.y * 0.25, z), u, ui, -1, c, m, o, blank)
-        box:addBlock(vec3(panel.x * 0.25, -panel.y * 0.25, z), u, ui, -1, c, m, o, blank)
+            local pi = box:addBlock(vec3(0, 0, 0), panel, -1, -1, c, m, o, bottom)
+            local ui = box:addBlock(vec3(0, 0, panel.z * 0.5 + glow.z * 0.5), glow, pi, -1, glowColor, m, o, BlockType.Glow)
+            local ui = box:addBlock(vec3(0, 0, panel.z * 0.5 + glow.z * 1.5), glow, ui, -1, c, m, o, bottom)
 
-    elseif panelType == 2 then
+            local u = upper * vec3(0.25, 0.25, 1.0)
+            local z = panel.z * 0.5 + glow.z * 2.0 + u.z * 0.5
 
-        local pi = box:addBlock(vec3(0, 0, 0), panel, -1, -1, c, m, o, blank)
-        local ui = box:addBlock(vec3(0, 0, panel.z * 0.5 + glow.z * 0.5), glow, pi, -1, glowColor, m, o, BlockType.Glow)
+            box:addBlock(vec3(panel.x * 0.25, panel.y * 0.25, z), u, ui, -1, c, m, o, bottom)
+            box:addBlock(vec3(-panel.x * 0.25, panel.y * 0.25, z), u, ui, -1, c, m, o, bottom)
+            box:addBlock(vec3(-panel.x * 0.25, -panel.y * 0.25, z), u, ui, -1, c, m, o, bottom)
+            box:addBlock(vec3(panel.x * 0.25, -panel.y * 0.25, z), u, ui, -1, c, m, o, bottom)
 
-        local u = upper * vec3(0.5, 0.5, 1.0)
-        local z = panel.z * 0.5 + glow.z + u.z * 0.5
+        elseif panelType == 2 then
 
-        local corners = {BlockType.InnerCornerHull, BlockType.OuterCornerHull}
-        local corner = corners[getInt(1, 2)]
+            local pi = box:addBlock(vec3(0, 0, 0), panel, -1, -1, c, m, o, bottom)
+            local ui = box:addBlock(vec3(0, 0, panel.z * 0.5 + glow.z * 0.5), glow, pi, -1, glowColor, m, o, BlockType.Glow)
 
-        box:addBlock(vec3(panel.x * 0.25, panel.y * 0.25, z), u, ui, -1, c, m, MatrixLookUp(vec3(-1, 0, 0), vec3(0, 0, 1)), corner)
-        box:addBlock(vec3(-panel.x * 0.25, panel.y * 0.25, z), u, ui, -1, c, m, MatrixLookUp(vec3(0, -1, 0), vec3(0, 0, 1)), corner)
-        box:addBlock(vec3(-panel.x * 0.25, -panel.y * 0.25, z), u, ui, -1, c, m, MatrixLookUp(vec3(1, 0, 0), vec3(0, 0, 1)), corner)
-        box:addBlock(vec3(panel.x * 0.25, -panel.y * 0.25, z), u, ui, -1, c, m, MatrixLookUp(vec3(0, 1, 0), vec3(0, 0, 1)), corner)
+            local u = upper * vec3(0.5, 0.5, 1.0)
+            local z = panel.z * 0.5 + glow.z + u.z * 0.5
 
-    elseif panelType == 3 then
+            local corners = {BlockType.InnerCornerHull, BlockType.OuterCornerHull}
+            local corner = corners[getInt(1, 2)]
 
-        local pi = box:addBlock(vec3(0, 0, 0), panel, -1, -1, c, m, o, blank)
-        local ui = box:addBlock(vec3(0, 0, panel.z * 0.5 + glow.z * 0.5), glow, pi, -1, glowColor, m, o, BlockType.Glow)
+            box:addBlock(vec3(panel.x * 0.25, panel.y * 0.25, z), u, ui, -1, c, m, MatrixLookUp(vec3(-1, 0, 0), vec3(0, 0, 1)), corner)
+            box:addBlock(vec3(-panel.x * 0.25, panel.y * 0.25, z), u, ui, -1, c, m, MatrixLookUp(vec3(0, -1, 0), vec3(0, 0, 1)), corner)
+            box:addBlock(vec3(-panel.x * 0.25, -panel.y * 0.25, z), u, ui, -1, c, m, MatrixLookUp(vec3(1, 0, 0), vec3(0, 0, 1)), corner)
+            box:addBlock(vec3(panel.x * 0.25, -panel.y * 0.25, z), u, ui, -1, c, m, MatrixLookUp(vec3(0, 1, 0), vec3(0, 0, 1)), corner)
 
-        local u = upper * vec3(0.5, 0.5, 1.0)
-        local z = panel.z * 0.5 + glow.z + u.z * 0.5
+        elseif panelType == 3 then
 
-        local corners = {BlockType.InnerCornerHull, BlockType.OuterCornerHull, BlockType.CornerHull}
-        local corner = corners[getInt(1, 3)]
+            local pi = box:addBlock(vec3(0, 0, 0), panel, -1, -1, c, m, o, bottom)
+            local ui = box:addBlock(vec3(0, 0, panel.z * 0.5 + glow.z * 0.5), glow, pi, -1, glowColor, m, o, BlockType.Glow)
 
-        box:addBlock(vec3(panel.x * 0.25, panel.y * 0.25, z), u, ui, -1, c, m, MatrixLookUp(vec3(1, 0, 0), vec3(0, 0, 1)), corner)
-        box:addBlock(vec3(-panel.x * 0.25, panel.y * 0.25, z), u, ui, -1, c, m, MatrixLookUp(vec3(0, 1, 0), vec3(0, 0, 1)), corner)
-        box:addBlock(vec3(panel.x * 0.25, -panel.y * 0.25, z), u, ui, -1, c, m, MatrixLookUp(vec3(0, -1, 0), vec3(0, 0, 1)), corner)
-        box:addBlock(vec3(-panel.x * 0.25, -panel.y * 0.25, z), u, ui, -1, c, m, MatrixLookUp(vec3(-1, 0, 0), vec3(0, 0, 1)), corner)
+            local u = upper * vec3(0.5, 0.5, 1.0)
+            local z = panel.z * 0.5 + glow.z + u.z * 0.5
 
+            local corners = {BlockType.InnerCornerHull, BlockType.OuterCornerHull, BlockType.CornerHull}
+            local corner = corners[getInt(1, 3)]
+
+            box:addBlock(vec3(panel.x * 0.25, panel.y * 0.25, z), u, ui, -1, c, m, MatrixLookUp(vec3(1, 0, 0), vec3(0, 0, 1)), corner)
+            box:addBlock(vec3(-panel.x * 0.25, panel.y * 0.25, z), u, ui, -1, c, m, MatrixLookUp(vec3(0, 1, 0), vec3(0, 0, 1)), corner)
+            box:addBlock(vec3(panel.x * 0.25, -panel.y * 0.25, z), u, ui, -1, c, m, MatrixLookUp(vec3(0, -1, 0), vec3(0, 0, 1)), corner)
+            box:addBlock(vec3(-panel.x * 0.25, -panel.y * 0.25, z), u, ui, -1, c, m, MatrixLookUp(vec3(-1, 0, 0), vec3(0, 0, 1)), corner)
+
+        end
     end
 
-
-
+    -- build the entire production field
     for i = 0, rows - 1 do
         local p = vec3(0, i * 10, 0)
+
+        local box = box1
+        if i % 2 == 0 then box = box2 end
 
         mid = panels:addBlock(p + vec3(0, 0, 0), middle, mid, -1, c, m, o, hull)
         local s1 = panels:addBlock(p + vec3(-side.x * 0.5, 5.0, 0), side, mid, -1, c, m, o, hull)

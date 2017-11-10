@@ -180,7 +180,7 @@ function sell(receiverIndex)
     local factions = getFactions()
     local faction = factions[receiverIndex]
 
-    owner:receive(faction.price)
+    owner:receive("Sold an object for %1% credits."%_T, faction.price)
     Galaxy():changeFactionRelations(Faction(faction.index), owner, faction.reputation)
 
     self.factionIndex = faction.index

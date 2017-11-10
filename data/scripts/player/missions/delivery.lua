@@ -6,9 +6,8 @@ require ("stringutility")
 require ("goods")
 require ("randomext")
 require ("mission")
+require ("utility")
 local SectorSpecifics = require("sectorspecifics")
-
-local clientStationName = ""
 
 
 -- this is the public interface for the game, for retrieving data and calling functions
@@ -126,7 +125,7 @@ function onDeliver(craftIndex)
         end
 
         -- remove cargo, pay reward
-        player:receive(missionData.reward)
+        player:receive("Received %1% credits for delivering cargo."%_T, missionData.reward)
         ship:removeCargo(goods[missionData.good]:good(), missionData.amount)
 
         invokeClientFunction(player, "onGoodsDelivered", 0)
@@ -135,6 +134,10 @@ function onDeliver(craftIndex)
         -- just set the timer to a few seconds so it will auto-terminate
         missionData.timeLeft = 5
         missionData.fulfilled = 1
+
+        -- improve relations
+        local relationsChange = GetRelationChangeFromMoney(missionData.reward)
+        Galaxy():changeFactionRelations(player, Faction(station.factionIndex), relationsChange)
     else
         invokeClientFunction(player, "onGoodsDelivered", 1)
     end
@@ -225,12 +228,13 @@ function updateClient()
 
     local x, y = Sector():getCoordinates()
     if x == missionData.location.x and y == missionData.location.y then
-        if not missionData.stationName and missionData.stationIndex ~= "" then
+        if not missionData.stationTitle and missionData.stationIndex ~= "" then
             local entity = Entity(missionData.stationIndex)
             if entity then
-                missionData.stationName = entity.translatedTitle
+                missionData.stationTitle = entity.translatedTitle
+                missionData.stationName = entity.name
 
-                displayChatMessage("Please deliver the cargo to the ${recipient}."%_t % {recipient = missionData.stationName}, "Client"%_t, 0)
+                displayChatMessage("Please deliver the cargo to the ${stationTitle} ${name}."%_t % {stationTitle = missionData.stationTitle, name = missionData.stationName}, "Client"%_t, 0)
             end
         end
     end
@@ -273,7 +277,7 @@ function getMissionDescription()
 
     local client = ""
     if missionData.stationName then
-        client = string.format("The receiver's address is the %s."%_t, missionData.stationName)
+        client = "The recipient is on the ${stationTitle} ${name}."%_t % {stationTitle = missionData.stationTitle, name = missionData.stationName}
     end
 
     local msg = "A client asked you to take care of an urgent delivery of ${amount} ${goods}.\n\n"%_t ..

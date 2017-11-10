@@ -9,10 +9,16 @@ local function new(fighter, index, player)
 
     -- initialize the item
     obj.price = obj:getPrice()
-    obj.name = "${weaponPrefix} Fighter"%_t % {weaponPrefix = obj.fighter.weaponPrefix}
     obj.rarity = obj.fighter.rarity
     obj.material = obj.fighter.material
-    obj.icon = obj.fighter.weaponIcon
+
+    if fighter.type == FighterType.CargoShuttle then
+        obj.name = "Cargo Shuttle"%_t
+        obj.icon = "data/textures/icons/wooden-crate.png"
+    elseif fighter.type == FighterType.Fighter then
+        obj.name = "${weaponPrefix} Fighter"%_t % {weaponPrefix = obj.fighter.weaponPrefix}
+        obj.icon = obj.fighter.weaponIcon
+    end
 
     if player and index then
         obj.amount = player:getInventory():amount(index)

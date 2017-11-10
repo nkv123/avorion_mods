@@ -193,7 +193,7 @@ function PirateAttack.endEvent()
             local player = Player(i)
 
             player:sendChatMessage(faction.name, 0, getRandomEntry(messages))
-            player:receive(reward)
+            player:receive("Received %1% credits for defeating a pirate attack."%_T, reward)
             Galaxy():changeFactionRelations(player, faction, reputation)
 
             local x, y = Sector():getCoordinates()

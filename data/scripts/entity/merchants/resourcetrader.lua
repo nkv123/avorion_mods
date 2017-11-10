@@ -5,11 +5,14 @@ require ("utility")
 require ("stringutility")
 require ("faction")
 require ("player")
+require ("merchantutility")
 local Dialog = require("dialogutility")
 
 -- Don't remove or alter the following comment, it tells the game the namespace this script lives in. If you remove it, the script will break.
 -- namespace ResourceDepot
 ResourceDepot = {}
+
+ResourceDepot.tax = 0.2
 
 -- Menu items
 local window = 0
@@ -25,10 +28,15 @@ local soldGoodPriceLabels = {}
 local soldGoodTextBoxes = {}
 local soldGoodButtons = {}
 
+local boughtGoodNameLabels = {}
 local boughtGoodStockLabels = {}
 local boughtGoodPriceLabels = {}
 local boughtGoodTextBoxes = {}
 local boughtGoodButtons = {}
+
+local shortageMaterial
+local shortageAmount
+local shortageTimer
 
 local guiInitialized = false
 
@@ -38,12 +46,41 @@ function ResourceDepot.interactionPossible(playerIndex, option)
     return CheckFactionInteraction(playerIndex, -25000)
 end
 
+function ResourceDepot.getUpdateInterval()
+    return 60
+end
+
 function ResourceDepot.restore(data)
     stock = data
+
+    -- keep compatibility with old saves
+    if tablelength(stock) == 10 then
+        shortageMaterial = table.remove(stock, 8)
+        shortageAmount = table.remove(stock, 8)
+        shortageTimer = table.remove(stock, 8)
+
+        if shortageMaterial == -1 then shortageMaterial = nil end
+        if shortageAmount == -1 then shortageAmount = nil end
+    end
+
+    if shortageTimer == nil then
+        shortageTimer = -random():getInt(15 * 60, 60 * 60)
+    elseif shortageTimer >= 0 and shortageMaterial ~= nil then
+        ResourceDepot.startShortage()
+    end
 end
 
 function ResourceDepot.secure()
-    return stock
+    data = {}
+    for k, v in pairs(stock) do
+        table.insert(data, k, v)
+    end
+
+    table.insert(data, shortageMaterial or -1)
+    table.insert(data, shortageAmount or -1)
+    table.insert(data, shortageTimer)
+
+    return data
 end
 
 function ResourceDepot.initialize()
@@ -51,6 +88,11 @@ function ResourceDepot.initialize()
 
     if station.title == "" then
         station.title = "Resource Depot"%_t
+    end
+
+    for i = 1, NumMaterials() do
+        sellPrice[i] = 10 * Material(i - 1).costFactor
+        buyPrice[i] = 10 * Material(i - 1).costFactor
     end
 
     if onServer() then
@@ -64,8 +106,6 @@ function ResourceDepot.initialize()
 
         for i = 1, NumMaterials() do
             stock[i] = math.max(0, probabilities[i - 1] - 0.1) * (getInt(5000, 10000) * Balancing_GetSectorRichnessFactor(x, y))
-            buyPrice[i] = 10 * Material(i - 1).costFactor
-            sellPrice[i] = 10 * Material(i - 1).costFactor
         end
 
         local num = 0
@@ -78,6 +118,8 @@ function ResourceDepot.initialize()
             stock[i] = round(stock[i])
         end
 
+        -- resource shortage
+        shortageTimer = -random():getInt(15 * 60, 60 * 60)
     end
 
     if onClient() and EntityIcon().icon == "" then
@@ -88,7 +130,6 @@ end
 
 -- create all required UI elements for the client side
 function ResourceDepot.initUI()
-
     local res = getResolution()
     local size = vec2(700, 650)
 
@@ -179,6 +220,7 @@ function ResourceDepot.buildGui(window, guiType)
             table.insert(soldGoodTextBoxes, numberTextBox)
             table.insert(soldGoodButtons, button)
         else
+            table.insert(boughtGoodNameLabels, nameLabel)
             table.insert(boughtGoodStockLabels, stockLabel)
             table.insert(boughtGoodPriceLabels, priceLabel)
             table.insert(boughtGoodTextBoxes, numberTextBox)
@@ -197,10 +239,47 @@ end
 --
 --end
 --
----- this function gets called every time the window is shown on the client, ie. when a player presses F
---function onShowWindow()
---
---end
+-- this function gets called every time the window is shown on the client, ie. when a player presses F
+function ResourceDepot.onShowWindow(optionIndex, material)
+    local interactingFaction = Faction(Entity(Player().craftIndex).factionIndex)
+
+    if material then
+        ResourceDepot.updateLine(material, interactingFaction)
+    else
+        for material = 1, NumMaterials() do
+            ResourceDepot.updateLine(material, interactingFaction)
+        end
+    end
+end
+
+function ResourceDepot.updateLine(material, interactingFaction)
+    remoteBuyPrice = ResourceDepot.getBuyPrice(material, interactingFaction)
+    remoteSellPrice = ResourceDepot.getSellPrice(material, interactingFaction)
+
+    soldGoodPriceLabels[material].caption = tostring(remoteBuyPrice)
+    boughtGoodPriceLabels[material].caption = tostring(remoteSellPrice)
+
+    -- resource shortage
+    if shortageMaterial == material then
+        soldGoodStockLabels[material].caption = "---"
+        soldGoodTextBoxes[material]:hide()
+        soldGoodButtons[material].active = false
+
+        data = {amount = shortageAmount, material = Material(material - 1).name}
+        boughtGoodStockLabels[material].caption = "---"
+        boughtGoodNameLabels[material].caption = "Deliver ${amount} ${material}"%_t % data
+        boughtGoodTextBoxes[material]:hide()
+
+    else
+        soldGoodStockLabels[material].caption = createMonetaryString(stock[material])
+        soldGoodTextBoxes[material]:show()
+        soldGoodButtons[material].active = true
+
+        boughtGoodStockLabels[material].caption = createMonetaryString(stock[material])
+        boughtGoodNameLabels[material].caption = Material(material - 1).name
+        boughtGoodTextBoxes[material]:show()
+    end
+end
 --
 ---- this function gets called every time the window is closed on the client
 --function onCloseWindow()
@@ -215,9 +294,15 @@ end
 --
 --end
 
---function updateServer(timeStep)
---
---end
+function ResourceDepot.updateServer(timeStep)
+    shortageTimer = shortageTimer + timeStep
+
+    if shortageTimer >= 0 and shortageMaterial == nil then
+        ResourceDepot.startShortage()
+    elseif shortageTimer >= 30 * 60 then
+        ResourceDepot.stopShortage()
+    end
+end
 
 --function renderUI()
 --
@@ -261,8 +346,12 @@ function ResourceDepot.onSellButtonPressed(button)
         amount = tonumber(amount)
     end
 
-    invokeServerFunction("sell", material, amount);
+    -- resource shortage
+    if material == shortageMaterial then
+        amount = shortageAmount
+    end
 
+    invokeServerFunction("sell", material, amount);
 end
 
 function ResourceDepot.onBuyTextEntered()
@@ -274,20 +363,26 @@ function ResourceDepot.onSellTextEntered()
 end
 
 function ResourceDepot.retrieveData()
-    invokeServerFunction("getData");
+    invokeServerFunction("getData")
 end
 
-function ResourceDepot.setData(material, amount, remoteBuyPrice, remoteSellPrice)
+function ResourceDepot.setData(material, amount, shortage)
+    if shortage ~= nil then
+        if shortage >= 0 then
+            shortageMaterial = material
+            shortageAmount = shortage
+        else
+            if shortageMaterial ~= nil then
+                shortageMaterial = nil
+                shortageAmount = nil
+            end
+        end
+    end
+
+    stock[material] = amount
 
     if guiInitialized then
-        stock[material] = amount
-        buyPrice[material] = remoteBuyPrice
-        sellPrice[material] = remoteSellPrice
-
-        soldGoodStockLabels[material].caption = createMonetaryString(amount)
-        soldGoodPriceLabels[material].caption = tostring(remoteBuyPrice)
-        boughtGoodStockLabels[material].caption = createMonetaryString(amount)
-        boughtGoodPriceLabels[material].caption = tostring(remoteSellPrice)
+        ResourceDepot.onShowWindow(0, material)
     end
 
 end
@@ -319,16 +414,17 @@ function ResourceDepot.buy(material, amount)
         return
     end
 
-    seller:pay(price)
-    seller:receiveResource(Material(material - 1), numTraded)
+    receiveTransactionTax(station, price * ResourceDepot.tax)
+
+    seller:pay("Bought resources for %1% credits."%_T, price)
+    seller:receiveResource("", Material(material - 1), numTraded)
 
     stock[material] = stock[material] - numTraded
 
     ResourceDepot.improveRelations(numTraded, ship, seller)
 
     -- update
-    broadcastInvokeClientFunction("setData", material, stock[material], ResourceDepot.getBuyPrice(material, seller), ResourceDepot.getSellPrice(material, seller))
-
+    broadcastInvokeClientFunction("setData", material, stock[material])
 end
 
 function ResourceDepot.sell(material, amount)
@@ -351,15 +447,29 @@ function ResourceDepot.sell(material, amount)
     local numTraded = math.min(playerResources[material], amount)
     local price = ResourceDepot.getSellPrice(material, buyer) * numTraded;
 
-    buyer:receive(price);
-    buyer:payResource(Material(material - 1), numTraded);
+    -- resource shortage
+    if material == shortageMaterial then
+        if numTraded ~= shortageAmount then
+            buyer:sendChatMessage("Server"%_t, 1, "You don't have enough ${material}."%_t % {material = Material(material - 1).name})
+            return
+        end
+    end
+
+    receiveTransactionTax(station, price * ResourceDepot.tax)
+
+    buyer:receive("Sold resources for %1% credits."%_T, price);
+    buyer:payResource("", Material(material - 1), numTraded);
 
     stock[material] = stock[material] + numTraded
 
     ResourceDepot.improveRelations(numTraded, ship, buyer)
 
     -- update
-    broadcastInvokeClientFunction("setData", material, stock[material], ResourceDepot.getBuyPrice(material, buyer), ResourceDepot.getSellPrice(material, buyer));
+    broadcastInvokeClientFunction("setData", material, stock[material]);
+
+    if material == shortageMaterial then
+        ResourceDepot.stopShortage()
+    end
 end
 
 -- relations improve when trading
@@ -385,8 +495,7 @@ function ResourceDepot.improveRelations(numTraded, ship, buyer)
     relationsGained[buyer.index] = gained
 end
 
-function ResourceDepot.getBuyingFactor(orderingFaction)
-
+function ResourceDepot.getBuyingFactor(material, orderingFaction)
     local stationFaction = Faction()
 
     if orderingFaction.index == Faction().index then return 1 end
@@ -407,11 +516,15 @@ function ResourceDepot.getBuyingFactor(orderingFaction)
         percentage = lerp(relation, -10000, 0, 3, 2)
     end
 
-    return percentage
+    -- adjust for resource shortage
+    if material == shortageMaterial then
+        percentage = percentage * 1.5
+    end
 
+    return percentage
 end
 
-function ResourceDepot.getSellingFactor(orderingFaction)
+function ResourceDepot.getSellingFactor(material, orderingFaction)
 
     local stationFaction = Faction()
 
@@ -434,16 +547,23 @@ function ResourceDepot.getSellingFactor(orderingFaction)
         percentage = math.max(percentage, 0.1);
     end
 
-    return percentage
+    -- adjust for resource shortage
+    if material == shortageMaterial then
+        percentage = percentage * 2
+    end
 
+    return percentage
 end
 
 function ResourceDepot.getSellPrice(material, faction)
-    return round(sellPrice[material] * ResourceDepot.getSellingFactor(faction), 1)
+    return round(sellPrice[material] * ResourceDepot.getSellingFactor(material, faction), 1)
 end
 
 function ResourceDepot.getBuyPrice(material, faction)
-    return round(buyPrice[material] * ResourceDepot.getBuyingFactor(faction), 1)
+    local bp = buyPrice[material]
+    local bf = ResourceDepot.getBuyingFactor(material, faction)
+    local tmp = bp * bf
+    return round(buyPrice[material] * ResourceDepot.getBuyingFactor(material, faction), 1)
 end
 
 function ResourceDepot.getData()
@@ -451,8 +571,44 @@ function ResourceDepot.getData()
     local player = Player(callingPlayer)
 
     for i = 1, NumMaterials() do
-        invokeClientFunction(player, "setData", i, stock[i], ResourceDepot.getBuyPrice(i, player), ResourceDepot.getSellPrice(i, player));
+        invokeClientFunction(player, "setData", i, stock[i]);
     end
 
 end
 
+function ResourceDepot.startShortage()
+    -- find material
+    local probabilities = Balancing_GetMaterialProbability(Sector():getCoordinates());
+    local materials = {}
+    for mat, value in pairs(probabilities) do
+        if value > 0 then
+            table.insert(materials, mat)
+        end
+    end
+
+    local numMaterials = tablelength(materials)
+    if numMaterials == 0 then
+        terminate()
+    end
+
+    shortageMaterial = materials[random():getInt(1, numMaterials)] + 1
+    shortageAmount = random():getInt(5, 25) * 1000
+
+    -- apply
+    stock[shortageMaterial] = 0
+
+    broadcastInvokeClientFunction("setData", shortageMaterial, 0, shortageAmount)
+
+    local values = {material = Material(shortageMaterial - 1).name, amount = shortageAmount}
+    local text = "We need ${amount} ${material}, quickly! If you can deliver in the next 30 minutes we will pay you handsomely."
+    Sector():broadcastChatMessage(Entity().title, 0, text%_t % values)
+end
+
+function ResourceDepot.stopShortage()
+    local material = shortageMaterial
+    shortageMaterial = nil
+    shortageAmount = nil
+    shortageTimer = -random():getInt(45 * 60, 90 * 60)
+
+    broadcastInvokeClientFunction("setData", material, stock[material], -1)
+end

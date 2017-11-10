@@ -18,6 +18,8 @@ function initialize(goodName, amount, stationIndex, cx, cy, reward)
         missionData.amount = 0
         missionData.stationIndex = 0
         missionData.location = {x = 0, y = 0}
+        missionData.sectorName = ""
+        missionData.stationTitle = ""
         missionData.stationName = ""
         missionData.reward = 0
         missionData.fulfilled = false
@@ -38,7 +40,9 @@ function initialize(goodName, amount, stationIndex, cx, cy, reward)
         missionData.amount = amount
         missionData.stationIndex = stationIndex
         missionData.location = {x = cx, y = cy}
-        missionData.stationName = Sector().name .. " " .. station.translatedTitle
+        missionData.sectorName = Sector().name
+        missionData.stationTitle = station.translatedTitle
+        missionData.stationName = station.name
         missionData.reward = reward
         missionData.fulfilled = false
         missionData.brief = "Organize ${amount} ${plural}"%_t
@@ -79,7 +83,7 @@ function onDeliver(craftIndex)
         end
 
         -- remove cargo, pay reward
-        player:receive(missionData.reward)
+        player:receive("Received %1% credits for organizing goods in time."%_T, missionData.reward)
         ship:removeCargo(goods[missionData.good]:good(), missionData.amount)
 
         invokeClientFunction(player, "onGoodsDelivered", 0)
@@ -146,7 +150,7 @@ function getMissionDescription()
         missionData.timeLeftStr = "< 1 min"%_t
     end
 
-    return [[The ${stationName} asked you for an urgent delivery of ${amount} ${plural}.
+return [[The ${stationTitle} ${stationName} in sector ${sectorName} asked you for an urgent delivery of ${amount} ${plural}.
 
 Upon delivering, you will receive payment for the goods as well as a bonus.
 

@@ -103,6 +103,11 @@ a:hover  {
     color:#55ff55;
 }
 
+.comment {
+font-family:monospace;
+color:#005500;
+}
+
 .type {
     font-family:monospace;
     font-weight:bold;

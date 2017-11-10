@@ -4,12 +4,14 @@ require ("utility")
 require ("faction")
 require ("stationextensions")
 require ("randomext")
-require("stringutility")
+require ("stringutility")
+require ("merchantutility")
 local Dialog = require("dialogutility")
 
 -- Don't remove or alter the following comment, it tells the game the namespace this script lives in. If you remove it, the script will break.
 -- namespace RepairDock
 RepairDock = {}
+RepairDock.tax = 0.2
 
 local window = 0
 local planDisplayer = 0
@@ -236,6 +238,8 @@ function RepairDock.repairCraft()
         return
     end
 
+    receiveTransactionTax(station, requiredMoney * RepairDock.tax)
+
     buyer:pay(requiredMoney, unpack(requiredResources))
 
     perfectPlan:resetDurability()
@@ -275,7 +279,7 @@ function RepairDock.setAsReconstructionSite()
         return
     end
 
-    player:pay(requiredMoney)
+    player:pay("Paid %1% credits to set a new reconstruction site."%_T, requiredMoney)
     player:setRespawnSectorCoordinates(x, y)
 
     invokeClientFunction(player, "onShowWindow", 1)

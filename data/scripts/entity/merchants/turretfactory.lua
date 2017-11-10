@@ -11,12 +11,14 @@ require ("goods")
 require ("tooltipmaker")
 require ("faction")
 require ("player")
-require("stringutility")
+require ("stringutility")
+require ("merchantutility")
 SellableInventoryItem = require ("sellableinventoryitem")
 Dialog = require("dialogutility")
 TurretGenerator = require("turretgenerator")
 
 
+local tax = 0.2
 local weaponTypes = {}
 
 table.insert(weaponTypes, WeaponType.ChainGun)
@@ -739,7 +741,8 @@ function buildTurret(weaponType, rarity, material, clientIngredients)
     -- make sure all required goods are there
     local missing
     for i, ingredient in pairs(ingredients) do
-        local amount = ship:getCargoAmount(ingredient.name)
+        local good = goods[ingredient.name]:good()
+        local amount = ship:getCargoAmount(good)
 
         if not amount or amount < ingredient.amount then
             missing = goods[ingredient.name].plural
@@ -766,7 +769,9 @@ function buildTurret(weaponType, rarity, material, clientIngredients)
     end
 
     -- pay
-    buyer:pay(price)
+    receiveTransactionTax(station, price * tax)
+
+    buyer:pay("Paid %1% credits to build a turret."%_T, price)
 
     for i, ingredient in pairs(ingredients) do
         local g = goods[ingredient.name]:good()

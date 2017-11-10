@@ -12,6 +12,8 @@ local Dialog = require("dialogutility")
 -- namespace TradingPost
 TradingPost = {}
 TradingPost = TradingAPI:CreateNamespace()
+TradingPost.trader.tax = 0.2
+TradingPost.trader.factionPaymentFactor = 0.0
 
 -- if this function returns false, the script will not be listed in the interaction window on the client,
 -- even though its UI may be registered

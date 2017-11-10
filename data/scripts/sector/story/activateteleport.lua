@@ -116,11 +116,12 @@ function ActivateTeleport.updateServer()
         local desc = WormholeDescriptor()
         desc:addComponent(ComponentType.DeletionTimer)
 
-        desc.cpwormhole.color = ColorRGB(1, 0, 0)
-        desc.cpwormhole:setTargetCoordinates(destination.x, destination.y)
-        desc.cpwormhole.visualSize = 100
-        desc.cpwormhole.passageSize = 150
-        desc.cpwormhole.oneWay = false
+        local cpwormhole = desc:getComponent(ComponentType.WormHole)
+        cpwormhole.color = ColorRGB(1, 0, 0)
+        cpwormhole:setTargetCoordinates(destination.x, destination.y)
+        cpwormhole.visualSize = 100
+        cpwormhole.passageSize = 150
+        cpwormhole.oneWay = false
 
         local wormHole = Sector():createEntity(desc)
 

@@ -3,6 +3,9 @@ package.path = package.path .. ";data/scripts/lib/?.lua"
 require ("basesystem")
 require ("utility")
 
+-- optimization so that energy requirement doesn't have to be read every frame
+FixedEnergyRequirement = true
+
 function onInstalled(seed, rarity)
     if onClient() then
         if rarity == Rarity(RarityType.Legendary) then

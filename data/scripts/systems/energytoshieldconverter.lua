@@ -4,6 +4,9 @@ require ("basesystem")
 require ("utility")
 require ("randomext")
 
+-- optimization so that energy requirement doesn't have to be read every frame
+FixedEnergyRequirement = true
+
 function onInstalled(seed, rarity)
     addBaseMultiplier(StatsBonuses.ShieldDurability, getAmplification(seed, rarity))
     addBaseMultiplier(StatsBonuses.GeneratedEnergy, getEnergyChange(seed, rarity))

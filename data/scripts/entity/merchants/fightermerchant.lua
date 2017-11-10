@@ -30,14 +30,18 @@ local function comp(a, b)
     local ta = a.fighter;
     local tb = b.fighter;
 
-    if ta.rarity.value == tb.rarity.value then
-        if ta.material.value == tb.material.value then
-            return ta.weaponPrefix < tb.weaponPrefix
+    if ta.type == tb.type then
+        if ta.rarity.value == tb.rarity.value then
+            if ta.material.value == tb.material.value then
+                return ta.weaponPrefix < tb.weaponPrefix
+            else
+                return ta.material.value > tb.material.value
+            end
         else
-            return ta.material.value > tb.material.value
+            return ta.rarity.value > tb.rarity.value
         end
     else
-        return ta.rarity.value > tb.rarity.value
+        return ta.type < tb.type
     end
 end
 
@@ -68,6 +72,16 @@ function FighterMerchant.shop:addItems()
         elseif fighter.rarity.value == RarityType.Common then
             pair.amount = getInt(8, 12)
         end
+
+        table.insert(allFighters, pair)
+    end
+
+    for i = 1, 3 do
+        local fighter = FighterGenerator.generateCargoShuttle(Sector():getCoordinates())
+
+        local pair = {}
+        pair.fighter = fighter
+        pair.amount = getInt(8, 12)
 
         table.insert(allFighters, pair)
     end

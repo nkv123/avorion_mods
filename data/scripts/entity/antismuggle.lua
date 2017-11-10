@@ -110,7 +110,13 @@ function AntiSmuggle.updateSuspiciousShipDetection(timeStep)
                         if suspicion then
                             suspicion.ship = ship
                             suspicion.index = ship.index
-                            suspicion.player = Player(ship.factionIndex)
+
+                            local pilots = {ship:getPilotIndices()}
+                            if #pilots > 0 then
+                                suspicion.player = Player(pilots[1])
+                            end
+
+                            suspicion.factionIndex = ship.factionIndex
                             suspicion.fine = (suspicion.fine or 0) + (good.price * amount + 1500 * Balancing_GetSectorRichnessFactor(Sector():getCoordinates())) * payment
                             suspicion.fine = suspicion.fine * (1.0 + 0.5 * selfFaction:getTrait("greedy"))
 
@@ -140,7 +146,7 @@ function AntiSmuggle.updateSuspicionDetectedBehaviour(timeStep)
     --
     if not valid(suspicion.ship) then
         local faction = Faction()
-        Galaxy():changeFactionRelations(faction, suspicion.player, -25000 - (10000 * faction:getTrait("strict")))
+        Galaxy():changeFactionRelations(faction, Faction(suspicion.factionIndex), -25000 - (10000 * faction:getTrait("strict")), true, true)
         AntiSmuggle.resetSuspicion()
         return
     end
@@ -151,9 +157,11 @@ function AntiSmuggle.updateSuspicionDetectedBehaviour(timeStep)
         suspicion.timeOut = values.timeOut
 
         local faction = Faction()
-        Galaxy():changeFactionRelations(faction, suspicion.player, -5000 - (2500 * faction:getTrait("strict")))
+        Galaxy():changeFactionRelations(faction, Faction(suspicion.factionIndex), -5000 - (2500 * faction:getTrait("strict")), true, true)
 
-        invokeClientFunction(suspicion.player, "startTalk", suspicion.type, suspicion.fine)
+        if valid(suspicion.player) then
+            invokeClientFunction(suspicion.player, "startTalk", suspicion.type, suspicion.fine)
+        end
     end
 
     -- if they don't respond in time, they are considered an enemy
@@ -163,7 +171,7 @@ function AntiSmuggle.updateSuspicionDetectedBehaviour(timeStep)
             ShipAI():registerEnemyEntity(suspicion.ship.index)
         end
 
-        if suspicion.timeOut == 0 then
+        if suspicion.timeOut == 0  and valid(suspicion.player) then
             invokeClientFunction(suspicion.player, "startEnemyTalk")
         end
     end
@@ -305,9 +313,9 @@ function AntiSmuggle.onComply()
         return
     end
 
-    if suspicion and suspicion.player and suspicion.player.index == callingPlayer then
+if suspicion and suspicion.factionIndex and suspicion.player and suspicion.player.index == callingPlayer then
         suspicion.responded = true
-        Player(callingPlayer):pay(suspicion.fine)
+        Faction(suspicion.factionIndex):pay("Paid a fine of %1% credits."%_T, suspicion.fine)
     end
 end
 

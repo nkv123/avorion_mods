@@ -42,7 +42,7 @@ function updateServer()
 
         if numPirates == 0 then
             local player = Player()
-            player:receive(missionData.reward)
+            player:receive("Earned %1% credits for wiping out a pirate group."%_T, missionData.reward)
             player:sendChatMessage(missionData.giver, 0, "Thank you for taking care of this scum. We transferred the reward to your account."%_t)
             finish()
         end

@@ -346,8 +346,19 @@ function PlanGenerator.transformToFreighter(plan, faction)
     local displace = vec3(front.box.position.x, front.box.position.y, front.box.upper.z) - vec3(back.box.position.x, back.box.position.y, back.box.lower.z)
     plan:addPlanDisplaced(front.index, attachment, attachment:getNthIndex(0), displace)
 
-    CorrectInefficiencies(plan, 1)
+    -- slap an engine on the back to make sure that the freighter can fly
+    local stats = plan:getStats()
+    local back = findMinBlock(plan, "z")
 
+    local box = back.box
+    local size = box.size
+    local position = box.position
+
+    position.z = position.z - size.z * 0.5 - 0.5
+
+    plan:addBlock(position, vec3(1.5, 1.5, 1.5), back.index, -1, back.color, back.material, Matrix(), BlockType.Engine)
+
+    CorrectInefficiencies(plan, 1)
 end
 
 

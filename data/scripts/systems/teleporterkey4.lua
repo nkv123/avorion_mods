@@ -5,6 +5,9 @@ require ("utility")
 
 -- this key is sold by the travelling merchant
 
+-- optimization so that energy requirement doesn't have to be read every frame
+FixedEnergyRequirement = true
+
 function getNumTurrets(seed, rarity)
     return math.max(1, rarity.value)
 end
@@ -22,10 +25,6 @@ end
 
 function getIcon(seed, rarity)
     return "data/textures/icons/key4.png"
-end
-
-function getEnergy(seed, rarity)
-    return 0
 end
 
 function getPrice(seed, rarity)

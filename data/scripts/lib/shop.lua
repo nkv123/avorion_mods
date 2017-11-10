@@ -1,15 +1,3 @@
---[[
-
-This script is a template for creating station or entity scripts.
-The script runs on the server and on the client simultaneously.
-
-There are various methods that get called at specific points of the game,
-read the comments of the methods for further information.
-It is required that these methods do not get changed, otherwise this will
-lead to controlled crashes of the game.
-
-]]--
-
 package.path = package.path .. ";data/scripts/lib/?.lua"
 require ("galaxy")
 require ("randomext")
@@ -17,6 +5,7 @@ require ("utility")
 require ("stringutility")
 require ("player")
 require ("faction")
+require ("merchantutility")
 local SellableInventoryItem = require ("sellableinventoryitem")
 local Dialog = require("dialogutility")
 
@@ -29,6 +18,7 @@ local function new()
     local instance = {}
 
     instance.ItemWrapper = SellableInventoryItem
+    instance.tax = 0.2
 
     -- UI
     instance.soldItemFrames = {}
@@ -613,7 +603,9 @@ function Shop:sellToPlayer(itemIndex) -- server
         return
     end
 
-    buyer:pay(item.price)
+    receiveTransactionTax(station, item.price * self.tax)
+
+    buyer:pay("Bought an item for %1% credits."%_T, item.price)
 
     -- remove item
     item.amount = item.amount - 1
@@ -658,7 +650,10 @@ function Shop:buyFromPlayer(itemIndex) -- server
         return
     end
 
-    buyer:receive(item.price * 0.25)
+    -- no transaction tax here since it could be abused by 2 players working together
+    -- receiveTransactionTax(station, item.price * 0.25 * self.tax)
+
+    buyer:receive("Sold an item for %1% credits."%_T, item.price * 0.25)
 
     -- insert the item into buyback list
     for i = 14, 1, -1 do
@@ -703,7 +698,7 @@ function Shop:buyTrashFromPlayer() -- server
                 return
             end
 
-            buyer:receive(item.price * 0.25)
+            buyer:receive("Sold an item for %1% credits."%_T, item.price * 0.25)
 
             -- insert the item into buyback list
             for i = 14, 1, -1 do
@@ -755,7 +750,10 @@ function Shop:sellBackToPlayer(itemIndex) -- server
         return
     end
 
-    buyer:pay(item.price * 0.25)
+    -- no transaction tax here since it could be abused by 2 players working together
+    -- receiveTransactionTax(station, item.price * 0.25 * self.tax)
+
+    buyer:pay("Bought back an item for %1% credits."%_T, item.price * 0.25)
 
     -- remove item
     item.amount = item.amount - 1

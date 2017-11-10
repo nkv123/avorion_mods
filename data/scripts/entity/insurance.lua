@@ -261,7 +261,7 @@ function Insurance.insure()
         return
     end
 
-    buyer:pay(due)
+    buyer:pay("Paid %1% credits for ship insurance."%_T, due)
     Insurance.insuredValue = value
     Insurance.refundedValue = value
 
@@ -292,7 +292,7 @@ function Insurance.insurePartial()
 
     toPay = math.min(due, toPay)
 
-    buyer:pay(toPay)
+    buyer:pay("Paid %1% credits for ship insurance."%_T, toPay)
 
     Insurance.insuredValue = math.floor(Insurance.insuredValue + toPay / 0.3)
     Insurance.refundedValue = Insurance.insuredValue
@@ -327,6 +327,8 @@ end
 
 -- if ship is destroyed this function is called
 function Insurance.onDestroyed(index, lastDamageInflictor)
+    if Insurance.refundedValue == 0 then return end
+
     local faction = Faction()
     if not faction then return end
 
@@ -350,7 +352,7 @@ function Insurance.onDestroyed(index, lastDamageInflictor)
 
         player:addMail(mail)
     else
-        faction:receive(Insurance.refundedValue)
+        faction:receive(Format("Received insurance refund for %1%: %2% credits."%_T, ship.name), Insurance.refundedValue)
     end
 end
 

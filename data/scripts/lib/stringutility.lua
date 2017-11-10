@@ -55,7 +55,7 @@ function enumerate(values, f)
 
         if i > 1 then
             if i == num then
-                result = result .. " and /* this is for the last connection of enumerations, such as A, B and C */"%_t
+                result = result .. " and  /* this is for the last connection of enumerations, such as A, B and C */"%_t
             else
                 result = result .. ", "
             end

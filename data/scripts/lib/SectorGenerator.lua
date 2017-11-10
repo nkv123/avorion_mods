@@ -457,19 +457,7 @@ function SectorGenerator:createShipyard(faction)
     local station = self:createStation(faction, "data/scripts/entity/merchants/shipyard.lua");
     station:addScript("data/scripts/entity/merchants/repairdock.lua")
 
-    station:addScript("data/scripts/entity/merchants/consumer.lua", "Shipyard"%_t,
-                  "Energy Tube",
-                  "Steel",
-                  "Aluminium",
-                  "Display",
-                  "Metal Plate",
-                  "Power Unit",
-                  "Antigrav Unit",
-                  "Fusion Core",
-                  "Wire",
-                  "Solar Cell",
-                  "Solar Panel",
-                  "Plastic")
+    station:addScript("data/scripts/entity/merchants/consumer.lua", ShipyardConsumerArguments())
 
     return station
 end
@@ -479,20 +467,7 @@ function SectorGenerator:createEquipmentDock(faction)
 
     station:addScript("data/scripts/entity/merchants/turretmerchant.lua")
     station:addScript("data/scripts/entity/merchants/fightermerchant.lua")
-    station:addScript("data/scripts/entity/merchants/consumer.lua", "Equipment Dock"%_t,
-                  "Fuel",
-                  "Rocket",
-                  "Tools",
-                  "Laser Compressor",
-                  "Display",
-                  "Laser Head",
-                  "Power Unit",
-                  "Antigrav Unit",
-                  "Fusion Core",
-                  "Wire",
-                  "Drill",
-                  "Warhead",
-                  "Plastic")
+    station:addScript("data/scripts/entity/merchants/consumer.lua", EquipmentDockConsumerArguments())
 
     ShipUtility.addArmedTurretsToCraft(station)
 
@@ -502,20 +477,7 @@ end
 function SectorGenerator:createRepairDock(faction)
     local station = self:createStation(faction, "data/scripts/entity/merchants/repairdock.lua");
 
-    station:addScript("data/scripts/entity/merchants/consumer.lua", "Repair Dock"%_t,
-                  "Energy Tube",
-                  "Fuel",
-                  "Steel",
-                  "Fusion Core",
-                  "Display",
-                  "Metal Plate",
-                  "Power Unit",
-                  "Antigrav Unit",
-                  "Nanobot",
-                  "Processor",
-                  "Solar Cell",
-                  "Solar Panel",
-                  "Plastic")
+    station:addScript("data/scripts/entity/merchants/consumer.lua", RepairDockConsumerArguments())
 
     return station
 end
@@ -523,20 +485,7 @@ end
 function SectorGenerator:createMilitaryBase(faction)
     local station = self:createStation(faction, "data/scripts/entity/merchants/militaryoutpost.lua");
 
-    station:addScript("data/scripts/entity/merchants/consumer.lua", "Military Outpost"%_t,
-                  "War Robot",
-                  "Body Armor",
-                  "Vehicle",
-                  "Gun",
-                  "Ammunition",
-                  "Ammunition S",
-                  "Ammunition M",
-                  "Ammunition L",
-                  "Medical Supplies",
-                  "Explosive Charge",
-                  "Electromagnetic Charge",
-                  "Food Bar",
-                  "Targeting System")
+    station:addScript("data/scripts/entity/merchants/consumer.lua", MilitaryOutpostConsumerArguments())
 
     ShipUtility.addArmedTurretsToCraft(station)
 
@@ -546,18 +495,7 @@ end
 function SectorGenerator:createResearchStation(faction)
     local station = self:createStation(faction, "data/scripts/entity/merchants/researchstation.lua");
 
-    station:addScript("data/scripts/entity/merchants/consumer.lua", "Research Station"%_t,
-                  "Turbine",
-                  "High Capacity Lens",
-                  "Neutron Accelerator",
-                  "Electron Accelerator",
-                  "Proton Accelerator",
-                  "Fusion Generator",
-                  "Anti-Grav Generator",
-                  "Force Generator",
-                  "Teleporter",
-                  "Drill",
-                  "Satellite")
+    station:addScript("data/scripts/entity/merchants/consumer.lua", ResearchStationConsumerArguments())
 
     return station
 end
@@ -686,7 +624,7 @@ function SectorGenerator:createGates()
             desc.invincible = true
             desc:addScript("data/scripts/entity/gate.lua")
 
-            local wormhole = desc.cpwormhole
+            local wormhole = desc:getComponent(ComponentType.WormHole)
             wormhole:setTargetCoordinates(target.x, target.y)
             wormhole.visible = false
             wormhole.visualSize = 50

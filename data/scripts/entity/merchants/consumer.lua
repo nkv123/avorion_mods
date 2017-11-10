@@ -17,11 +17,11 @@ Consumer = TradingAPI:CreateNamespace()
 Consumer.consumerName = ""
 Consumer.consumerIcon = ""
 Consumer.consumedGoods = {}
+Consumer.trader.tax = 0.0
+Consumer.trader.factionPaymentFactor = 0.0
 
 function Consumer.interactionPossible(playerIndex, option)
-
     if Player(playerIndex).craftIndex == Entity().index then return false end
-
     return CheckFactionInteraction(playerIndex, -20000)
 end
 

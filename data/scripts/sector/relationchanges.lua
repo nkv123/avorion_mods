@@ -87,7 +87,7 @@ function RelationChanges.onDestroyed(destroyedIndex, destroyerIndex)
             -- relations can't worsen when the observing faction has really bad relations to the victim
             if relationsToVictim < -70000 then change = math.max(change, 0) end
 
-            Galaxy():changeFactionRelations(destroyers, faction, change)
+            Galaxy():changeFactionRelations(destroyers, faction, change, true, true)
         end
     end
 

@@ -3,6 +3,9 @@ package.path = package.path .. ";data/scripts/lib/?.lua"
 require ("basesystem")
 require ("randomext")
 
+-- optimization so that energy requirement doesn't have to be read every frame
+FixedEnergyRequirement = true
+
 function getBonuses(seed, rarity)
     math.randomseed(seed)
 

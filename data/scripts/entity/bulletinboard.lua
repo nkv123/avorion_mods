@@ -11,7 +11,9 @@ local bulletins = {}
 BulletinBoard = {}
 
 function BulletinBoard.initialize()
-
+    if onClient() then
+        BulletinBoard.fetchData()
+    end
 end
 
 function BulletinBoard.interactionPossible(playerIndex, option)
@@ -144,6 +146,11 @@ function BulletinBoard.receiveData(bulletins_in)
     bulletins = bulletins_in
 
     BulletinBoard.refreshUI()
+    if #bulletins == 0 then
+        EntityIcon().secondaryIcon = ""
+    else
+        EntityIcon().secondaryIcon = "data/textures/icons/pixel/mission.png"
+    end
 end
 
 function BulletinBoard.refreshUI()

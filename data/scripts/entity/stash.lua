@@ -57,7 +57,7 @@ function receiveMoney(faction)
     local x, y = Sector():getCoordinates()
     local money = 5500 * Balancing_GetSectorRichnessFactor(x, y)
 
-    faction:receive(money)
+    faction:receive("Found %1% credits in a stash."%_T, money)
 end
 
 function receiveTurret(faction)
