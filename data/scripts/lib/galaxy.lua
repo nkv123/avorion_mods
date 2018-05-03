@@ -162,12 +162,6 @@ function Balancing_GetSectorWeaponDPS(x, y)
     local lg = math.min(1.0, math.max(0.0, 1.0 - (dist / 220)))
     local lmin = math.min(1.0, math.max(0.0, 1.0 - (dist / 220)))
 
-    local b = 250
-    local q = 1000
-    local loverall = 1000
-    local louter = 500
-    local lmid = 30
-
     local dps = 0
     dps = math.max(dps, 95 * la)
     dps = math.max(dps, 190 * lb)
@@ -274,20 +268,23 @@ function Balancing_GetWeaponProbability(x, y)
 
     local data = {}
 
-    data[WeaponType.ChainGun] =         {p = 3.0}
-    data[WeaponType.MiningLaser] =      {p = 3.0}
-    data[WeaponType.SalvagingLaser] =   {p = 2.0}
-    data[WeaponType.Bolter] =           {d = 0.9, p = 1.0}
-    data[WeaponType.ForceGun] =         {d = 0.85, p = 1.0}
-    data[WeaponType.PlasmaGun] =        {d = 0.8, p = 2.0}
-    data[WeaponType.Laser] =            {d = 0.75, p = 2.0}
-    data[WeaponType.PulseCannon] =      {d = 0.73, p = 1.0}
-    data[WeaponType.Cannon] =           {d = 0.7, p = 2.0}
-    data[WeaponType.RepairBeam] =       {d = 0.65, p = 2.0}
-    data[WeaponType.RocketLauncher] =   {d = 0.6, p = 1.0}
-    data[WeaponType.LightningGun] =     {d = 0.55, p = 2.0}
-    data[WeaponType.TeslaGun] =         {d = 0.55, p = 2.0}
-    data[WeaponType.RailGun] =          {d = 0.5, p = 1.0}
+    data[WeaponType.ChainGun] =             {p = 3.0}
+    data[WeaponType.PointDefenseChainGun] = {p = 1.0}
+    data[WeaponType.MiningLaser] =          {p = 3.0}
+    data[WeaponType.SalvagingLaser] =       {p = 2.0}
+    data[WeaponType.Bolter] =               {d = 0.9, p = 1.0}
+    data[WeaponType.ForceGun] =             {d = 0.85, p = 1.0}
+    data[WeaponType.Laser] =                {d = 0.75, p = 2.0}
+    data[WeaponType.TeslaGun] =             {d = 0.73, p = 2.0}
+    data[WeaponType.PulseCannon] =          {d = 0.73, p = 1.0}
+    data[WeaponType.AntiFighter] =          {d = 0.7, p = 2.0}
+    data[WeaponType.Cannon] =               {d = 0.65, p = 2.0}
+    data[WeaponType.RepairBeam] =           {d = 0.65, p = 2.0}
+    data[WeaponType.PointDefenseLaser] =    {d = 0.6, p = 1.0}
+    data[WeaponType.PlasmaGun] =            {d = 0.6, p = 2.0}
+    data[WeaponType.RocketLauncher] =       {d = 0.6, p = 1.0}
+    data[WeaponType.RailGun] =              {d = 0.6, p = 1.0}
+    data[WeaponType.LightningGun] =         {d = 0.4, p = 2.0}
 
     local probabilities = {}
 
@@ -355,6 +352,19 @@ function Balancing_GetBlockRingMax()
     return blockRingMax;
 end
 
+function Balancing_GetDamageFactor(difficulty)
+
+    if difficulty == Difficulty.Beginner then return 0.025
+    elseif difficulty == Difficulty.Easy then return 0.075
+    elseif difficulty == Difficulty.Normal then return 0.2
+    elseif difficulty == Difficulty.Veteran then return 0.4
+    elseif difficulty == Difficulty.Difficult then return 0.6
+    elseif difficulty == Difficulty.Hard then return 0.8
+    elseif difficulty == Difficulty.Insane then return 1.0
+    end
+
+    return 0.2;
+end
 
 return
 {

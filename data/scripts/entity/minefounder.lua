@@ -86,6 +86,7 @@ function initUI()
     warnWindowLabel = warnWindow:createLabel(ihsplit.bottom.lower, "Text", 14)
     warnWindowLabel.size = ihsplit.bottom.size
     warnWindowLabel:setTopAligned();
+    warnWindowLabel.wordBreak = true
 
     local vsplit = UIVerticalSplitter(hsplit.bottom, 10, 0, 0.5)
     warnWindow:createButton(vsplit.left, "OK"%_t, "onConfirmTransformationButtonPress")
@@ -123,7 +124,7 @@ function buildGui(levels, tab)
 
         for index, production in pairs(productions) do
 
-            if string.match(production.factory, "Mine") then
+            if string.match(production.factory, "Mine") or string.match(production.factory, "Oil Rig") then
 
                 -- read data from production
                 local result = goods[production.results[1].name];
@@ -277,7 +278,11 @@ function foundFactory(goodName, productionIndex, name)
     buyer:pay("Paid %1% credits to found a mine."%_T, cost)
 
     local station = transformToStation(asteroid, name)
-    station.title = "${good} Mine"%_t % {good = goodName}
+    if goodName == "Raw Oil" then
+        station.title = "Oil Rig"%_t
+    else
+        station.title = "${good} Mine"%_t % {good = goodName}
+    end
 
     -- make a factory
     station:addScript("data/scripts/entity/merchants/factory.lua", "nothing")
@@ -299,12 +304,15 @@ function transformToStation(asteroid, name)
 
     -- create the station
     -- get plan of asteroid
-    local plan = asteroid:getPlan()
+    local plan = asteroid:getMovePlan()
+
+    -- this will delete the asteroid and deactivate the collision detection so the original asteroid doesn't interfere with the new station
+    asteroid:setPlan(BlockPlan())
 
     -- create station
     local desc = StationDescriptor()
     desc.factionIndex = asteroid.factionIndex
-    desc:setPlan(plan)
+    desc:setMovePlan(plan)
     desc.position = asteroid.position
     desc:addScript("data/scripts/entity/crewboard.lua")
     desc.name = name
@@ -312,9 +320,6 @@ function transformToStation(asteroid, name)
     local station = Sector():createEntity(desc)
 
     AddDefaultStationScripts(station)
-
-    -- this will delete the asteroid and deactivate the collision detection so the original asteroid doesn't interfere with the new station
-    asteroid:setPlan(BlockPlan())
 
     return station
 end

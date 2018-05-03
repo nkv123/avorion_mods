@@ -22,6 +22,7 @@ local tax = 0.2
 local weaponTypes = {}
 
 table.insert(weaponTypes, WeaponType.ChainGun)
+table.insert(weaponTypes, WeaponType.PointDefenseChainGun)
 table.insert(weaponTypes, WeaponType.Bolter)
 table.insert(weaponTypes, WeaponType.Laser)
 table.insert(weaponTypes, WeaponType.PlasmaGun)
@@ -34,9 +35,11 @@ table.insert(weaponTypes, WeaponType.SalvagingLaser)
 table.insert(weaponTypes, WeaponType.ForceGun)
 table.insert(weaponTypes, WeaponType.LightningGun)
 table.insert(weaponTypes, WeaponType.PulseCannon)
+table.insert(weaponTypes, WeaponType.TeslaGun)
 
 local weaponNamesByType = {}
 weaponNamesByType[WeaponType.ChainGun] = "Chaingun /* Weapon Type */"%_t
+weaponNamesByType[WeaponType.PointDefenseChainGun] = "Point Defense Chaingun /* Weapon Type */"%_t
 weaponNamesByType[WeaponType.Bolter] = "Bolter /* Weapon Type */"%_t
 weaponNamesByType[WeaponType.Laser] = "Laser /* Weapon Type */"%_t
 weaponNamesByType[WeaponType.PlasmaGun] = "Plasma /* Weapon Type */"%_t
@@ -49,6 +52,8 @@ weaponNamesByType[WeaponType.SalvagingLaser] = "Salvaging Laser /* Weapon Type *
 weaponNamesByType[WeaponType.ForceGun] = "Force Gun /* Weapon Type */"%_t
 weaponNamesByType[WeaponType.LightningGun] = "Lightning Gun /* Weapon Type */"%_t
 weaponNamesByType[WeaponType.PulseCannon] = "Pulse Cannon /* Weapon Type */"%_t
+weaponNamesByType[WeaponType.TeslaGun] = "Tesla Gun /* Weapon Type */"%_t
+
 
 local weaponsByComboEntry = {}
 
@@ -70,6 +75,19 @@ function getBaseIngredients(weaponType)
             {name = "Steel",            amount = 5,     investable = 10,    minimum = 3},
             {name = "Aluminium",        amount = 7,     investable = 5,     minimum = 3},
             {name = "Lead",             amount = 10,    investable = 10,    minimum = 1},
+            {name = "Targeting System", amount = 0,     investable = 2,     minimum = 0, turretStat = "automatic", investFactor = 1, changeType = StatChanges.Flat},
+
+        }
+    elseif weaponType == WeaponType.PointDefenseChainGun then
+        return {
+            {name = "Servo",            amount = 15,    investable = 10,    minimum = 8, rarityFactor = 0.75, weaponStat = "fireRate", investFactor = 0.3, },
+            {name = "Steel Tube",       amount = 6,     investable = 7,     weaponStat = "reach"},
+            {name = "Ammunition S",     amount = 5,     investable = 10,    minimum = 1, weaponStat = "damage"},
+            {name = "Steel",            amount = 5,     investable = 10,    minimum = 3},
+            {name = "Aluminium",        amount = 7,     investable = 5,     minimum = 3},
+            {name = "Lead",             amount = 10,    investable = 10,    minimum = 1},
+            {name = "Targeting System", amount = 2,     investable = 0,     minimum = 2, turretStat = "automatic", investFactor = 1, changeType = StatChanges.Flat},
+
         }
     elseif weaponType == WeaponType.Bolter then
         return {
@@ -79,53 +97,62 @@ function getBaseIngredients(weaponType)
             {name = "Explosive Charge",     amount = 2,     investable = 4,     minimum = 1,    weaponStat = "damage", investFactor = 1.5},
             {name = "Steel",                amount = 5,     investable = 10,    minimum = 3,},
             {name = "Aluminium",            amount = 7,     investable = 5,     minimum = 3,},
+            {name = "Targeting System",     amount = 0,     investable = 2,     minimum = 0, turretStat = "automatic", investFactor = 1, changeType = StatChanges.Flat},
         }
     elseif weaponType == WeaponType.Laser then
         return {
-            {name = "Laser Head",           amount = 2,    investable = 4, minimum = 1, weaponStat = "damage", investFactor = 2.0, },
-            {name = "Laser Compressor",     amount = 2,    investable = 3, weaponStat = "damage", investFactor = 2.0, },
-            {name = "High Capacity Lens",   amount = 2,    investable = 4, weaponStat = "reach", investFactor = 2.0, },
-            {name = "Laser Modulator",      amount = 2,    investable = 4, turretStat = "energyIncreasePerSecond", investFactor = -0.2, changeType = StatChanges.Percentage },
+            {name = "Laser Head",           amount = 2,    investable = 4,  minimum = 1, weaponStat = "damage", investFactor = 2.0, },
+            {name = "Laser Compressor",     amount = 2,    investable = 3,              weaponStat = "damage", investFactor = 2.0, },
+            {name = "High Capacity Lens",   amount = 2,    investable = 4,              weaponStat = "reach", investFactor = 2.0, },
+            {name = "Laser Modulator",      amount = 2,    investable = 4,              turretStat = "energyIncreasePerSecond", investFactor = -0.2, changeType = StatChanges.Percentage },
             {name = "Steel",                amount = 5,    investable = 10, minimum = 3,},
             {name = "Crystal",              amount = 2,    investable = 10, minimum = 1,},
+            {name = "Targeting System",     amount = 0,    investable = 2, minimum = 0, turretStat = "automatic", investFactor = 1, changeType = StatChanges.Flat},
         }
     elseif weaponType == WeaponType.PlasmaGun then
         return {
             {name = "Plasma Cell",          amount = 8,    investable = 4,  minimum = 1,   weaponStat = "damage",   },
-            {name = "Energy Tube",          amount = 2,    investable = 6, minimum = 1,    weaponStat = "reach", },
-            {name = "Conductor",            amount = 5,    investable = 6, minimum = 1,    turretStat = "energyIncreasePerSecond", investFactor = -0.3, changeType = StatChanges.Percentage },
-            {name = "Energy Container",     amount = 5,    investable = 6, minimum = 1,    turretStat = "baseEnergyPerSecond", investFactor = -0.3, changeType = StatChanges.Percentage },
+            {name = "Energy Tube",          amount = 2,    investable = 6,  minimum = 1,    weaponStat = "reach", },
+            {name = "Conductor",            amount = 5,    investable = 6,  minimum = 1,    turretStat = "energyIncreasePerSecond", investFactor = -0.3, changeType = StatChanges.Percentage },
+            {name = "Energy Container",     amount = 5,    investable = 6,  minimum = 1,    turretStat = "baseEnergyPerSecond", investFactor = -0.3, changeType = StatChanges.Percentage },
             {name = "Steel",                amount = 4,    investable = 10, minimum = 3,},
             {name = "Crystal",              amount = 2,    investable = 10, minimum = 1,},
+            {name = "Targeting System",     amount = 0,    investable = 2,  minimum = 0, turretStat = "automatic", investFactor = 1, changeType = StatChanges.Flat},
+
         }
     elseif weaponType == WeaponType.Cannon then
         return {
-            {name = "Servo",                amount = 15,   investable = 10,  minimum = 5,  weaponStat = "fireRate", investFactor = 1.0, changeType = StatChanges.Percentage},
-            {name = "Warhead",              amount = 5,    investable = 6, minimum = 1,    weaponStat = "damage",  },
-            {name = "High Pressure Tube",   amount = 2,    investable = 6, minimum = 1,    weaponStat = "reach", },
-            {name = "Explosive Charge",     amount = 2,    investable = 6, minimum = 1,    weaponStat = "reach", investFactor = 0.5,},
+            {name = "Servo",                amount = 15,   investable = 10, minimum = 5,  weaponStat = "fireRate", investFactor = 1.0, changeType = StatChanges.Percentage},
+            {name = "Warhead",              amount = 5,    investable = 6,  minimum = 1,    weaponStat = "damage",  },
+            {name = "High Pressure Tube",   amount = 2,    investable = 6,  minimum = 1,    weaponStat = "reach", },
+            {name = "Explosive Charge",     amount = 2,    investable = 6,  minimum = 1,    weaponStat = "reach", investFactor = 0.5,},
             {name = "Steel",                amount = 8,    investable = 10, minimum = 3,},
             {name = "Wire",                 amount = 5,    investable = 10, minimum = 3,},
+            {name = "Targeting System",     amount = 0,    investable = 2,  minimum = 0, turretStat = "automatic", investFactor = 1, changeType = StatChanges.Flat},
+
         }
     elseif weaponType == WeaponType.RocketLauncher then
         return {
-            {name = "Servo",                amount = 15,   investable = 10,  minimum = 5,  weaponStat = "fireRate", investFactor = 1.0, changeType = StatChanges.Percentage},
+            {name = "Servo",                amount = 15,   investable = 10, minimum = 5,  weaponStat = "fireRate", investFactor = 1.0, changeType = StatChanges.Percentage},
             {name = "Rocket",               amount = 5,    investable = 6,  minimum = 1,    weaponStat = "damage",  },
             {name = "High Pressure Tube",   amount = 2,    investable = 6,  minimum = 1,    weaponStat = "reach", },
             {name = "Fuel",                 amount = 2,    investable = 6,  minimum = 1,    weaponStat = "reach", investFactor = 0.5,},
-            {name = "Targeting Card",       amount = 5,    investable = 5, minimum = 0,     weaponStat = "seeker", investFactor = 1, changeType = StatChanges.Flat},
+            {name = "Targeting Card",       amount = 5,    investable = 5,  minimum = 0,     weaponStat = "seeker", investFactor = 1, changeType = StatChanges.Flat},
             {name = "Steel",                amount = 8,    investable = 10, minimum = 3,},
             {name = "Wire",                 amount = 5,    investable = 10, minimum = 3,},
+            {name = "Targeting System",     amount = 0,    investable = 2,  minimum = 0, turretStat = "automatic", investFactor = 1, changeType = StatChanges.Flat},
         }
     elseif weaponType == WeaponType.RailGun then
         return {
-            {name = "Servo",                amount = 15,   investable = 10,  minimum = 5,   weaponStat = "fireRate", investFactor = 1.0, changeType = StatChanges.Percentage},
-            {name = "Electromagnetic Charge",amount = 5,    investable = 6,  minimum = 1,   weaponStat = "damage", investFactor = 0.75,},
+            {name = "Servo",                amount = 15,   investable = 10, minimum = 5,   weaponStat = "fireRate", investFactor = 1.0, changeType = StatChanges.Percentage},
+            {name = "Electromagnetic Charge",amount = 5,   investable = 6,  minimum = 1,   weaponStat = "damage", investFactor = 0.75,},
             {name = "Electro Magnet",       amount = 8,    investable = 10, minimum = 3,    weaponStat = "reach", investFactor = 0.75,},
             {name = "Gauss Rail",           amount = 5,    investable = 6,  minimum = 1,    weaponStat = "damage", investFactor = 0.75,},
             {name = "High Pressure Tube",   amount = 2,    investable = 6,  minimum = 1,    weaponStat = "reach",  investFactor = 0.75,},
             {name = "Steel",                amount = 5,    investable = 10, minimum = 3,},
             {name = "Copper",               amount = 2,    investable = 10, minimum = 1,},
+            {name = "Targeting System",     amount = 0,    investable = 2,  minimum = 0, turretStat = "automatic", investFactor = 1, changeType = StatChanges.Flat},
+
         }
     elseif weaponType == WeaponType.RepairBeam then
         return {
@@ -135,6 +162,8 @@ function getBaseIngredients(weaponType)
             {name = "Conductor",            amount = 2,    investable = 6,  minimum = 0,    turretStat = "energyIncreasePerSecond",  investFactor = -0.5, changeType = StatChanges.Percentage},
             {name = "Gold",                 amount = 3,    investable = 10, minimum = 1,},
             {name = "Steel",                amount = 8,    investable = 10, minimum = 3,},
+            {name = "Targeting System",     amount = 0,    investable = 2,  minimum = 0, turretStat = "automatic", investFactor = 1, changeType = StatChanges.Flat},
+
         }
     elseif weaponType == WeaponType.MiningLaser then
         return {
@@ -143,6 +172,8 @@ function getBaseIngredients(weaponType)
             {name = "High Capacity Lens",   amount = 2,    investable = 6,  minimum = 0,    weaponStat = "reach",  investFactor = 2.0,},
             {name = "Conductor",            amount = 5,    investable = 6,  minimum = 2,},
             {name = "Steel",                amount = 5,    investable = 10, minimum = 3,},
+            {name = "Targeting System",     amount = 0,    investable = 2,  minimum = 0, turretStat = "automatic", investFactor = 1, changeType = StatChanges.Flat},
+
         }
     elseif weaponType == WeaponType.SalvagingLaser then
         return {
@@ -151,6 +182,8 @@ function getBaseIngredients(weaponType)
             {name = "High Capacity Lens",   amount = 2,    investable = 6,  minimum = 0,    weaponStat = "reach",  investFactor = 2.0,},
             {name = "Conductor",            amount = 5,    investable = 6,  minimum = 2,},
             {name = "Steel",                amount = 5,    investable = 10, minimum = 3,},
+            {name = "Targeting System",     amount = 0,    investable = 2,  minimum = 0, turretStat = "automatic", investFactor = 1, changeType = StatChanges.Flat},
+
         }
     elseif weaponType == WeaponType.ForceGun then
         return {
@@ -160,39 +193,46 @@ function getBaseIngredients(weaponType)
             {name = "Conductor",            amount = 10,   investable = 6,  minimum = 2,},
             {name = "Steel",                amount = 7,    investable = 10, minimum = 3,},
             {name = "Zinc",                 amount = 3,    investable = 10, minimum = 3,},
+            {name = "Targeting System",     amount = 0,    investable = 2,  minimum = 0, turretStat = "automatic", investFactor = 1, changeType = StatChanges.Flat},
+
         }
     elseif weaponType == WeaponType.TeslaGun then
         return {
             {name = "Industrial Tesla Coil",amount = 5,    investable = 6,  minimum = 1,    weaponStat = "damage", investFactor = 3.0},
-            {name = "Electromagnetic Charge",amount = 2,    investable = 4,  minimum = 1,   weaponStat = "reach", investFactor = 0.2, changeType = StatChanges.Percentage },
+            {name = "Electromagnetic Charge",amount = 2,   investable = 4,  minimum = 1,   weaponStat = "reach", investFactor = 0.2, changeType = StatChanges.Percentage },
             {name = "Energy Inverter",      amount = 2,    investable = 4,  minimum = 1,    turretStat = "baseEnergyPerSecond",  investFactor = -0.5, changeType = StatChanges.Percentage},
             {name = "Conductor",            amount = 5,    investable = 6,  minimum = 2,    turretStat = "energyIncreasePerSecond",  investFactor = -0.5, changeType = StatChanges.Percentage},
             {name = "Copper",               amount = 5,    investable = 10, minimum = 3,},
             {name = "Energy Cell",          amount = 5,    investable = 10, minimum = 3,},
+            {name = "Targeting System",     amount = 0,    investable = 2,  minimum = 0, turretStat = "automatic", investFactor = 1, changeType = StatChanges.Flat},
+
         }
     elseif weaponType == WeaponType.LightningGun then
         return {
             {name = "Military Tesla Coil",  amount = 5,    investable = 6,  minimum = 1,    weaponStat = "damage", investFactor = 3.0},
             {name = "High Capacity Lens",   amount = 2,    investable = 4,  minimum = 1,    weaponStat = "reach", investFactor = 0.2, changeType = StatChanges.Percentage },
-            {name = "Electromagnetic Charge",amount = 2,    investable = 4,  minimum = 1,   turretStat = "baseEnergyPerSecond",  investFactor = -0.5, changeType = StatChanges.Percentage},
+            {name = "Electromagnetic Charge",amount = 2,   investable = 4,  minimum = 1,   turretStat = "baseEnergyPerSecond",  investFactor = -0.5, changeType = StatChanges.Percentage},
             {name = "Conductor",            amount = 5,    investable = 6,  minimum = 2,    turretStat = "energyIncreasePerSecond",  investFactor = -0.5, changeType = StatChanges.Percentage},
             {name = "Copper",               amount = 5,    investable = 10, minimum = 3,},
             {name = "Energy Cell",          amount = 5,    investable = 10, minimum = 3,},
+            {name = "Targeting System",     amount = 0,    investable = 2,  minimum = 0, turretStat = "automatic", investFactor = 1, changeType = StatChanges.Flat},
+
         }
     elseif weaponType == WeaponType.PulseCannon then
         return {
             {name = "Servo",                amount = 8,    investable = 8,  minimum = 3, rarityFactor = 0.75, weaponStat = "fireRate", investFactor = 0.3, },
-            {name = "Steel Tube",           amount = 6,    investable = 7,   weaponStat = "reach"},
+            {name = "Steel Tube",           amount = 6,    investable = 7,  weaponStat = "reach"},
             {name = "Ammunition S",         amount = 5,    investable = 7,  minimum = 1, weaponStat = "damage"},
             {name = "Steel",                amount = 5,    investable = 10, minimum = 4},
             {name = "Copper",               amount = 5,    investable = 10, minimum = 3,},
             {name = "Energy Cell",          amount = 3,    investable = 5,  minimum = 2,},
+            {name = "Targeting System",     amount = 0,    investable = 2,  minimum = 0, turretStat = "automatic", investFactor = 1, changeType = StatChanges.Flat},
+
         }
     else
+        print ("unknown weapon: " .. weaponType .. "!")
 
-
-
-        return { {name = "Servo",                amount = 20,    investable = 10, minimum = 3, rarityFactor = 0.75, weaponStat = "damage", investFactor = 0.15, }, }
+        return { {name = "Servo",           amount = 20,    investable = 10, minimum = 3, rarityFactor = 0.75, weaponStat = "damage", investFactor = 0.15, }, }
     end
 
 
@@ -221,7 +261,7 @@ function initialize()
 
             math.randomseed(Sector().seed + Sector().numEntities)
             addProductionCenters(station)
-            math.randomseed(os.time())
+            math.randomseed(appTimeMs())
         end
     end
 
@@ -409,7 +449,7 @@ function getMaterial()
     return material;
 end
 
-function getTurretIngredients(weaponType, rarity, material)
+function getTurretIngredientsAndTax(weaponType, rarity, material, buyer)
     -- make the turrets generally cheaper, to compensate for randomness and having to bring your own goods
     local turret = makeTurretBase(weaponType, rarity, material)
     local better = makeTurretBase(weaponType,  Rarity(rarity.value + 1), material)
@@ -431,6 +471,7 @@ function getTurretIngredients(weaponType, rarity, material)
     end
 
     if item.price < goodsPrice then
+
         -- turret is cheaper than the goods required to build it
         -- scale down goods
         local factor = item.price / goodsPrice
@@ -499,9 +540,15 @@ function getTurretIngredients(weaponType, rarity, material)
             if changeType == StatChanges.ToNextLevel then
                 difference = (betterObject[stat] - object[stat]) * 0.8
 
+                -- difference and invest factor have different sign -> flip sign
+                if difference * (ingredient.investFactor or 1) < 0 then
+                    difference = -difference * 0.5
+                end
+
                 if difference == 0.0 then
                     difference = object[stat] * 0.3
                 end
+
             elseif changeType == StatChanges.Percentage then
                 difference = object[stat]
             elseif changeType == StatChanges.Flat then
@@ -567,18 +614,48 @@ function getTurretIngredients(weaponType, rarity, material)
 
     -- remaining price is the difference between the goods price sum and the actual turret sum
     local remaining = math.floor(math.max(item.price * 0.15, item.price - goodsPrice)) / 0.65
+    local taxAmount = round(remaining * tax)
 
-    return finalIngredients, remaining
+    if Faction().index == buyer.index then
+        remaining = remaining - taxAmount
+        -- don't pay out for the second time
+        taxAmount = 0
+    end
+
+    return finalIngredients, remaining, taxAmount
 end
 
 function makeTurretBase(weaponType, rarity, material)
     local station = Entity()
     local x, y = Sector():getCoordinates()
 
-    local seed = station.index.number + 123 + x + y * 300 * station.factionIndex
+    local seed = station.index.number + 123 + x + y * 300
 
     TurretGenerator.initialize(Seed(seed))
-    return TurretGenerator.generate(x, y, 0, rarity, weaponType, material)
+    local turret = TurretGenerator.generate(x, y, 0, rarity, weaponType, material)
+
+    -- automatic turrets must get automatic property removed and damage rebuffed
+    -- we don't want the base turrets to have independent targeting since that can mess up the rest of the stats calculation, especially for damage
+    if turret.automatic then
+        turret.automatic = false
+
+        local weapons = {turret:getWeapons()}
+        turret:clearWeapons()
+
+        for _, weapon in pairs(weapons) do
+            weapon.damage = weapon.damage * 2.0
+            if weapon.hullRepair > 0.0 then
+                weapon.hullRepair = weapon.hullRepair * 2.0
+            end
+            if weapon.shieldRepair > 0.0 then
+                weapon.shieldRepair = weapon.shieldRepair * 2.0
+            end
+
+            turret:addWeapon(weapon)
+        end
+    end
+
+    return turret
 end
 
 function makeTurret(weaponType, rarity, material, ingredients)
@@ -618,8 +695,34 @@ function makeTurret(weaponType, rarity, material, ingredients)
             local additions = math.max(ingredient.minimum - ingredient.default, math.min(ingredient.maximum - ingredient.default, ingredient.amount - ingredient.default))
 
             local value = turret[ingredient.turretStat]
+            if type(value) == "boolean" then
+                if value then
+                    value = 1
+                else
+                    value = 0
+                end
+            end
+
             value = value + ingredient.statDelta * additions
             turret[ingredient.turretStat] = value
+        end
+    end
+
+    -- if the automatic property was set, we must adjust damage of the turret
+    if turret.automatic then
+        local weapons = {turret:getWeapons()}
+        turret:clearWeapons()
+
+        for _, weapon in pairs(weapons) do
+            weapon.damage = weapon.damage / 2.0
+            if weapon.hullRepair > 0.0 then
+                weapon.hullRepair = weapon.hullRepair / 2.0
+            end
+            if weapon.shieldRepair > 0.0 then
+                weapon.shieldRepair = weapon.shieldRepair / 2.0
+            end
+
+            turret:addWeapon(weapon)
         end
     end
 
@@ -644,7 +747,7 @@ function refreshUI()
         local good = goods[ingredient.name]:good()
 
         local needed = ingredient.amount
-        local have = ship:getCargoAmount(ingredient.name) or 0
+        local have = ship:getCargoAmount(good) or 0
 
         line.icon.picture = good.icon
         line.material.caption = good.displayName
@@ -697,12 +800,24 @@ function onMinus(button)
 end
 
 function onRaritySelect()
-    requirements, price = getTurretIngredients(getUIWeapon(), getUIRarity(), getMaterial())
+    local buyer = Player()
+    local playerCraft = buyer.craft
+    if playerCraft.factionIndex == buyer.allianceIndex then
+        buyer = buyer.alliance
+    end
+
+    requirements, price = getTurretIngredientsAndTax(getUIWeapon(), getUIRarity(), getMaterial(), buyer)
     refreshUI()
 end
 
 function onTurretTypeSelect()
-    requirements, price = getTurretIngredients(getUIWeapon(), getUIRarity(), getMaterial())
+    local buyer = Player()
+    local playerCraft = buyer.craft
+    if playerCraft.factionIndex == buyer.allianceIndex then
+        buyer = buyer.alliance
+    end
+
+    requirements, price = getTurretIngredientsAndTax(getUIWeapon(), getUIRarity(), getMaterial(), buyer)
     refreshUI()
 end
 
@@ -711,6 +826,13 @@ function onBuildButtonPressed(button)
 end
 
 function onShowWindow()
+    local buyer = Player()
+    local playerCraft = buyer.craft
+    if playerCraft.factionIndex == buyer.allianceIndex then
+        buyer = buyer.alliance
+    end
+
+    requirements, price = getTurretIngredientsAndTax(getUIWeapon(), getUIRarity(), getMaterial(), buyer)
     refreshUI()
 end
 
@@ -729,7 +851,7 @@ function buildTurret(weaponType, rarity, material, clientIngredients)
     end
 
     -- don't take ingredients from clients blindly, they might want to cheat
-    local ingredients, price = getTurretIngredients(weaponType, rarity, material)
+    local ingredients, price, taxAmount = getTurretIngredientsAndTax(weaponType, rarity, material, buyer)
 
     for i, ingredient in pairs(ingredients) do
         local other = clientIngredients[i]
@@ -769,7 +891,7 @@ function buildTurret(weaponType, rarity, material, clientIngredients)
     end
 
     -- pay
-    receiveTransactionTax(station, price * tax)
+    receiveTransactionTax(station, taxAmount)
 
     buyer:pay("Paid %1% credits to build a turret."%_T, price)
 
@@ -782,7 +904,22 @@ function buildTurret(weaponType, rarity, material, clientIngredients)
 
     buyer:getInventory():add(InventoryTurret(turret))
 
-    invokeClientFunction(player, "onShowWindow")
+    invokeClientFunction(player, "refreshUI")
+end
+
+function buildTurretTest(weaponType, rarity, material)
+    local ingredients = getTurretIngredientsAndTax(weaponType, rarity, material, Faction(Player(callingPlayer).craft.factionIndex))
+    buildTurret(weaponType, rarity, material, ingredients)
+end
+
+function getTurretPriceTest(weaponType, rarity, material)
+    local _, price, _ = getTurretIngredientsAndTax(weaponType, rarity, material, Faction(Player(callingPlayer).craft.factionIndex))
+    return price
+end
+
+function getTurretTaxTest(weaponType, rarity, material)
+    local _, _, taxAmount = getTurretIngredientsAndTax(weaponType, rarity, material, Faction(Player(callingPlayer).craft.factionIndex))
+    return taxAmount
 end
 
 

@@ -58,6 +58,30 @@
 </td></tr>
 <tr><td><br/></td></tr>
 <tr><td><span class="docheader;">Member Functions</span></td></tr>
+<tr><td>
+<a class="code" href="#getSquadName">getSquadName</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#canLand">canLand</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#getFighter">getFighter</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#getSquads">getSquads</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#getSquadFighters">getSquadFighters</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#getSquadMaxFighters">getSquadMaxFighters</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#getSquadFreeSlots">getSquadFreeSlots</a>
+</td></tr>
+<tr><td>
+<a class="code" href="#getSquadMainWeaponCategory">getSquadMainWeaponCategory</a>
+</td></tr>
 </table>
 </div>
 </div>
@@ -130,6 +154,89 @@ A new instance of ReadOnlyHangar
 <td><span class="keyword">property</span> <span class="type">bool </span> producing</td><td align="right"><span>[read-only]</span></td></tr></table>
 </div>
 </div>
+<div id="getSquadName", class="codecontainer">
+<div id="getSquadName", class="function">
+<p>
+<span class="keyword">function var</span> getSquadName(<span class="type">unsigned int</span> <span class="parameter">squadIndex</span>) <br/>
+</p>
+</div>
+<div id="getSquadName", class="">
+</p>
+</div>
+</div>
+<div id="canLand", class="codecontainer">
+<div id="canLand", class="function">
+<p>
+<span class="keyword">function bool</span> canLand(<span class="type">Entity</span> <span class="parameter">entity</span>) <br/>
+</p>
+</div>
+<div id="canLand", class="">
+</p>
+</div>
+</div>
+<div id="getFighter", class="codecontainer">
+<div id="getFighter", class="function">
+<p>
+<span class="keyword">function FighterTemplate</span> getFighter(<span class="type">unsigned int</span> <span class="parameter">squadIndex</span>, <span class="type">unsigned int</span> <span class="parameter">fighterIndex</span>) <br/>
+</p>
+</div>
+<div id="getFighter", class="">
+</p>
+</div>
+</div>
+<div id="getSquads", class="codecontainer">
+<div id="getSquads", class="function">
+<p>
+<span class="keyword">function unsigned int...</span> getSquads() <br/>
+</p>
+</div>
+<div id="getSquads", class="">
+</p>
+</div>
+</div>
+<div id="getSquadFighters", class="codecontainer">
+<div id="getSquadFighters", class="function">
+<p>
+<span class="keyword">function unsigned int</span> getSquadFighters(<span class="type">unsigned int</span> <span class="parameter">squadIndex</span>) <br/>
+</p>
+</div>
+<div id="getSquadFighters", class="">
+</p>
+</div>
+</div>
+<div id="getSquadMaxFighters", class="codecontainer">
+<div id="getSquadMaxFighters", class="function">
+<p>
+<span class="keyword">function unsigned int</span> getSquadMaxFighters(<span class="type">unsigned int</span> <span class="parameter">squadIndex</span>) <br/>
+</p>
+</div>
+<div id="getSquadMaxFighters", class="">
+</p>
+</div>
+</div>
+<div id="getSquadFreeSlots", class="codecontainer">
+<div id="getSquadFreeSlots", class="function">
+<p>
+<span class="keyword">function unsigned int</span> getSquadFreeSlots(<span class="type">unsigned int</span> <span class="parameter">squadIndex</span>) <br/>
+</p>
+</div>
+<div id="getSquadFreeSlots", class="">
+</p>
+</div>
+</div>
+<div id="getSquadMainWeaponCategory", class="codecontainer">
+<div id="getSquadMainWeaponCategory", class="function">
+<p>
+<span class="keyword">function var</span> getSquadMainWeaponCategory(<span class="type">unsigned int</span> <span class="parameter">squadIndex</span>) <br/>
+</p>
+</div>
+<div id="getSquadMainWeaponCategory", class="">
+<p>
+Returns the weapon type that most fighters of this squad are equipped with. Use this to determine if an AI controlled ship can use this squad to mine or salvage. In case mulitple weapon types are equally present a random one is returned. 
+</p>
+</p>
+</div>
+</div>
 </div>
 </div>
 <div class="sitemap">
@@ -155,9 +262,12 @@ A new instance of ReadOnlyHangar
 <a href="PlayerFunctions.html">Player</a>
 <a href="SectorFunctions.html">Sector</a>
 <a href="ServerFunctions.html">Server</a>
+<a href="UsableInventoryItemFunctions.html">UsableInventoryItem</a>
 </div><div class="headerlisting">
 <span class="docheader">Common Components</span>
-<br><a href="DockingPositions.html">DockingPositions</a>
+<br><a href="TorpedoLauncher.html">TorpedoLauncher</a>
+<a href="ReadOnlyTorpedoLauncher.html">ReadOnlyTorpedoLauncher</a>
+<a href="DockingPositions.html">DockingPositions</a>
 <a href="Hangar.html">Hangar</a>
 <a href="ReadOnlyHangar.html">ReadOnlyHangar</a>
 <a href="BspTree.html">BspTree</a>
@@ -212,9 +322,11 @@ A new instance of ReadOnlyHangar
 <a href="Format.html">Format</a>
 <a href="Seed.html">Seed</a>
 <a href="Random.html">Random</a>
+<a href="UsableInventoryItem.html">UsableInventoryItem</a>
 <a href="FighterTemplate.html">FighterTemplate</a>
 <a href="BlockStatistics.html">BlockStatistics</a>
 <a href="VanillaInventoryItem.html">VanillaInventoryItem</a>
+<a href="GameSettings.html">GameSettings</a>
 <a href="Rarity.html">Rarity</a>
 <a href="PlanetSpecifics.html">PlanetSpecifics</a>
 <a href="CraftStyle.html">CraftStyle</a>
@@ -224,6 +336,7 @@ A new instance of ReadOnlyHangar
 <a href="Language.html">Language</a>
 <a href="Inventory.html">Inventory</a>
 <a href="PlanBspTree.html">PlanBspTree</a>
+<a href="TorpedoTemplate.html">TorpedoTemplate</a>
 <a href="Weapon.html">Weapon</a>
 <a href="Crew.html">Crew</a>
 <a href="CrewProfession.html">CrewProfession</a>
@@ -319,16 +432,15 @@ A new instance of ReadOnlyHangar
 <a href="Galaxy [Server].html">Galaxy [Server]</a>
 <a href="Alliance [Server].html">Alliance [Server]</a>
 <a href="Faction [Server].html">Faction [Server]</a>
-<a href="GameSettings.html">GameSettings</a>
 <a href="Player [Server].html">Player [Server]</a>
 </div><div class="lastheaderlisting">
 <span class="docheader">Enums</span>
 <br><a href="Enums.html#SoundType">SoundType</a>
 <a href="Enums.html#FontType">FontType</a>
-<a href="Enums.html#Difficulty">Difficulty</a>
 <a href="Enums.html#ChatMessageType">ChatMessageType</a>
 <a href="Enums.html#ComponentType">ComponentType</a>
 <a href="Enums.html#WeaponCategory">WeaponCategory</a>
+<a href="Enums.html#Difficulty">Difficulty</a>
 <a href="Enums.html#RarityType">RarityType</a>
 <a href="Enums.html#MoonType">MoonType</a>
 <a href="Enums.html#PlanetType">PlanetType</a>
@@ -349,7 +461,7 @@ A new instance of ReadOnlyHangar
 </div></div>
 <div class="disclaimer">
 <p>This is the official documentation for the scripting API of Avorion. This documentation is automatically generated and <strong>not</strong> necessarily complete. Depending on the context in which functions exist, some documentation such as descriptions, return values or variable names or types may be missing.</p>
-<p>Work in Progress. Documentation of Avorion Version: Beta 0.15 r9816</p>
+<p>Work in Progress. Documentation of Avorion Version: Beta 0.16.7 r11165</p>
 </div>
 <div class="footer">
 <p align="center">Work in Progress.</p>

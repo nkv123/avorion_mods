@@ -16,7 +16,13 @@
 <div class="codecontainer">
 <table>
 <tr><td>
+<a href="#onSectorEntered">onSectorEntered</a>
+</td></tr>
+<tr><td>
 <a href="#onCollision">onCollision</a>
+</td></tr>
+<tr><td>
+<a href="#onJump">onJump</a>
 </td></tr>
 <tr><td>
 <a href="#onShotHit">onShotHit</a>
@@ -31,7 +37,19 @@
 <a href="#destinationSectorReady">destinationSectorReady</a>
 </td></tr>
 <tr><td>
+<a href="#onTorpedoHit">onTorpedoHit</a>
+</td></tr>
+<tr><td>
+<a href="#onTorpedoShieldHit">onTorpedoShieldHit</a>
+</td></tr>
+<tr><td>
+<a href="#onTorpedoHullHit">onTorpedoHullHit</a>
+</td></tr>
+<tr><td>
 <a href="#onSelected">onSelected</a>
+</td></tr>
+<tr><td>
+<a href="#onStartDialog">onStartDialog</a>
 </td></tr>
 <tr><td>
 <a href="#onCargoChanged">onCargoChanged</a>
@@ -138,11 +156,64 @@
 <tr><td>
 <a href="#onSquadAdded">onSquadAdded</a>
 </td></tr>
+<tr><td>
+<a href="#onFighterRemove">onFighterRemove</a>
+</td></tr>
+<tr><td>
+<a href="#onFighterRemoved">onFighterRemoved</a>
+</td></tr>
+<tr><td>
+<a href="#onFighterAdded">onFighterAdded</a>
+</td></tr>
+<tr><td>
+<a href="#onSquadOrdersChanged">onSquadOrdersChanged</a>
+</td></tr>
+<tr><td>
+<a href="#onFighterStarted">onFighterStarted</a>
+</td></tr>
+<tr><td>
+<a href="#onFighterLanded">onFighterLanded</a>
+</td></tr>
+<tr><td>
+<a href="#onTorpedoAdded">onTorpedoAdded</a>
+</td></tr>
+<tr><td>
+<a href="#onTorpedoRemove">onTorpedoRemove</a>
+</td></tr>
+<tr><td>
+<a href="#onTorpedoRemoved">onTorpedoRemoved</a>
+</td></tr>
+<tr><td>
+<a href="#onShaftWeaponIndexAssign">onShaftWeaponIndexAssign</a>
+</td></tr>
+<tr><td>
+<a href="#onTorpedoLaunched">onTorpedoLaunched</a>
+</td></tr>
 </table>
 </div>
 </div>
 <div class="floatright" id="Entity ">
 <h1>Entity  Callbacks</h1>
+<div id="onSectorEntered", class="codecontainer">
+<p>
+<span class="keyword">callback</span> onSectorEntered(entityId, x, y) <br/>
+</p>
+<div id="onSectorEntered", class="code">
+<p>
+Executed whenever the entity enters a sector. 
+</p>
+<p><span class="parameter">Parameters</span></p>
+<div class="indented">
+<span class="parameter">entityId</span>
+The index of the entity that entered the sector <br/>
+<span class="parameter">x</span>
+Sector X coordinates of the entered sector <br/>
+<span class="parameter">y</span>
+Sector Y coordinates of the entered sector <br/>
+</div>
+</p>
+</div>
+</div>
 <div id="onCollision", class="codecontainer">
 <p>
 <span class="keyword">callback</span> onCollision(objectIndexA, objectIndexB) <br/>
@@ -157,6 +228,26 @@ Executed whenever two block objects collided in the sector
 The index of the one colliding object <br/>
 <span class="parameter">objectIndexB</span>
 The index of the other colliding object <br/>
+</div>
+</p>
+</div>
+</div>
+<div id="onJump", class="codecontainer">
+<p>
+<span class="keyword">callback</span> onJump(shipIndex, x, y) <br/>
+</p>
+<div id="onJump", class="code">
+<p>
+Executed whenever the entity jumps into another sector. 
+</p>
+<p><span class="parameter">Parameters</span></p>
+<div class="indented">
+<span class="parameter">shipIndex</span>
+The index of the entity that will jump <br/>
+<span class="parameter">x</span>
+The x coordinate of the target sector <br/>
+<span class="parameter">y</span>
+The y coordinate of the target sector <br/>
 </div>
 </p>
 </div>
@@ -243,6 +334,72 @@ Boolean indicating whether the destination sector is in memory <br/>
 </p>
 </div>
 </div>
+<div id="onTorpedoHit", class="codecontainer">
+<p>
+<span class="keyword">callback</span> onTorpedoHit(objectIndex, shooterIndex, location) <br/>
+</p>
+<div id="onTorpedoHit", class="code">
+<p>
+Executed whenever a block object is hit by a torpedo in the sector. This callback is executed *before* the damage is dealt to the object. 
+</p>
+<p><span class="parameter">Parameters</span></p>
+<div class="indented">
+<span class="parameter">objectIndex</span>
+The index of the object that got shot at <br/>
+<span class="parameter">shooterIndex</span>
+The index of the craft that fired the torpedo <br/>
+<span class="parameter">location</span>
+The impact location <br/>
+</div>
+</p>
+</div>
+</div>
+<div id="onTorpedoShieldHit", class="codecontainer">
+<p>
+<span class="keyword">callback</span> onTorpedoShieldHit(objectIndex, shooterIndex, damage, location) <br/>
+</p>
+<div id="onTorpedoShieldHit", class="code">
+<p>
+Executed whenever an object's shield is hit by a torpedo in the sector. This callback is executed *before* the damage is dealt to the object. 
+</p>
+<p><span class="parameter">Parameters</span></p>
+<div class="indented">
+<span class="parameter">objectIndex</span>
+The index of the object that got shot at <br/>
+<span class="parameter">shooterIndex</span>
+The index of the craft that fired the torpedo <br/>
+<span class="parameter">damage</span>
+The damage the torpedo dealt to the object <br/>
+<span class="parameter">location</span>
+The impact location <br/>
+</div>
+</p>
+</div>
+</div>
+<div id="onTorpedoHullHit", class="codecontainer">
+<p>
+<span class="keyword">callback</span> onTorpedoHullHit(objectIndex, blockIndex, shooterIndex, damage, location) <br/>
+</p>
+<div id="onTorpedoHullHit", class="code">
+<p>
+Executed whenever a block object is hit by a torpedo in the sector. This callback is executed *before* the damage is dealt to the object. Don't delete the block that is hit by the torpedo, this will lead to a crash. 
+</p>
+<p><span class="parameter">Parameters</span></p>
+<div class="indented">
+<span class="parameter">objectIndex</span>
+The index of the object that got shot at <br/>
+<span class="parameter">blockIndex</span>
+The index of the block that was hit by the torpedo <br/>
+<span class="parameter">shooterIndex</span>
+The index of the craft that fired the torpedo <br/>
+<span class="parameter">damage</span>
+The damage the torpedo dealt to the object <br/>
+<span class="parameter">location</span>
+The impact location <br/>
+</div>
+</p>
+</div>
+</div>
 <div id="onSelected", class="codecontainer">
 <p>
 <span class="keyword">callback</span> onSelected() <br/>
@@ -251,6 +408,22 @@ Boolean indicating whether the destination sector is in memory <br/>
 <p>
 Executed when the entity gets selected by the player on the client. 
 </p>
+</p>
+</div>
+</div>
+<div id="onStartDialog", class="codecontainer">
+<p>
+<span class="keyword">callback</span> onStartDialog(objectIndex) <br/>
+</p>
+<div id="onStartDialog", class="code">
+<p>
+Executed when a dialog is started. 
+</p>
+<p><span class="parameter">Parameters</span></p>
+<div class="indented">
+<span class="parameter">objectIndex</span>
+The index of the entity the dialog is started with <br/>
+</div>
 </p>
 </div>
 </div>
@@ -265,7 +438,7 @@ Executed whenever the cargo of an entity in the sector changes. This callback is
 <p><span class="parameter">Parameters</span></p>
 <div class="indented">
 <span class="parameter">objectIndex</span>
-The index of the entity <br/>
+The id of the entity <br/>
 <span class="parameter">delta</span>
 The amount of cargo that changed <br/>
 <span class="parameter">good</span>
@@ -305,7 +478,7 @@ Executed whenever the plan of the entity is changed.
 <p><span class="parameter">Parameters</span></p>
 <div class="indented">
 <span class="parameter">objectIndex</span>
-The index of the entity <br/>
+The id of the entity <br/>
 <span class="parameter">allBlocksChanged</span>
 A boolean that indicates whether all the blocks in the block plan have potentially changed <br/>
 </div>
@@ -323,7 +496,7 @@ Executed whenever the plan of the entity is changed.
 <p><span class="parameter">Parameters</span></p>
 <div class="indented">
 <span class="parameter">objectIndex</span>
-The index of the entity <br/>
+The id of the entity <br/>
 <span class="parameter">blockIndex</span>
 The index of the block <br/>
 <span class="parameter">changeFlags</span>
@@ -343,7 +516,7 @@ Executed whenever a block of the block object got destroyed This callback is exe
 <p><span class="parameter">Parameters</span></p>
 <div class="indented">
 <span class="parameter">objectIndex</span>
-The index of the entity <br/>
+The id of the entity <br/>
 <span class="parameter">damageType</span>
 The type of damage <br/>
 <span class="parameter">index</span>
@@ -367,7 +540,7 @@ The index of the damaged object <br/>
 <span class="parameter">blockIndex</span>
 The index of the damaged block <br/>
 <span class="parameter">inflictorId</span>
-The index of the entity that inflicted the damage <br/>
+The id of the entity that inflicted the damage <br/>
 <span class="parameter">damage</span>
 The damage that was inflicted to the entity <br/>
 <span class="parameter">damageType</span>
@@ -387,7 +560,7 @@ Executed whenever a block is removed from the plan by a player. This callback is
 <p><span class="parameter">Parameters</span></p>
 <div class="indented">
 <span class="parameter">objectIndex</span>
-The index of the entity <br/>
+The id of the entity <br/>
 <span class="parameter">blockIndex</span>
 The index of the block <br/>
 </div>
@@ -405,7 +578,7 @@ Executed whenever a block is removed from the plan by a player. This callback is
 <p><span class="parameter">Parameters</span></p>
 <div class="indented">
 <span class="parameter">objectIndex</span>
-The index of the entity <br/>
+The id of the entity <br/>
 <span class="parameter">blockIndex</span>
 The index of the block <br/>
 </div>
@@ -423,7 +596,7 @@ Executed whenever a new block is added to the entity. This callback is executed 
 <p><span class="parameter">Parameters</span></p>
 <div class="indented">
 <span class="parameter">objectIndex</span>
-The index of the entity <br/>
+The id of the entity <br/>
 <span class="parameter">blockIndex</span>
 The index of the block <br/>
 </div>
@@ -441,7 +614,7 @@ Executed when the plan of the entity breaks. This callback is executed after the
 <p><span class="parameter">Parameters</span></p>
 <div class="indented">
 <span class="parameter">objectIndex</span>
-The index of the entity <br/>
+The id of the entity <br/>
 <span class="parameter">plan...</span>
 The plans of the broken off parts <br/>
 </div>
@@ -533,7 +706,7 @@ Executed when the entity was destroyed
 <p><span class="parameter">Parameters</span></p>
 <div class="indented">
 <span class="parameter">index</span>
-The index of the entity that was destroyed <br/>
+The id of the entity that was destroyed <br/>
 <span class="parameter">lastDamageInflictor</span>
 The index of the last entity that inflicted damage to the destroyed entity <br/>
 </div>
@@ -551,7 +724,7 @@ Executed whenever the crew of the entity changes. This callback is executed *aft
 <p><span class="parameter">Parameters</span></p>
 <div class="indented">
 <span class="parameter">index</span>
-The index of the entity <br/>
+The id of the entity <br/>
 </div>
 </p>
 </div>
@@ -567,7 +740,7 @@ Executed whenever the crew of an entity in the sector changes. This callback is 
 <p><span class="parameter">Parameters</span></p>
 <div class="indented">
 <span class="parameter">index</span>
-The index of the entity <br/>
+The id of the entity <br/>
 <span class="parameter">delta</span>
 The amount of crewmen that changed <br/>
 <span class="parameter">profession</span>
@@ -587,7 +760,7 @@ Executed whenever loot gets collected by anyone, be it player or AI faction
 <p><span class="parameter">Parameters</span></p>
 <div class="indented">
 <span class="parameter">collector</span>
-The index of the entity which collected the loot <br/>
+The id of the entity which collected the loot <br/>
 <span class="parameter">lootIndex</span>
 The index of the collected loot <br/>
 </div>
@@ -605,7 +778,7 @@ Executed whenever money loot gets collected by the entity
 <p><span class="parameter">Parameters</span></p>
 <div class="indented">
 <span class="parameter">collector</span>
-The index of the entity which collected the loot <br/>
+The id of the entity which collected the loot <br/>
 <span class="parameter">lootIndex</span>
 The index of the collected loot <br/>
 <span class="parameter">value</span>
@@ -625,7 +798,7 @@ Executed whenever material loot gets collected by
 <p><span class="parameter">Parameters</span></p>
 <div class="indented">
 <span class="parameter">collector</span>
-The index of the entity which collected the loot <br/>
+The id of the entity which collected the loot <br/>
 <span class="parameter">lootIndex</span>
 The index of the loot that was collected <br/>
 <span class="parameter">materialType</span>
@@ -647,7 +820,7 @@ Executed whenever material loot gets collected by
 <p><span class="parameter">Parameters</span></p>
 <div class="indented">
 <span class="parameter">collector</span>
-The index of the entity which collected the loot <br/>
+The id of the entity which collected the loot <br/>
 <span class="parameter">lootIndex</span>
 The index of the loot that was collected <br/>
 </div>
@@ -665,7 +838,7 @@ Executed whenever turret loot gets collected by the entity
 <p><span class="parameter">Parameters</span></p>
 <div class="indented">
 <span class="parameter">collector</span>
-The index of the entity which collected the loot <br/>
+The id of the entity which collected the loot <br/>
 <span class="parameter">lootIndex</span>
 The index of the collected loot <br/>
 </div>
@@ -683,7 +856,7 @@ Executed whenever color loot gets collected by the entity
 <p><span class="parameter">Parameters</span></p>
 <div class="indented">
 <span class="parameter">playerIndex</span>
-The index of the entity which collected the loot <br/>
+The id of the entity which collected the loot <br/>
 <span class="parameter">lootIndex</span>
 The index of the collected loot <br/>
 </div>
@@ -701,7 +874,7 @@ Executed whenever trading good loot gets collected by a player
 <p><span class="parameter">Parameters</span></p>
 <div class="indented">
 <span class="parameter">collector</span>
-The index of the entity that collected loot <br/>
+The id of the entity that collected loot <br/>
 <span class="parameter">lootIndex</span>
 The index of the collected loot <br/>
 <span class="parameter">amount</span>
@@ -727,7 +900,7 @@ Executed whenever a turret of the entity was destroyed
 <span class="parameter">turretIndex</span>
 The index of the turret that was destroyed <br/>
 <span class="parameter">shipIndex</span>
-The index of the entity that turret was attached to <br/>
+The id of the entity that turret was attached to <br/>
 </div>
 </p>
 </div>
@@ -743,11 +916,11 @@ Executed whenever the entities shield is damaged
 <p><span class="parameter">Parameters</span></p>
 <div class="indented">
 <span class="parameter">entityId</span>
-The index of the entity <br/>
+The id of the entity <br/>
 <span class="parameter">amount</span>
 The amount of damage inflicted <br/>
 <span class="parameter">inflictorId</span>
-The index of the entity that inflicted the damage <br/>
+The id of the entity that inflicted the damage <br/>
 </div>
 </p>
 </div>
@@ -763,7 +936,7 @@ Executed whenever the entities shield is healed
 <p><span class="parameter">Parameters</span></p>
 <div class="indented">
 <span class="parameter">entityId</span>
-The index of the entity <br/>
+The id of the entity <br/>
 <span class="parameter">amount</span>
 The amount of damage healed <br/>
 </div>
@@ -781,7 +954,7 @@ Executed whenever the entities shield activates
 <p><span class="parameter">Parameters</span></p>
 <div class="indented">
 <span class="parameter">entityId</span>
-The index of the entity <br/>
+The id of the entity <br/>
 </div>
 </p>
 </div>
@@ -797,7 +970,7 @@ Executed whenever the entities shield deactivates
 <p><span class="parameter">Parameters</span></p>
 <div class="indented">
 <span class="parameter">entityId</span>
-The index of the entity <br/>
+The id of the entity <br/>
 </div>
 </p>
 </div>
@@ -813,7 +986,7 @@ Executed whenever the entity fires a shot
 <p><span class="parameter">Parameters</span></p>
 <div class="indented">
 <span class="parameter">entityId</span>
-The index of the entity <br/>
+The id of the entity <br/>
 </div>
 </p>
 </div>
@@ -829,7 +1002,7 @@ Executed whenever the entity starts firing
 <p><span class="parameter">Parameters</span></p>
 <div class="indented">
 <span class="parameter">entityId</span>
-The index of the entity <br/>
+The id of the entity <br/>
 </div>
 </p>
 </div>
@@ -845,7 +1018,7 @@ Executed whenever the entity stops firing
 <p><span class="parameter">Parameters</span></p>
 <div class="indented">
 <span class="parameter">entityId</span>
-The index of the entity <br/>
+The id of the entity <br/>
 </div>
 </p>
 </div>
@@ -861,7 +1034,7 @@ Executed whenever a squad is removed from the entity, before the squad gets remo
 <p><span class="parameter">Parameters</span></p>
 <div class="indented">
 <span class="parameter">entityId</span>
-The index of the entity <br/>
+The id of the entity <br/>
 <span class="parameter">index</span>
 The index of the squad <br/>
 </div>
@@ -879,7 +1052,7 @@ Executed whenever a squad is removed from the entity, after the squad got remove
 <p><span class="parameter">Parameters</span></p>
 <div class="indented">
 <span class="parameter">entityId</span>
-The index of the entity <br/>
+The id of the entity <br/>
 <span class="parameter">index</span>
 The index of the squad <br/>
 </div>
@@ -897,9 +1070,237 @@ Executed whenever a squad is removed from the entity
 <p><span class="parameter">Parameters</span></p>
 <div class="indented">
 <span class="parameter">entityId</span>
-The index of the entity <br/>
+The id of the entity <br/>
 <span class="parameter">index</span>
 The index of the squad <br/>
+</div>
+</p>
+</div>
+</div>
+<div id="onFighterRemove", class="codecontainer">
+<p>
+<span class="keyword">callback</span> onFighterRemove(entityId, squadIndex, fighterIndex, started) <br/>
+</p>
+<div id="onFighterRemove", class="code">
+<p>
+Executed whenever a fighter is removed from the entity, before it gets removed 
+</p>
+<p><span class="parameter">Parameters</span></p>
+<div class="indented">
+<span class="parameter">entityId</span>
+The id of the entity <br/>
+<span class="parameter">squadIndex</span>
+The index of the squad <br/>
+<span class="parameter">fighterIndex</span>
+The index of the fighter in the squad <br/>
+<span class="parameter">started</span>
+A boolean whether the fighter started or got removed otherwise <br/>
+</div>
+</p>
+</div>
+</div>
+<div id="onFighterRemoved", class="codecontainer">
+<p>
+<span class="keyword">callback</span> onFighterRemoved(entityId, squadIndex, fighterIndex, started) <br/>
+</p>
+<div id="onFighterRemoved", class="code">
+<p>
+Executed whenever a fighter is removed from the entity, after it got removed 
+</p>
+<p><span class="parameter">Parameters</span></p>
+<div class="indented">
+<span class="parameter">entityId</span>
+The id of the entity <br/>
+<span class="parameter">squadIndex</span>
+The index of the squad <br/>
+<span class="parameter">fighterIndex</span>
+The index of the fighter in the squad <br/>
+<span class="parameter">started</span>
+A boolean whether the fighter started or got removed otherwise <br/>
+</div>
+</p>
+</div>
+</div>
+<div id="onFighterAdded", class="codecontainer">
+<p>
+<span class="keyword">callback</span> onFighterAdded(entityId, squadIndex, fighterIndex, landed) <br/>
+</p>
+<div id="onFighterAdded", class="code">
+<p>
+Executed whenever a fighter is added to the entity 
+</p>
+<p><span class="parameter">Parameters</span></p>
+<div class="indented">
+<span class="parameter">entityId</span>
+The id of the entity <br/>
+<span class="parameter">squadIndex</span>
+The index of the squad <br/>
+<span class="parameter">fighterIndex</span>
+The index of the fighter in the squad <br/>
+<span class="parameter">landed</span>
+A boolean whether the fighter landed or got added otherwise <br/>
+</div>
+</p>
+</div>
+</div>
+<div id="onSquadOrdersChanged", class="codecontainer">
+<p>
+<span class="keyword">callback</span> onSquadOrdersChanged(entityId, squadIndex, orders, targetId) <br/>
+</p>
+<div id="onSquadOrdersChanged", class="code">
+<p>
+Executed whenever the orders of a squad of the entity change 
+</p>
+<p><span class="parameter">Parameters</span></p>
+<div class="indented">
+<span class="parameter">entityId</span>
+The id of the entity <br/>
+<span class="parameter">squadIndex</span>
+The index of the squad <br/>
+<span class="parameter">orders</span>
+The orders of the squad <br/>
+<span class="parameter">targetId</span>
+The target assigned to the fighters <br/>
+</div>
+</p>
+</div>
+</div>
+<div id="onFighterStarted", class="codecontainer">
+<p>
+<span class="keyword">callback</span> onFighterStarted(entityId, squadIndex, fighterId) <br/>
+</p>
+<div id="onFighterStarted", class="code">
+<p>
+Executed whenever a fighter starts from a hangar of the entity 
+</p>
+<p><span class="parameter">Parameters</span></p>
+<div class="indented">
+<span class="parameter">entityId</span>
+The id of the entity the fighter started from <br/>
+<span class="parameter">squadIndex</span>
+The index of the squad <br/>
+<span class="parameter">fighterId</span>
+The id of the fighter that started <br/>
+</div>
+</p>
+</div>
+</div>
+<div id="onFighterLanded", class="codecontainer">
+<p>
+<span class="keyword">callback</span> onFighterLanded(entityId, squadIndex, fighterId) <br/>
+</p>
+<div id="onFighterLanded", class="code">
+<p>
+Executed whenever a fighter starts from a hangar of the entity 
+</p>
+<p><span class="parameter">Parameters</span></p>
+<div class="indented">
+<span class="parameter">entityId</span>
+The id of the entity the fighter landed on <br/>
+<span class="parameter">squadIndex</span>
+The index of the squad <br/>
+<span class="parameter">fighterId</span>
+The id of the fighter that landed <br/>
+</div>
+</p>
+</div>
+</div>
+<div id="onTorpedoAdded", class="codecontainer">
+<p>
+<span class="keyword">callback</span> onTorpedoAdded(entityId, shaftIndex, torpedoIndex, torpedo) <br/>
+</p>
+<div id="onTorpedoAdded", class="code">
+<p>
+Executed whenever a torpedo added to the entity 
+</p>
+<p><span class="parameter">Parameters</span></p>
+<div class="indented">
+<span class="parameter">entityId</span>
+The id of the entity <br/>
+<span class="parameter">shaftIndex</span>
+The index of the new torpedo shaft (-1 if storage) <br/>
+<span class="parameter">torpedoIndex</span>
+The index of the torpedo <br/>
+<span class="parameter">torpedo</span>
+The torpedo that's added <br/>
+</div>
+</p>
+</div>
+</div>
+<div id="onTorpedoRemove", class="codecontainer">
+<p>
+<span class="keyword">callback</span> onTorpedoRemove(entityId, shaftIndex, torpedoIndex) <br/>
+</p>
+<div id="onTorpedoRemove", class="code">
+<p>
+Executed whenever a torpedo is about to be removed from the entity 
+</p>
+<p><span class="parameter">Parameters</span></p>
+<div class="indented">
+<span class="parameter">entityId</span>
+The id of the entity <br/>
+<span class="parameter">shaftIndex</span>
+The index of the new torpedo shaft (-1 if storage) <br/>
+<span class="parameter">torpedoIndex</span>
+The index of the torpedo <br/>
+</div>
+</p>
+</div>
+</div>
+<div id="onTorpedoRemoved", class="codecontainer">
+<p>
+<span class="keyword">callback</span> onTorpedoRemoved(entityId, shaftIndex, torpedoIndex) <br/>
+</p>
+<div id="onTorpedoRemoved", class="code">
+<p>
+Executed whenever a torpedo was removed from the entity 
+</p>
+<p><span class="parameter">Parameters</span></p>
+<div class="indented">
+<span class="parameter">entityId</span>
+The id of the entity <br/>
+<span class="parameter">shaftIndex</span>
+The index of the new torpedo shaft (-1 if storage) <br/>
+<span class="parameter">torpedoIndex</span>
+The index of the torpedo <br/>
+</div>
+</p>
+</div>
+</div>
+<div id="onShaftWeaponIndexAssign", class="codecontainer">
+<p>
+<span class="keyword">callback</span> onShaftWeaponIndexAssign(entityId, shaftIndex, weaponIndex) <br/>
+</p>
+<div id="onShaftWeaponIndexAssign", class="code">
+<p>
+Executed whenever a torpedo shaft was assigned a new weapon index 
+</p>
+<p><span class="parameter">Parameters</span></p>
+<div class="indented">
+<span class="parameter">entityId</span>
+The id of the entity <br/>
+<span class="parameter">shaftIndex</span>
+The index of the new torpedo shaft <br/>
+<span class="parameter">weaponIndex</span>
+The new weapon index of the shaft <br/>
+</div>
+</p>
+</div>
+</div>
+<div id="onTorpedoLaunched", class="codecontainer">
+<p>
+<span class="keyword">callback</span> onTorpedoLaunched(entityId, torpedoId) <br/>
+</p>
+<div id="onTorpedoLaunched", class="code">
+<p>
+Executed whenever a torpedo was launched from the entity 
+</p>
+<p><span class="parameter">Parameters</span></p>
+<div class="indented">
+<span class="parameter">entityId</span>
+The id of the entity <br/>
+<span class="parameter">torpedoId</span>
+The id of the launched torpedo <br/>
 </div>
 </p>
 </div>
@@ -929,9 +1330,12 @@ The index of the squad <br/>
 <a href="PlayerFunctions.html">Player</a>
 <a href="SectorFunctions.html">Sector</a>
 <a href="ServerFunctions.html">Server</a>
+<a href="UsableInventoryItemFunctions.html">UsableInventoryItem</a>
 </div><div class="headerlisting">
 <span class="docheader">Common Components</span>
-<br><a href="DockingPositions.html">DockingPositions</a>
+<br><a href="TorpedoLauncher.html">TorpedoLauncher</a>
+<a href="ReadOnlyTorpedoLauncher.html">ReadOnlyTorpedoLauncher</a>
+<a href="DockingPositions.html">DockingPositions</a>
 <a href="Hangar.html">Hangar</a>
 <a href="ReadOnlyHangar.html">ReadOnlyHangar</a>
 <a href="BspTree.html">BspTree</a>
@@ -986,9 +1390,11 @@ The index of the squad <br/>
 <a href="Format.html">Format</a>
 <a href="Seed.html">Seed</a>
 <a href="Random.html">Random</a>
+<a href="UsableInventoryItem.html">UsableInventoryItem</a>
 <a href="FighterTemplate.html">FighterTemplate</a>
 <a href="BlockStatistics.html">BlockStatistics</a>
 <a href="VanillaInventoryItem.html">VanillaInventoryItem</a>
+<a href="GameSettings.html">GameSettings</a>
 <a href="Rarity.html">Rarity</a>
 <a href="PlanetSpecifics.html">PlanetSpecifics</a>
 <a href="CraftStyle.html">CraftStyle</a>
@@ -998,6 +1404,7 @@ The index of the squad <br/>
 <a href="Language.html">Language</a>
 <a href="Inventory.html">Inventory</a>
 <a href="PlanBspTree.html">PlanBspTree</a>
+<a href="TorpedoTemplate.html">TorpedoTemplate</a>
 <a href="Weapon.html">Weapon</a>
 <a href="Crew.html">Crew</a>
 <a href="CrewProfession.html">CrewProfession</a>
@@ -1093,16 +1500,15 @@ The index of the squad <br/>
 <a href="Galaxy [Server].html">Galaxy [Server]</a>
 <a href="Alliance [Server].html">Alliance [Server]</a>
 <a href="Faction [Server].html">Faction [Server]</a>
-<a href="GameSettings.html">GameSettings</a>
 <a href="Player [Server].html">Player [Server]</a>
 </div><div class="lastheaderlisting">
 <span class="docheader">Enums</span>
 <br><a href="Enums.html#SoundType">SoundType</a>
 <a href="Enums.html#FontType">FontType</a>
-<a href="Enums.html#Difficulty">Difficulty</a>
 <a href="Enums.html#ChatMessageType">ChatMessageType</a>
 <a href="Enums.html#ComponentType">ComponentType</a>
 <a href="Enums.html#WeaponCategory">WeaponCategory</a>
+<a href="Enums.html#Difficulty">Difficulty</a>
 <a href="Enums.html#RarityType">RarityType</a>
 <a href="Enums.html#MoonType">MoonType</a>
 <a href="Enums.html#PlanetType">PlanetType</a>
@@ -1123,7 +1529,7 @@ The index of the squad <br/>
 </div></div>
 <div class="disclaimer">
 <p>This is the official documentation for the scripting API of Avorion. This documentation is automatically generated and <strong>not</strong> necessarily complete. Depending on the context in which functions exist, some documentation such as descriptions, return values or variable names or types may be missing.</p>
-<p>Work in Progress. Documentation of Avorion Version: Beta 0.15 r9816</p>
+<p>Work in Progress. Documentation of Avorion Version: Beta 0.16.7 r11165</p>
 </div>
 <div class="footer">
 <p align="center">Work in Progress.</p>

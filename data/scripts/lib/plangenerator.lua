@@ -1,6 +1,9 @@
+package.path = package.path .. ";data/scripts/lib/?.lua"
+package.path = package.path .. ";data/scripts/?.lua"
 
 require ("utility")
 require ("randomext")
+require ("galaxy")
 
 local PlanGenerator = {}
 

@@ -7,7 +7,7 @@ require("stringutility")
 -- the data variable is created by the singleinteraction.lua api
 -- we can just add more variables and it will be saved in the database by the singleinteraction api.
 data.given = {}
-
+data.hail = true
 
 function getSingleInteractionDialog()
     return makeDialog()

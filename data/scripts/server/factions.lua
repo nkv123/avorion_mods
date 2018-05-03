@@ -133,6 +133,10 @@ function initializePlayer(player)
 
 end
 
+function initializeAlliance(alliance)
+    alliance:createShipStyle("TestStyle")
+end
+
 function matchResources(player)
 
     player.infiniteResources = Server().infiniteResources

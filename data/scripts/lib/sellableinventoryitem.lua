@@ -53,30 +53,37 @@ local function new(item, index, owner)
 end
 
 function SellableInventoryItem:getMaterial()
-    if self.item.itemType == InventoryItemType.Turret or self.item.itemType == InventoryItemType.TurretTemplate then
-        return self.item.material
+    local item = self.item
+
+    if item.itemType == InventoryItemType.Turret or item.itemType == InventoryItemType.TurretTemplate then
+        return item.material
     end
 end
 
 function SellableInventoryItem:getIcon()
-    if self.item.itemType == InventoryItemType.Turret or self.item.itemType == InventoryItemType.TurretTemplate then
-        return self.item.weaponIcon
-    elseif self.item.itemType == InventoryItemType.SystemUpgrade then
-        return self.item.icon
-    elseif self.item.itemType == InventoryItemType.VanillaItem then
-        return self.item.icon
+    local item = self.item
+
+    if item.itemType == InventoryItemType.Turret or item.itemType == InventoryItemType.TurretTemplate then
+        return item.weaponIcon
+    elseif item.itemType == InventoryItemType.SystemUpgrade then
+        return item.icon
+    elseif item.itemType == InventoryItemType.VanillaItem
+        or item.itemType == InventoryItemType.UsableItem then
+        return item.icon
     end
 end
 
 function SellableInventoryItem:getTooltip()
+    local item = self.item
 
     if self.tooltip == nil then
-        if self.item.itemType == InventoryItemType.Turret or self.item.itemType == InventoryItemType.TurretTemplate then
-            self.tooltip = makeTurretTooltip(self.item)
-        elseif self.item.itemType == InventoryItemType.SystemUpgrade then
-            self.tooltip = self.item.tooltip
-        elseif self.item.itemType == InventoryItemType.VanillaItem then
-            self.tooltip = self.item:getTooltip()
+        if item.itemType == InventoryItemType.Turret or item.itemType == InventoryItemType.TurretTemplate then
+            self.tooltip = makeTurretTooltip(item)
+        elseif item.itemType == InventoryItemType.SystemUpgrade then
+            self.tooltip = item.tooltip
+        elseif item.itemType == InventoryItemType.VanillaItem
+            or item.itemType == InventoryItemType.UsableItem then
+            self.tooltip = item:getTooltip()
         end
     end
 
@@ -84,30 +91,28 @@ function SellableInventoryItem:getTooltip()
 end
 
 function SellableInventoryItem:getPrice()
+    local item = self.item
     local value = 0
 
-    if self.item.itemType == InventoryItemType.Turret or self.item.itemType == InventoryItemType.TurretTemplate then
+    if item.itemType == InventoryItemType.Turret or item.itemType == InventoryItemType.TurretTemplate then
+        return round(ArmedObjectPrice(item))
 
-        local turret = self.item
+    elseif item.itemType == InventoryItemType.SystemUpgrade then
+        value = item.price
 
-        local value = round(ArmedObjectPrice(turret))
-
-        return value
-
-    elseif self.item.itemType == InventoryItemType.SystemUpgrade then
-        value = self.item.price
-
-    elseif self.item.itemType == InventoryItemType.VanillaItem then
-        value = self.item.price
+    elseif item.itemType == InventoryItemType.VanillaItem
+        or item.itemType == InventoryItemType.UsableItem then
+        value = item.price
     end
 
     return value
 end
 
 function SellableInventoryItem:getName()
+    local item = self.item
     local name = ""
 
-    if self.item.itemType == InventoryItemType.Turret or self.item.itemType == InventoryItemType.TurretTemplate then
+    if item.itemType == InventoryItemType.Turret or item.itemType == InventoryItemType.TurretTemplate then
         if onClient() then
             local tooltip = self:getTooltip()
             return tooltip:getLine(0).ctext
@@ -115,10 +120,11 @@ function SellableInventoryItem:getName()
             return "Turret";
         end
 
-    elseif self.item.itemType == InventoryItemType.SystemUpgrade then
-        return self.item.name
-    elseif self.item.itemType == InventoryItemType.VanillaItem then
-        return self.item.name
+    elseif item.itemType == InventoryItemType.SystemUpgrade then
+        return item.name
+    elseif item.itemType == InventoryItemType.VanillaItem
+        or item.itemType == InventoryItemType.UsableItem then
+        return item.name
     end
 
     return name

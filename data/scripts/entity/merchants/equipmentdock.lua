@@ -63,5 +63,5 @@ function EquipmentDock.initialize()
 end
 
 function EquipmentDock.initUI()
-    EquipmentDock.shop:initUI("Buy/Sell Upgrades"%_t, "Equipment Dock"%_t)
+    EquipmentDock.shop:initUI("Trade Equipment"%_t, "Equipment Dock"%_t, "Upgrades"%_t)
 end

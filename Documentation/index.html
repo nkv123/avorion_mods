@@ -9,7 +9,7 @@
 <h1 class="documentationheader">Avorion Script API Documentation</h1>
 <div class="disclaimer">
 <p>This is the official documentation for the scripting API of Avorion. This documentation is automatically generated and <strong>not</strong> necessarily complete. Depending on the context in which functions exist, some documentation such as descriptions, return values or variable names or types may be missing.</p>
-<p>Work in Progress. Documentation of Avorion Version: Beta 0.15 r9816</p>
+<p>Work in Progress. Documentation of Avorion Version: Beta 0.16.7 r11165</p>
 </div>
 <div class="sitemap">
 <div class="headerlisting">
@@ -34,9 +34,12 @@
 <a href="PlayerFunctions.html">Player</a>
 <a href="SectorFunctions.html">Sector</a>
 <a href="ServerFunctions.html">Server</a>
+<a href="UsableInventoryItemFunctions.html">UsableInventoryItem</a>
 </div><div class="headerlisting">
 <span class="docheader">Common Components</span>
-<br><a href="DockingPositions.html">DockingPositions</a>
+<br><a href="TorpedoLauncher.html">TorpedoLauncher</a>
+<a href="ReadOnlyTorpedoLauncher.html">ReadOnlyTorpedoLauncher</a>
+<a href="DockingPositions.html">DockingPositions</a>
 <a href="Hangar.html">Hangar</a>
 <a href="ReadOnlyHangar.html">ReadOnlyHangar</a>
 <a href="BspTree.html">BspTree</a>
@@ -91,9 +94,11 @@
 <a href="Format.html">Format</a>
 <a href="Seed.html">Seed</a>
 <a href="Random.html">Random</a>
+<a href="UsableInventoryItem.html">UsableInventoryItem</a>
 <a href="FighterTemplate.html">FighterTemplate</a>
 <a href="BlockStatistics.html">BlockStatistics</a>
 <a href="VanillaInventoryItem.html">VanillaInventoryItem</a>
+<a href="GameSettings.html">GameSettings</a>
 <a href="Rarity.html">Rarity</a>
 <a href="PlanetSpecifics.html">PlanetSpecifics</a>
 <a href="CraftStyle.html">CraftStyle</a>
@@ -103,6 +108,7 @@
 <a href="Language.html">Language</a>
 <a href="Inventory.html">Inventory</a>
 <a href="PlanBspTree.html">PlanBspTree</a>
+<a href="TorpedoTemplate.html">TorpedoTemplate</a>
 <a href="Weapon.html">Weapon</a>
 <a href="Crew.html">Crew</a>
 <a href="CrewProfession.html">CrewProfession</a>
@@ -198,16 +204,15 @@
 <a href="Galaxy [Server].html">Galaxy [Server]</a>
 <a href="Alliance [Server].html">Alliance [Server]</a>
 <a href="Faction [Server].html">Faction [Server]</a>
-<a href="GameSettings.html">GameSettings</a>
 <a href="Player [Server].html">Player [Server]</a>
 </div><div class="lastheaderlisting">
 <span class="docheader">Enums</span>
 <br><a href="Enums.html#SoundType">SoundType</a>
 <a href="Enums.html#FontType">FontType</a>
-<a href="Enums.html#Difficulty">Difficulty</a>
 <a href="Enums.html#ChatMessageType">ChatMessageType</a>
 <a href="Enums.html#ComponentType">ComponentType</a>
 <a href="Enums.html#WeaponCategory">WeaponCategory</a>
+<a href="Enums.html#Difficulty">Difficulty</a>
 <a href="Enums.html#RarityType">RarityType</a>
 <a href="Enums.html#MoonType">MoonType</a>
 <a href="Enums.html#PlanetType">PlanetType</a>
@@ -253,9 +258,6 @@
 </td></tr>
 <tr><td>
 <a class="keyword" href="Faction [Server].html">Faction [Server]</a>
-</td></tr>
-<tr><td>
-<a class="keyword" href="GameSettings.html">GameSettings</a>
 </td></tr>
 <tr><td>
 <a class="keyword" href="Player [Server].html">Player [Server]</a>
@@ -477,6 +479,9 @@
 <a class="keyword" href="Random.html">Random</a>
 </td></tr>
 <tr><td>
+<a class="keyword" href="UsableInventoryItem.html">UsableInventoryItem</a>
+</td></tr>
+<tr><td>
 <a class="keyword" href="FighterTemplate.html">FighterTemplate</a>
 </td></tr>
 <tr><td>
@@ -484,6 +489,9 @@
 </td></tr>
 <tr><td>
 <a class="keyword" href="VanillaInventoryItem.html">VanillaInventoryItem</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="GameSettings.html">GameSettings</a>
 </td></tr>
 <tr><td>
 <a class="keyword" href="Rarity.html">Rarity</a>
@@ -511,6 +519,9 @@
 </td></tr>
 <tr><td>
 <a class="keyword" href="PlanBspTree.html">PlanBspTree</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="TorpedoTemplate.html">TorpedoTemplate</a>
 </td></tr>
 <tr><td>
 <a class="keyword" href="Weapon.html">Weapon</a>
@@ -598,6 +609,12 @@
 </td></tr>
 <tr><td>
 <a class="keyword" href="ReadOnlyScriptUI.html">ReadOnlyScriptUI</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="TorpedoLauncher.html">TorpedoLauncher</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="ReadOnlyTorpedoLauncher.html">ReadOnlyTorpedoLauncher</a>
 </td></tr>
 <tr><td>
 <a class="keyword" href="DockingPositions.html">DockingPositions</a>
@@ -757,6 +774,12 @@
 <a class="keyword" href="Functions.html#async">async</a>
 </td></tr>
 <tr><td>
+<a class="keyword" href="Functions.html#getCurrentLanguage">getCurrentLanguage</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#checkSecureFilename">checkSecureFilename</a>
+</td></tr>
+<tr><td>
 <a class="keyword" href="Functions.html#copy">copy</a>
 </td></tr>
 <tr><td>
@@ -770,12 +793,6 @@
 </td></tr>
 <tr><td>
 <a class="keyword" href="Functions.html#deferredCallback">deferredCallback</a>
-</td></tr>
-<tr><td>
-<a class="keyword" href="Functions.html#systemTimeMs">systemTimeMs</a>
-</td></tr>
-<tr><td>
-<a class="keyword" href="Functions.html#systemTime">systemTime</a>
 </td></tr>
 <tr><td>
 <a class="keyword" href="Functions.html#appTimeMs">appTimeMs</a>
@@ -806,6 +823,12 @@
 </td></tr>
 <tr><td>
 <a class="keyword" href="Functions.html#async">async</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#onServer">onServer</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Functions.html#onClient">onClient</a>
 </td></tr>
 <tr><td>
 <a class="keyword" href="Functions.html#getParentFaction">getParentFaction</a>
@@ -1028,9 +1051,6 @@
 <a class="keyword" href="Enums.html#FontType">FontType</a>
 </td></tr>
 <tr><td>
-<a class="keyword" href="Enums.html#Difficulty">Difficulty</a>
-</td></tr>
-<tr><td>
 <a class="keyword" href="Enums.html#ChatMessageType">ChatMessageType</a>
 </td></tr>
 <tr><td>
@@ -1038,6 +1058,9 @@
 </td></tr>
 <tr><td>
 <a class="keyword" href="Enums.html#WeaponCategory">WeaponCategory</a>
+</td></tr>
+<tr><td>
+<a class="keyword" href="Enums.html#Difficulty">Difficulty</a>
 </td></tr>
 <tr><td>
 <a class="keyword" href="Enums.html#RarityType">RarityType</a>
@@ -1148,9 +1171,12 @@
 <a href="PlayerFunctions.html">Player</a>
 <a href="SectorFunctions.html">Sector</a>
 <a href="ServerFunctions.html">Server</a>
+<a href="UsableInventoryItemFunctions.html">UsableInventoryItem</a>
 </div><div class="headerlisting">
 <span class="docheader">Common Components</span>
-<br><a href="DockingPositions.html">DockingPositions</a>
+<br><a href="TorpedoLauncher.html">TorpedoLauncher</a>
+<a href="ReadOnlyTorpedoLauncher.html">ReadOnlyTorpedoLauncher</a>
+<a href="DockingPositions.html">DockingPositions</a>
 <a href="Hangar.html">Hangar</a>
 <a href="ReadOnlyHangar.html">ReadOnlyHangar</a>
 <a href="BspTree.html">BspTree</a>
@@ -1205,9 +1231,11 @@
 <a href="Format.html">Format</a>
 <a href="Seed.html">Seed</a>
 <a href="Random.html">Random</a>
+<a href="UsableInventoryItem.html">UsableInventoryItem</a>
 <a href="FighterTemplate.html">FighterTemplate</a>
 <a href="BlockStatistics.html">BlockStatistics</a>
 <a href="VanillaInventoryItem.html">VanillaInventoryItem</a>
+<a href="GameSettings.html">GameSettings</a>
 <a href="Rarity.html">Rarity</a>
 <a href="PlanetSpecifics.html">PlanetSpecifics</a>
 <a href="CraftStyle.html">CraftStyle</a>
@@ -1217,6 +1245,7 @@
 <a href="Language.html">Language</a>
 <a href="Inventory.html">Inventory</a>
 <a href="PlanBspTree.html">PlanBspTree</a>
+<a href="TorpedoTemplate.html">TorpedoTemplate</a>
 <a href="Weapon.html">Weapon</a>
 <a href="Crew.html">Crew</a>
 <a href="CrewProfession.html">CrewProfession</a>
@@ -1312,16 +1341,15 @@
 <a href="Galaxy [Server].html">Galaxy [Server]</a>
 <a href="Alliance [Server].html">Alliance [Server]</a>
 <a href="Faction [Server].html">Faction [Server]</a>
-<a href="GameSettings.html">GameSettings</a>
 <a href="Player [Server].html">Player [Server]</a>
 </div><div class="lastheaderlisting">
 <span class="docheader">Enums</span>
 <br><a href="Enums.html#SoundType">SoundType</a>
 <a href="Enums.html#FontType">FontType</a>
-<a href="Enums.html#Difficulty">Difficulty</a>
 <a href="Enums.html#ChatMessageType">ChatMessageType</a>
 <a href="Enums.html#ComponentType">ComponentType</a>
 <a href="Enums.html#WeaponCategory">WeaponCategory</a>
+<a href="Enums.html#Difficulty">Difficulty</a>
 <a href="Enums.html#RarityType">RarityType</a>
 <a href="Enums.html#MoonType">MoonType</a>
 <a href="Enums.html#PlanetType">PlanetType</a>

@@ -5,6 +5,7 @@ require ("galaxy")
 require ("stringutility")
 local PlanGenerator = require ("plangenerator")
 local ShipUtility = require ("shiputility")
+local PirateGenerator = require("pirategenerator")
 
 -- since this local variable can be used in multiple scripts in the same lua_State, a single callback function isn't enough
 -- we use a table that has a unique id per generator
@@ -12,23 +13,12 @@ local generators = {}
 local AsyncPirateGenerator = {}
 AsyncPirateGenerator.__index = AsyncPirateGenerator
 
-local function onPlanGenerated(plan, generatorId, position, factionIndex, turretFactor, title)
+local function onPlanGenerated(plan, generatorId, position, factionIndex, title)
 
     local faction = Faction(factionIndex)
     local ship = Sector():createShip(faction, "", plan, position)
 
-    -- turrets should also scale with pirate strength, but every pirate must have at least 1 turret
-    local turrets = math.max(2, math.floor(Balancing_GetEnemySectorTurrets(x, y) * turretFactor))
-
-    ShipUtility.addArmedTurretsToCraft(ship, turrets)
-
-    ship.crew = ship.minCrew
-    ship.title = title
-    ship.shieldDurability = ship.shieldMaxDurability
-
-    ShipAI(ship.index):setAggressive()
-
-    ship:setValue("is_pirate", 1)
+    PirateGenerator.addPirateEquipment(ship, title)
 
     local self = generators[generatorId]
 
@@ -75,7 +65,7 @@ local function new(namespace, onGeneratedCallback)
     return setmetatable(instance, AsyncPirateGenerator)
 end
 
-function AsyncPirateGenerator:create(position, volumeFactor, turretFactor, title)
+function AsyncPirateGenerator:create(position, volumeFactor, title)
 
     if self.batching then
         self.expected = self.expected + 1
@@ -88,7 +78,7 @@ function AsyncPirateGenerator:create(position, volumeFactor, turretFactor, title
     local faction = Galaxy():getPirateFaction(self.pirateLevel)
     local volume = Balancing_GetSectorShipVolume(x, y) * volumeFactor;
 
-    PlanGenerator.makeAsyncShipPlan("_pirate_generator_on_plan_generated", {self.generatorId, position, faction.index, turretFactor, title}, faction, volume)
+    PlanGenerator.makeAsyncShipPlan("_pirate_generator_on_plan_generated", {self.generatorId, position, faction.index, title}, faction, volume)
 end
 
 function AsyncPirateGenerator:startBatch()
@@ -117,57 +107,74 @@ end
 
 function AsyncPirateGenerator:createScaledOutlaw(position)
     local scaling = self:getScaling()
-    return self:create(position, 0.75 * scaling, 0.25, "Outlaw"%_t)
+    return self:create(position, 0.75 * scaling, "Outlaw"%_T)
 end
 
 function AsyncPirateGenerator:createScaledBandit(position)
     local scaling = self:getScaling()
-    return self:create(position, 1.0 * scaling, 0.5, "Bandit"%_t)
+    return self:create(position, 1.0 * scaling, "Bandit"%_T)
 end
 
 function AsyncPirateGenerator:createScaledPirate(position)
     local scaling = self:getScaling()
-    return self:create(position, 1.5 * scaling, 0.65, "Pirate"%_t)
+    return self:create(position, 1.5 * scaling, "Pirate"%_T)
 end
 
 function AsyncPirateGenerator:createScaledMarauder(position)
     local scaling = self:getScaling()
-    return self:create(position, 2.0 * scaling, 0.75, "Marauder"%_t)
+    return self:create(position, 2.0 * scaling, "Marauder"%_T)
+end
+
+function AsyncPirateGenerator:createScaledDisruptor(position)
+    local scaling = self:getScaling()
+    return self:create(position, 2.0 * scaling, "Disruptor"%_T)
 end
 
 function AsyncPirateGenerator:createScaledRaider(position)
     local scaling = self:getScaling()
-    return self:create(position, 4.0 * scaling, 1.0, "Raider"%_t)
+    return self:create(position, 4.0 * scaling, "Raider"%_T)
+end
+function AsyncPirateGenerator:createScaledRaider(position)
+    local scaling = self:getScaling()
+    return self:create(position, 8.0 * scaling, "Ravager"%_T)
 end
 
 function AsyncPirateGenerator:createScaledBoss(position)
     local scaling = self:getScaling()
-    return self:create(position, 30.0 * scaling, 1.5, "Pirate Mothership"%_t)
+    return self:create(position, 30.0 * scaling, "Pirate Mothership"%_T)
 end
 
 
 function AsyncPirateGenerator:createOutlaw(position)
-    return self:create(position, 0.75, 0.5, "Outlaw"%_t)
+    return self:create(position, 0.75, "Outlaw"%_T)
 end
 
 function AsyncPirateGenerator:createBandit(position)
-    return self:create(position, 1.0, 1.0, "Bandit"%_t)
+    return self:create(position, 1.0, "Bandit"%_T)
 end
 
 function AsyncPirateGenerator:createPirate(position)
-    return self:create(position, 1.5, 1.0, "Pirate"%_t)
+    return self:create(position, 1.5, "Pirate"%_T)
 end
 
 function AsyncPirateGenerator:createMarauder(position)
-    return self:create(position, 2.0, 1.25, "Marauder"%_t)
+    return self:create(position, 2.0, "Marauder"%_T)
+end
+
+function AsyncPirateGenerator:createDisruptor(position)
+    return self:create(position, 2.0, "Disruptor"%_T)
 end
 
 function AsyncPirateGenerator:createRaider(position)
-    return self:create(position, 4.0, 1.5, "Raider"%_t)
+    return self:create(position, 4.0, "Raider"%_T)
+end
+
+function AsyncPirateGenerator:createRavager(position)
+    return self:create(position, 8.0, "Ravager"%_T)
 end
 
 function AsyncPirateGenerator:createBoss(position)
-    return self:create(position, 30.0, 2.0, "Pirate Mothership"%_t)
+    return self:create(position, 30.0, "Pirate Mothership"%_T)
 end
 
 function AsyncPirateGenerator:getScaling()

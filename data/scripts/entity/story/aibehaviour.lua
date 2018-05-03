@@ -78,7 +78,7 @@ function onBreak(entityId, ...)
 
             desc.position = wreckPosition
             desc.factionIndex = entity.factionIndex
-            desc:setPlan(newPlan)
+            desc:setMovePlan(newPlan)
             desc:addScriptOnce("story/aibehaviour")
             desc:addScriptOnce("deleteonplayersleft")
             desc.title = "The AI"%_T
@@ -100,7 +100,7 @@ function onBreak(entityId, ...)
             local desc = WreckageDescriptor()
 
             desc.position = wreckPosition
-            desc:setPlan(newPlan)
+            desc:setMovePlan(newPlan)
 
             -- finally create the wreck
              Sector():createEntity(desc);

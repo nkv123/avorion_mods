@@ -71,3 +71,49 @@ function getMiningProductions()
 
     return miningProductions
 end
+
+function getFactoryCost(production)
+
+    -- calculate the difference between the value of ingredients and results
+    local ingredientValue = 0
+    local resultValue = 0
+
+    for _, ingredient in pairs(production.ingredients) do
+        local good = goods[ingredient.name]
+        ingredientValue = ingredientValue + good.price * ingredient.amount
+    end
+
+    for _, result in pairs(production.results) do
+        local good = goods[result.name]
+        resultValue = resultValue + good.price * result.amount
+    end
+
+    local diff = resultValue - ingredientValue
+
+    local costs = 3000000 -- 3 mio minimum for a factory
+    costs = costs + diff * 4500
+    return costs
+end
+
+function getFactoryUpgradeCost(production, size)
+
+    -- calculate the difference between the value of ingredients and results
+    local ingredientValue = 0
+    local resultValue = 0
+
+    for _, ingredient in pairs(production.ingredients) do
+        local good = goods[ingredient.name]
+        ingredientValue = ingredientValue + good.price * ingredient.amount
+    end
+
+    for _, result in pairs(production.results) do
+        local good = goods[result.name]
+        resultValue = resultValue + good.price * result.amount
+    end
+
+    local diff = resultValue - ingredientValue
+
+    local costs = diff * 1000 * size
+    return costs
+end
+

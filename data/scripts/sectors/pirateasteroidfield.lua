@@ -48,12 +48,12 @@ function SectorTemplate.generate(player, seed, x, y)
     -- create pirate ships
     local numShips = math.random(numAsteroids * 2, numAsteroids * 3)
 
-    for i = 1, numShips do
-        PirateGenerator.createBandit(generator:getPositionInSector(5000))
-    end
+    PirateGenerator.createRaider(generator:getPositionInSector(5000))
 
     for i = 1, numShips do
+        PirateGenerator.createMarauder(generator:getPositionInSector(5000))
         PirateGenerator.createPirate(generator:getPositionInSector(5000))
+        PirateGenerator.createBandit(generator:getPositionInSector(5000))
     end
 
     local numAsteroids = math.random(1, 3)

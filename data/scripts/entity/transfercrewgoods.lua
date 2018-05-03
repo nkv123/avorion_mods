@@ -1305,7 +1305,7 @@ function TransferCrewGoods.renderUI()
     if not activeSelection then return end
 
     local mousePos = Mouse().position
-    local key = activeSelection:getKey(mousePos)
+    local key = activeSelection:getMouseOveredKey()
     if key.y ~= 0 then return end
     if key.x < 0 then return end
 

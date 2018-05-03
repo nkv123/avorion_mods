@@ -44,6 +44,7 @@ function initUI()
     local label = window:createLabel(hmsplit:partition(0).lower, "Enter the name of your new ship:"%_t, 14);
     label.size = vec2(size.x - 20, 40)
     label.centered = true
+    label.wordBreak = true
 
     nameTextBox = window:createTextBox(hmsplit:partition(1), "")
     nameTextBox.maxCharacters = 35
@@ -99,7 +100,7 @@ local function foundShip(faction, player, name)
 
     player.craft = ship
 
-
+    return ship
 end
 
 function onShowWindow()
@@ -130,7 +131,11 @@ function found(name, forAlliance)
             return
         end
 
-        foundShip(alliance, player, name)
+        local ship = foundShip(alliance, player, name)
+
+        if ship then
+            ship:addScript("entity/claimalliance.lua")
+        end
     else
         foundShip(player, player, name)
     end

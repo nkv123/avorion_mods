@@ -23,6 +23,7 @@ local OperationExodus = require("story/operationexodus")
 local AsyncPirateGenerator = require("asyncpirategenerator")
 local AsyncShipGenerator = require("asyncshipgenerator")
 local FighterGenerator = require("fightergenerator")
+local TorpedoGenerator = require("torpedogenerator")
 
 local window
 local scriptsWindow
@@ -98,13 +99,16 @@ function initUI()
     tab:createButton(ButtonRect(), "Spawn Beacon", "onCreateBeaconButtonPressed")
     tab:createButton(ButtonRect(), "Fly", "onFlyButtonPressed")
     tab:createButton(ButtonRect(), "Own", "onOwnButtonPressed")
+    tab:createButton(ButtonRect(), "Own Alliance", "onOwnAllianceButtonPressed")
     tab:createButton(ButtonRect(), "Add Crew", "onAddCrewButtonPressed")
     tab:createButton(ButtonRect(), "Add Cargo", "onAddCargoButtonPressed")
     tab:createButton(ButtonRect(), "Add Fighters", "onAddFightersButtonPressed")
     tab:createButton(ButtonRect(), "Add Cargo Shuttles", "onAddCargoShuttlesButtonPressed")
+    tab:createButton(ButtonRect(), "Add Torpedoes", "onAddTorpedoesButtonPressed")
     tab:createButton(ButtonRect(), "Clear Cargo", "onClearCargoButtonPressed")
     tab:createButton(ButtonRect(), "Clear Crew", "onClearCrewButtonPressed")
     tab:createButton(ButtonRect(), "Clear Hangar", "onClearHangarButtonPressed")
+    tab:createButton(ButtonRect(), "Clear Torpedoes", "onClearTorpedoesButtonPressed")
     tab:createButton(ButtonRect(), "Start Fighter", "onStartFighterButtonPressed")
     tab:createButton(ButtonRect(), "Destroy", "onDestroyButtonPressed")
     tab:createButton(ButtonRect(), "Delete", "onDeleteButtonPressed")
@@ -136,21 +140,17 @@ function initUI()
     tab:createButton(ButtonRect(), "Server Values", "onServerValuesButtonPressed")
     tab:createButton(ButtonRect(), "Clear Sector", "onClearButtonPressed")
     tab:createButton(ButtonRect(), "Clear Fighters", "onClearFightersButtonPressed")
+    tab:createButton(ButtonRect(), "Clear Torpedos", "onClearTorpedosButtonPressed")
     tab:createButton(ButtonRect(), "Infect Asteroids", "onInfectAsteroidsButtonPressed")
     tab:createButton(ButtonRect(), "Align", "onAlignButtonPressed")
+    tab:createButton(ButtonRect(), "Condense Entities", "onCondenseSectorButtonPressed")
     tab:createButton(ButtonRect(), "Resolve Intersections", "onResolveIntersectionsButtonPressed")
     tab:createButton(ButtonRect(), "Respawn Asteroids", "onRespawnAsteroidsButtonPressed")
     tab:createButton(ButtonRect(), "Touch all Objects", "onTouchAllObjectsButtonPressed")
     tab:createButton(ButtonRect(), "Touch all Objects [Client]", "onTouchAllObjectsOnClientButtonPressed")
 
-    local tab = tabbedWindow:createTab("Spawn", "data/textures/icons/slow-blob.png", "Spawn")
+    local tab = tabbedWindow:createTab("Spawn Stations", "data/textures/icons/factory-arm.png", "Spawn Station")
     numButtons = 0
-    tab:createButton(ButtonRect(), "Infected Asteroid", "onCreateInfectedAsteroidPressed")
-    tab:createButton(ButtonRect(), "Big Infected Asteroid", "onCreateBigInfectedAsteroidPressed")
-    tab:createButton(ButtonRect(), "Ownable Asteroid", "onCreateOwnableAsteroidPressed")
-    tab:createButton(ButtonRect(), "Adventurer", "onCreateAdventurerPressed")
-    tab:createButton(ButtonRect(), "Travelling Merchant", "onCreateMerchantPressed")
-    tab:createButton(ButtonRect(), "Wreckage", "onCreateWreckagePressed")
     tab:createButton(ButtonRect(), "Resistance Outpost", "onCreateResistanceOutpostPressed")
     tab:createButton(ButtonRect(), "Smuggler's Market", "onCreateSmugglersMarketPressed")
     tab:createButton(ButtonRect(), "Headquarters", "onCreateHeadQuartersPressed")
@@ -161,17 +161,24 @@ function initUI()
     tab:createButton(ButtonRect(), "Equipment Dock", "onCreateEquipmentDockButtonPressed")
     tab:createButton(ButtonRect(), "Turret Merchant", "onCreateTurretMerchantButtonPressed")
     tab:createButton(ButtonRect(), "Turret Factory", "onCreateTurretFactoryButtonPressed")
+    tab:createButton(ButtonRect(), "Fighter Merchant", "onCreateFighterMerchantButtonPressed")
     tab:createButton(ButtonRect(), "Fighter Factory", "onCreateFighterFactoryButtonPressed")
+    tab:createButton(ButtonRect(), "Torpedo Merchant", "onCreateTorpedoMerchantButtonPressed")
     tab:createButton(ButtonRect(), "Trading Post", "onCreateTradingPostButtonPressed")
     tab:createButton(ButtonRect(), "Planetary Trading Post", "onCreatePlanetaryTradingPostButtonPressed")
-    tab:createButton(ButtonRect(), "Resource Trader", "onCreateResourceTraderButtonPressed")
-    tab:createButton(ButtonRect(), "Mine", "onCreateMineButtonPressed")
-    tab:createButton(ButtonRect(), "Power Plant", "onCreateSolarPlantButtonPressed")
-    tab:createButton(ButtonRect(), "Manufacturer", "onCreateManufacturerButtonPressed")
-    tab:createButton(ButtonRect(), "Farm", "onCreateFarmButtonPressed")
-    tab:createButton(ButtonRect(), "Collector", "onCreateCollectorButtonPressed")
+    tab:createButton(ButtonRect(), "Resource Depot", "onCreateResourceDepotButtonPressed")
     tab:createButton(ButtonRect(), "Scrapyard", "onCreateScrapyardButtonPressed")
     tab:createButton(ButtonRect(), "Military Outpost", "onCreateMilitaryOutpostPressed")
+
+    local tab = tabbedWindow:createTab("Spawn", "data/textures/icons/slow-blob.png", "Spawn")
+    numButtons = 0
+    tab:createButton(ButtonRect(), "Infected Asteroid", "onCreateInfectedAsteroidPressed")
+    tab:createButton(ButtonRect(), "Big Infected Asteroid", "onCreateBigInfectedAsteroidPressed")
+    tab:createButton(ButtonRect(), "Claimable Wreckage", "onCreateClaimableWreckagePressed")
+    tab:createButton(ButtonRect(), "Claimable Asteroid", "onCreateOwnableAsteroidPressed")
+    tab:createButton(ButtonRect(), "Adventurer", "onCreateAdventurerPressed")
+    tab:createButton(ButtonRect(), "Travelling Merchant", "onCreateMerchantPressed")
+    tab:createButton(ButtonRect(), "Wreckage", "onCreateWreckagePressed")
     tab:createButton(ButtonRect(), "Big Asteroid", "onCreateBigAsteroidButtonPressed")
     tab:createButton(ButtonRect(), "Asteroid Field", "onCreateAsteroidFieldButtonPressed")
     tab:createButton(ButtonRect(), "Empty Asteroid Field", "onCreateEmptyAsteroidFieldButtonPressed")
@@ -179,7 +186,14 @@ function initUI()
     tab:createButton(ButtonRect(), "Container Field", "onCreateContainerFieldButtonPressed")
     tab:createButton(ButtonRect(), "Resource Asteroid", "onCreateResourceAsteroidButtonPressed")
     tab:createButton(ButtonRect(), "Pirate", "onCreatePirateButtonPressed")
+    tab:createButton(ButtonRect(), "Military Ship", "onSpawnMilitaryShipButtonPressed")
     tab:createButton(ButtonRect(), "Carrier", "onSpawnCarrierButtonPressed")
+    tab:createButton(ButtonRect(), "Flagship", "onSpawnFlagshipButtonPressed")
+    tab:createButton(ButtonRect(), "Persecutor", "onSpawnPersecutorButtonPressed")
+    tab:createButton(ButtonRect(), "Blocker", "onSpawnBlockerButtonPressed")
+    tab:createButton(ButtonRect(), "Disruptor", "onSpawnDisruptorButtonPressed")
+    tab:createButton(ButtonRect(), "CIWS", "onSpawnCIWSButtonPressed")
+    tab:createButton(ButtonRect(), "Torpedoboat", "onSpawnTorpedoBoatButtonPressed")
     tab:createButton(ButtonRect(), "Trader", "onSpawnTraderButtonPressed")
     tab:createButton(ButtonRect(), "Freighter", "onSpawnFreighterButtonPressed")
     tab:createButton(ButtonRect(), "Miner", "onSpawnMinerButtonPressed")
@@ -188,12 +202,8 @@ function initUI()
     tab:createButton(ButtonRect(), "Battle", "onSpawnBattleButtonPressed")
     tab:createButton(ButtonRect(), "Deferred Battle", "onSpawnDeferredBattleButtonPressed")
     tab:createButton(ButtonRect(), "Fleet", "onSpawnFleetButtonPressed")
-    tab:createButton(ButtonRect(), "Swoks", "onSpawnSwoksButtonPressed")
-    tab:createButton(ButtonRect(), "The AI", "onSpawnTheAIButtonPressed")
-    tab:createButton(ButtonRect(), "Smuggler", "onSpawnSmugglerButtonPressed")
-    tab:createButton(ButtonRect(), "Scientist", "onSpawnScientistButtonPressed")
-    tab:createButton(ButtonRect(), "The 4", "onSpawnThe4ButtonPressed")
-    tab:createButton(ButtonRect(), "Guardian", "onSpawnGuardianButtonPressed")
+    tab:createButton(ButtonRect(), "Raiders", "onPersecutorsButtonPressed")
+
 
     local tab = tabbedWindow:createTab("Factory Spawn", "data/textures/icons/cog.png", "Spawn Factory")
     numButtons = 0
@@ -230,6 +240,15 @@ function initUI()
     tab:createButton(ButtonRect(), "Trader Attacked by Pirates", "onTraderAttackedByPiratesButtonPressed")
     tab:createButton(ButtonRect(), "Xsotan Attack", "onAlienAttackButtonPressed")
     tab:createButton(ButtonRect(), "Headhunter Attack", "onHeadhunterAttackButtonPressed")
+    tab:createButton(ButtonRect(), "Search and Rescue Call", "onSearchAndRescueButtonPressed")
+    tab:createButton(ButtonRect(), "Progress Brakers", "onProgressBrakersButtonPressed")
+    tab:createButton(ButtonRect(), "Spawn Swoks", "onSpawnSwoksButtonPressed")
+    tab:createButton(ButtonRect(), "Spawn The AI", "onSpawnTheAIButtonPressed")
+    tab:createButton(ButtonRect(), "Spawn Smuggler", "onSpawnSmugglerButtonPressed")
+    tab:createButton(ButtonRect(), "Spawn Scientist", "onSpawnScientistButtonPressed")
+    tab:createButton(ButtonRect(), "Spawn The 4", "onSpawnThe4ButtonPressed")
+    tab:createButton(ButtonRect(), "Spawn Guardian", "onSpawnGuardianButtonPressed")
+
 
 
 
@@ -557,6 +576,31 @@ function onHeadhunterAttackButtonPressed()
 
 end
 
+function onProgressBrakersButtonPressed()
+    if onClient() then
+        invokeServerFunction("onProgressBrakersButtonPressed")
+        return
+    end
+
+    Sector():addScriptOnce("spawnpersecutors.lua")
+    Sector():invokeFunction("spawnpersecutors", "update")
+end
+
+function onPersecutorsButtonPressed()
+    if onClient() then
+        invokeServerFunction("onPersecutorsButtonPressed")
+        return
+    end
+
+    local generator = AsyncPirateGenerator()
+    for i = 1, 3 do
+        local dir = random():getDirection()
+        local matrix = MatrixLookUpPosition(-dir, vec3(0,1,0), Entity().translationf + dir * 2000)
+
+        generator:createRaider(matrix)
+    end
+end
+
 function onStolenChecked(index, checked)
 end
 
@@ -655,6 +699,15 @@ function onClearHangarButtonPressed()
     Hangar():clear()
 end
 
+function onClearTorpedoesButtonPressed()
+    if onClient() then
+        invokeServerFunction("onClearTorpedoesButtonPressed")
+        return
+    end
+
+    TorpedoLauncher():clear()
+end
+
 function onStartFighterButtonPressed()
     if onClient() then
         invokeServerFunction("onStartFighterButtonPressed")
@@ -711,6 +764,120 @@ function onSpawnDefendersButtonPressed()
 
 end
 
+local function getPositionInFrontOfPlayer()
+
+    local right = Entity().right
+    local dir = Entity().look
+    local up = Entity().up
+    local position = Entity().translationf
+
+    local pos = position + dir * 100
+
+    return MatrixLookUpPosition(right, up, pos)
+end
+
+function makeDefender(craft)
+    craft:addScript("ai/patrol")
+end
+
+function onSpawnMilitaryShipButtonPressed()
+    if onClient() then
+        invokeServerFunction("onSpawnMilitaryShipButtonPressed")
+        return
+    end
+
+    local x, y = Sector():getCoordinates()
+    local faction = Galaxy():getNearestFaction(x, y)
+
+    local generator = AsyncShipGenerator(nil, makeDefender)
+    generator:createMilitaryShip(faction, getPositionInFrontOfPlayer())
+
+end
+
+function onSpawnTorpedoBoatButtonPressed()
+    if onClient() then
+        invokeServerFunction("onSpawnTorpedoBoatButtonPressed")
+        return
+    end
+
+    local x, y = Sector():getCoordinates()
+    local faction = Galaxy():getNearestFaction(x, y)
+
+    local generator = AsyncShipGenerator(nil, makeDefender)
+    generator:createTorpedoShip(faction, getPositionInFrontOfPlayer())
+
+end
+
+function onSpawnCIWSButtonPressed()
+    if onClient() then
+        invokeServerFunction("onSpawnCIWSButtonPressed")
+        return
+    end
+
+    local x, y = Sector():getCoordinates()
+    local faction = Galaxy():getNearestFaction(x, y)
+
+    local generator = AsyncShipGenerator(nil, makeDefender)
+    generator:createCIWSShip(faction, getPositionInFrontOfPlayer())
+
+end
+
+function onSpawnDisruptorButtonPressed()
+    if onClient() then
+        invokeServerFunction("onSpawnDisruptorButtonPressed")
+        return
+    end
+
+    local x, y = Sector():getCoordinates()
+    local faction = Galaxy():getNearestFaction(x, y)
+
+    local generator = AsyncShipGenerator(nil, makeDefender)
+    generator:createDisruptorShip(faction, getPositionInFrontOfPlayer())
+
+end
+
+function onSpawnPersecutorButtonPressed()
+    if onClient() then
+        invokeServerFunction("onSpawnPersecutorButtonPressed")
+        return
+    end
+
+    local x, y = Sector():getCoordinates()
+    local faction = Galaxy():getNearestFaction(x, y)
+
+    local generator = AsyncShipGenerator(nil, makeDefender)
+    generator:createPersecutorShip(faction, getPositionInFrontOfPlayer())
+
+end
+
+function onSpawnBlockerButtonPressed()
+    if onClient() then
+        invokeServerFunction("onSpawnBlockerButtonPressed")
+        return
+    end
+
+    local x, y = Sector():getCoordinates()
+    local faction = Galaxy():getNearestFaction(x, y)
+
+    local generator = AsyncShipGenerator(nil, makeDefender)
+    generator:createBlockerShip(faction, getPositionInFrontOfPlayer())
+
+end
+
+function onSpawnFlagshipButtonPressed()
+    if onClient() then
+        invokeServerFunction("onSpawnFlagshipButtonPressed")
+        return
+    end
+
+    local x, y = Sector():getCoordinates()
+    local faction = Galaxy():getNearestFaction(x, y)
+
+    local generator = AsyncShipGenerator(nil, makeDefender)
+    generator:createFlagShip(faction, getPositionInFrontOfPlayer())
+
+end
+
 function onSpawnCarrierButtonPressed()
     if onClient() then
         invokeServerFunction("onSpawnCarrierButtonPressed")
@@ -727,7 +894,7 @@ function onSpawnCarrierButtonPressed()
     local position = Entity().translationf
 
     local pos = position + dir * 100
-    local generator = AsyncShipGenerator()
+    local generator = AsyncShipGenerator(nil, makeDefender)
     generator:createCarrier(faction, MatrixLookUpPosition(right, up, pos))
 
 end
@@ -748,7 +915,7 @@ function onSpawnTraderButtonPressed()
     local position = Entity().translationf
 
     local pos = position + dir * 100
-    local generator = AsyncShipGenerator()
+    local generator = AsyncShipGenerator(nil, makeDefender)
     generator:createTradingShip(faction, MatrixLookUpPosition(right, up, pos))
 
 end
@@ -951,6 +1118,20 @@ function onResolveIntersectionsButtonPressed()
     Placer.resolveIntersections()
 end
 
+function onCondenseSectorButtonPressed()
+    if onClient() then
+        invokeServerFunction("onCondenseSectorButtonPressed")
+        Entity().position = Matrix()
+        return
+    end
+
+    for _, entity in pairs({Sector():getEntitiesByComponent(ComponentType.Plan)}) do
+        entity.position = Matrix()
+    end
+
+    Placer.resolveIntersections()
+end
+
 function onRespawnAsteroidsButtonPressed()
     if onClient() then
         invokeServerFunction("onRespawnAsteroidsButtonPressed")
@@ -1038,6 +1219,17 @@ function onSpawnGuardianButtonPressed()
 
     Xsotan.createGuardian()
     Placer.resolveIntersections()
+end
+
+function onSearchAndRescueButtonPressed()
+    if onClient() then
+        invokeServerFunction("onSearchAndRescueButtonPressed")
+        return
+    end
+
+    local player = Player(callingPlayer)
+    player:addScript("missions/searchandrescue/searchandrescue.lua", true)
+
 end
 
 function onSpawnThe4ButtonPressed()
@@ -1431,6 +1623,21 @@ function onOwnButtonPressed(arg)
     Entity().factionIndex = arg
 end
 
+function onOwnAllianceButtonPressed(arg)
+
+    if onClient() then
+        local allianceIndex = Player().allianceIndex
+
+        if allianceIndex then
+            invokeServerFunction("onOwnAllianceButtonPressed", allianceIndex)
+        end
+
+        return
+    end
+
+    Entity().factionIndex = arg
+end
+
 function onCreateShipsButtonPressed()
 
     if onClient() then
@@ -1480,6 +1687,7 @@ function onGunsButtonPressed()
 
     local weaponTypes = {}
     weaponTypes[WeaponType.ChainGun] = 1
+    weaponTypes[WeaponType.PointDefenseChainGun] = 1
     weaponTypes[WeaponType.Laser] = 1
     weaponTypes[WeaponType.MiningLaser] = 1
     weaponTypes[WeaponType.SalvagingLaser] = 1
@@ -1490,8 +1698,11 @@ function onGunsButtonPressed()
     weaponTypes[WeaponType.RepairBeam] = 1
     weaponTypes[WeaponType.Bolter] = 1
     weaponTypes[WeaponType.LightningGun] = 1
+    weaponTypes[WeaponType.TeslaGun] = 1
     weaponTypes[WeaponType.ForceGun] = 1
     weaponTypes[WeaponType.PulseCannon] = 1
+    weaponTypes[WeaponType.AntiFighter] = 1
+    weaponTypes[WeaponType.PointDefenseLaser] = 1
 
     local rarities = {}
     rarities[RarityType.Petty] = 1
@@ -1622,6 +1833,23 @@ function onCreateOwnableAsteroidPressed()
     Placer.resolveIntersections()
 end
 
+function onCreateClaimableWreckagePressed()
+    if onClient() then
+        invokeServerFunction("onCreateClaimableWreckagePressed")
+        return
+    end
+
+    local generator = SectorGenerator(Sector():getCoordinates())
+    local faction = Galaxy():createRandomFaction(Sector():getCoordinates())
+    local wreckage = generator:createWreckage(faction, nil, 0)
+
+    -- find largest wreckage
+    wreckage.title = "Abandoned Ship"%_t
+    wreckage:addScript("wreckagetoship.lua")
+
+    Placer.resolveIntersections()
+end
+
 function onCreateAdventurerPressed()
     if onClient() then
         invokeServerFunction("onCreateAdventurerPressed")
@@ -1720,6 +1948,22 @@ function onCreateTurretFactoryButtonPressed()
 
 end
 
+function onCreateFighterMerchantButtonPressed()
+
+    if onClient() then
+        invokeServerFunction("onCreateFighterMerchantButtonPressed")
+        return
+    end
+
+    local generator = SectorGenerator(Sector():getCoordinates())
+
+    local faction = Galaxy():createRandomFaction(Sector():getCoordinates())
+    local station = generator:createStation(faction, "data/scripts/entity/merchants/fightermerchant.lua")
+    station.position = Matrix()
+
+    Placer.resolveIntersections()
+end
+
 function onCreateFighterFactoryButtonPressed()
 
     if onClient() then
@@ -1734,7 +1978,22 @@ function onCreateFighterFactoryButtonPressed()
     station.position = Matrix()
 
     Placer.resolveIntersections()
+end
 
+function onCreateTorpedoMerchantButtonPressed()
+
+    if onClient() then
+        invokeServerFunction("onCreateTorpedoMerchantButtonPressed")
+        return
+    end
+
+    local generator = SectorGenerator(Sector():getCoordinates())
+
+    local faction = Galaxy():createRandomFaction(Sector():getCoordinates())
+    local station = generator:createStation(faction, "data/scripts/entity/merchants/torpedomerchant.lua")
+    station.position = Matrix()
+
+    Placer.resolveIntersections()
 end
 
 function onCreateTradingPostButtonPressed()
@@ -1934,10 +2193,10 @@ function onCreateTurretMerchantButtonPressed()
     Placer.resolveIntersections()
 end
 
-function onCreateResourceTraderButtonPressed()
+function onCreateResourceDepotButtonPressed()
 
     if onClient() then
-        invokeServerFunction("onCreateResourceTraderButtonPressed")
+        invokeServerFunction("onCreateResourceDepotButtonPressed")
         return
     end
 
@@ -2007,7 +2266,7 @@ function onSetGatePlanPressed()
 
     local entity = Entity()
 
-    entity:setPlan(plan)
+    entity:setMovePlan(plan)
 end
 
 function onSetFreighterPlanPressed()
@@ -2018,7 +2277,7 @@ function onSetFreighterPlanPressed()
 
     local plan = PlanGenerator.makeFreighterPlan(Faction())
 
-    Entity():setPlan(plan)
+    Entity():setMovePlan(plan)
 end
 
 function onLikePressed()
@@ -2028,7 +2287,7 @@ function onLikePressed()
     end
 
     local faction, ship, player = getInteractingFaction(callingPlayer)
-    Galaxy():changeFactionRelations(faction, Faction(), 20000)
+    Galaxy():changeFactionRelations(faction, Faction(), 5000)
 end
 
 function onDislikePressed()
@@ -2038,7 +2297,7 @@ function onDislikePressed()
     end
 
     local faction, ship, player = getInteractingFaction(callingPlayer)
-    Galaxy():changeFactionRelations(faction, Faction(), -20000)
+    Galaxy():changeFactionRelations(faction, Faction(), -5000)
 
 end
 
@@ -2069,6 +2328,11 @@ function onAddFightersButtonPressed()
     if hangar == nil then return end
 
     local x, y = Sector():getCoordinates()
+
+    for i = 1, 10 do
+        hangar:addSquad("Script Squad")
+    end
+
     local squads = {hangar:getSquads()}
 
     -- fill all present squads
@@ -2113,6 +2377,38 @@ function onAddCargoShuttlesButtonPressed()
         end
     end
 
+end
+
+function onAddTorpedoesButtonPressed()
+    if onClient() then
+        invokeServerFunction("onAddTorpedoesButtonPressed")
+        return
+    end
+
+    local ship = Entity()
+    local launcher = TorpedoLauncher(ship.index)
+    if launcher == nil then return end
+
+    local x, y = Sector():getCoordinates()
+
+    local shafts = {launcher:getShafts()}
+
+    -- fill all present squads
+    for _, shaft in pairs(shafts) do
+        local torpedo = TorpedoGenerator.generate(x, y)
+
+        for i = 1, 10 do
+            launcher:addTorpedo(torpedo, shaft)
+        end
+    end
+
+    for j = 1, 10 do
+        local torpedo = TorpedoGenerator.generate(x, y)
+
+        for i = 1, 5 do
+            launcher:addTorpedo(torpedo)
+        end
+    end
 end
 
 function onDamagePressed()
@@ -2361,6 +2657,25 @@ function onClearFightersButtonPressed()
     end
 
 end
+
+function onClearTorpedosButtonPressed()
+    if onClient() then
+        invokeServerFunction("onClearTorpedosButtonPressed")
+        return
+    end
+
+    -- portion that is executed on server
+    local sector = Sector()
+    local self = Entity()
+
+    for _, entity in pairs({sector:getEntities()}) do
+        if entity.type == EntityType.Torpedo then
+            sector:deleteEntity(entity)
+        end
+    end
+
+end
+
 
 function onInfectAsteroidsButtonPressed()
     if onClient() then

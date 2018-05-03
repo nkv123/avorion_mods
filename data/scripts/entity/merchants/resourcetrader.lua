@@ -99,33 +99,62 @@ function ResourceDepot.initialize()
         math.randomseed(Sector().seed + Sector().numEntities)
 
         -- best buy price: 1 iron for 10 credits
-        -- best sell price: 1 iron for 10 credits
-        local x, y = Sector():getCoordinates();
-
-        local probabilities = Balancing_GetMaterialProbability(x, y);
-
-        for i = 1, NumMaterials() do
-            stock[i] = math.max(0, probabilities[i - 1] - 0.1) * (getInt(5000, 10000) * Balancing_GetSectorRichnessFactor(x, y))
-        end
-
-        local num = 0
-        for i = NumMaterials(), 1, -1 do
-            stock[i] = stock[i] + num
-            num = num + stock[i] / 4;
-        end
-
-        for i = 1, NumMaterials() do
-            stock[i] = round(stock[i])
-        end
+        -- best sell price: 1 iron for 10 credits        
+        stock = ResourceDepot.getInitialResources()
 
         -- resource shortage
         shortageTimer = -random():getInt(15 * 60, 60 * 60)
+
+        math.randomseed(appTimeMs())
+
+        if Faction().isAIFaction then
+            Sector():registerCallback("onRestoredFromDisk", "onRestoredFromDisk")
+        end
     end
 
     if onClient() and EntityIcon().icon == "" then
         EntityIcon().icon = "data/textures/icons/pixel/resources.png"
         InteractionText(station.index).text = Dialog.generateStationInteractionText(station, random())
     end
+end
+
+function ResourceDepot.onRestoredFromDisk(timeSinceLastSimulation)
+    ResourceDepot.updateServer(timeSinceLastSimulation)
+
+    local factor = math.max(0, math.min(1, (timeSinceLastSimulation - 20 * 60) / (2 * 60 * 60)))
+    local newStock = ResourceDepot.getInitialResources()
+
+    for i, amount in pairs(newStock) do
+        local diff = math.floor((amount - stock[i]) * factor)
+
+        if diff ~= 0 then
+            stock[i] = stock[i] + diff
+            broadcastInvokeClientFunction("setData", i, stock[i])
+        end
+    end
+end
+
+function ResourceDepot.getInitialResources()
+    local amounts = {}
+
+    local x, y = Sector():getCoordinates()
+    local probabilities = Balancing_GetMaterialProbability(x, y)
+
+    for i = 1, NumMaterials() do
+        amounts[i] = math.max(0, probabilities[i - 1] - 0.1) * (getInt(5000, 10000) * Balancing_GetSectorRichnessFactor(x, y))
+    end
+
+    local num = 0
+    for i = NumMaterials(), 1, -1 do
+        amounts[i] = amounts[i] + num
+        num = num + amounts[i] / 4
+    end
+
+    for i = 1, NumMaterials() do
+        amounts[i] = round(amounts[i])
+    end
+
+    return amounts
 end
 
 -- create all required UI elements for the client side
@@ -253,8 +282,8 @@ function ResourceDepot.onShowWindow(optionIndex, material)
 end
 
 function ResourceDepot.updateLine(material, interactingFaction)
-    remoteBuyPrice = ResourceDepot.getBuyPrice(material, interactingFaction)
-    remoteSellPrice = ResourceDepot.getSellPrice(material, interactingFaction)
+    remoteBuyPrice = ResourceDepot.getBuyPriceAndTax(material, interactingFaction, 1)
+    remoteSellPrice = ResourceDepot.getSellPriceAndTax(material, interactingFaction, 1)
 
     soldGoodPriceLabels[material].caption = tostring(remoteBuyPrice)
     boughtGoodPriceLabels[material].caption = tostring(remoteSellPrice)
@@ -399,7 +428,7 @@ function ResourceDepot.buy(material, amount)
     local station = Entity()
 
     local numTraded = math.min(stock[material], amount)
-    local price = ResourceDepot.getBuyPrice(material, seller) * numTraded;
+    local price, tax = ResourceDepot.getBuyPriceAndTax(material, seller, numTraded);
 
     local errors = {}
     errors[EntityType.Station] = "You must be docked to the station to trade."%_T
@@ -414,7 +443,7 @@ function ResourceDepot.buy(material, amount)
         return
     end
 
-    receiveTransactionTax(station, price * ResourceDepot.tax)
+    receiveTransactionTax(station, tax)
 
     seller:pay("Bought resources for %1% credits."%_T, price)
     seller:receiveResource("", Material(material - 1), numTraded)
@@ -445,7 +474,7 @@ function ResourceDepot.sell(material, amount)
 
     local playerResources = {buyer:getResources()}
     local numTraded = math.min(playerResources[material], amount)
-    local price = ResourceDepot.getSellPrice(material, buyer) * numTraded;
+    local price, tax = ResourceDepot.getSellPriceAndTax(material, buyer, numTraded);
 
     -- resource shortage
     if material == shortageMaterial then
@@ -455,7 +484,7 @@ function ResourceDepot.sell(material, amount)
         end
     end
 
-    receiveTransactionTax(station, price * ResourceDepot.tax)
+    receiveTransactionTax(station, tax)
 
     buyer:receive("Sold resources for %1% credits."%_T, price);
     buyer:payResource("", Material(material - 1), numTraded);
@@ -555,15 +584,38 @@ function ResourceDepot.getSellingFactor(material, orderingFaction)
     return percentage
 end
 
-function ResourceDepot.getSellPrice(material, faction)
-    return round(sellPrice[material] * ResourceDepot.getSellingFactor(material, faction), 1)
+function ResourceDepot.getSellPriceAndTax(material, buyer, num)
+    local price = round(sellPrice[material] * ResourceDepot.getSellingFactor(material, buyer), 1) * num
+    local tax = round(price * ResourceDepot.tax)
+
+    if Faction().index == buyer.index then
+        price = price - tax
+        -- don't pay out for the second time
+        tax = 0
+    end
+
+    return price, tax
 end
 
-function ResourceDepot.getBuyPrice(material, faction)
-    local bp = buyPrice[material]
-    local bf = ResourceDepot.getBuyingFactor(material, faction)
-    local tmp = bp * bf
-    return round(buyPrice[material] * ResourceDepot.getBuyingFactor(material, faction), 1)
+function ResourceDepot.getBuyPriceAndTax(material, seller, num)
+    local price = round(buyPrice[material] * ResourceDepot.getBuyingFactor(material, seller), 1) * num
+    local tax = round(price * ResourceDepot.tax)
+
+    if Faction().index == seller.index then
+        price = price - tax
+        -- don't pay out for the second time
+        tax = 0
+    end
+
+    return price, tax
+end
+
+function ResourceDepot.getSellPriceAndTaxTest(material, buyer, num)
+    return ResourceDepot.getSellPriceAndTax(material, Faction(buyer), num)
+end
+
+function ResourceDepot.getBuyPriceAndTaxTest(material, seller, num)
+    return ResourceDepot.getBuyPriceAndTax(material, Faction(seller), num)
 end
 
 function ResourceDepot.getData()

@@ -11,6 +11,8 @@ require ("randomext")
 -- namespace CultistBehavior
 CultistBehavior = {}
 
+CultistBehavior.factionIndex = nil
+
 
 function CultistBehavior.getUpdateInterval()
     return 15
@@ -32,7 +34,7 @@ function CultistBehavior.restore(data)
     CultistBehavior.cultists = data.cultists
     CultistBehavior.isAggressive = data.isAggressive
 
-    CultistBehavior.setInitialCallbacks()
+    CultistBehavior.initCallbacksAndFaction()
 end
 
 function CultistBehavior.initialize(matrix, asteroidID, ...)
@@ -46,40 +48,37 @@ function CultistBehavior.initialize(matrix, asteroidID, ...)
             CultistBehavior.cultists[id] = true
         end
 
-        CultistBehavior.setInitialCallbacks()
+        CultistBehavior.initCallbacksAndFaction()
     end
 end
 
-function CultistBehavior.setInitialCallbacks()
-    if not CultistBehavior.isAggressive then
-        local sector = Sector()
+function CultistBehavior.initCallbacksAndFaction()
+    local sector = Sector()
 
-        local asteroid = sector:getEntity(Uuid(CultistBehavior.asteroidID))
-        if asteroid then
-            asteroid:registerCallback("onShotHit", "onAsteroidHit")
+    local asteroid = sector:getEntity(Uuid(CultistBehavior.asteroidID))
+    if asteroid then
+        asteroid:registerCallback("onShotHit", "onAsteroidHit")
+    end
+
+    for id, _ in pairs(CultistBehavior.cultists) do
+        local ship = sector:getEntity(Uuid(id))
+        if ship then
+            ship:registerCallback("onShotHit", "onCultistHit")
+
+            CultistBehavior.factionIndex = ship.factionIndex
         end
 
-        for id, _ in pairs(CultistBehavior.cultists) do
-            local ship = sector:getEntity(Uuid(id))
-            if ship then
-                ship:registerCallback("onShotHit", "onCultistHit")
-            end
-
-            local ai = ShipAI(Uuid(id))
-            if ai then
-                ai:setPassiveShooting(false)
-            end
+        local ai = ShipAI(Uuid(id))
+        if ai and not CultistBehavior.isAggressive then
+            ai:setPassiveShooting(false)
         end
     end
 end
 
 function CultistBehavior.update(timeStep)
-    local cultistFaction
     for id, _ in pairs(CultistBehavior.cultists) do
         local cultist = Entity(Uuid(id))
-        if cultist then
-            cultistFaction = cultist.factionIndex
-        else
+        if not cultist then
             CultistBehavior.cultists[id] = nil
         end
     end
@@ -95,7 +94,7 @@ function CultistBehavior.update(timeStep)
 
         local enemiesPresent = false
         for _, ship in pairs(ships) do
-            if Faction(ship.factionIndex):getRelations(cultistFaction) < -40000 then -- TODO
+            if Faction(ship.factionIndex):getRelations(CultistBehavior.factionIndex) < -40000 then -- TODO
                 enemiesPresent = true
                 break
             end
@@ -116,26 +115,19 @@ function CultistBehavior.onCultistHit(objectIndex, shooterIndex)
 end
 
 function CultistBehavior.setAggressive(shooterEntity)
+    local shooterFaction
+    if shooterEntity then
+        shooterFaction = shooterEntity.factionIndex
+    else
+        return
+    end
+
+    if shooterFaction == CultistBehavior.factionIndex then return end
+
     CultistBehavior.isAggressive = true
 
     local sector = Sector()
-    local asteroid = sector:getEntity(Uuid(CultistBehavior.asteroidID))
-    if asteroid then
-        asteroid:unregisterCallback("onShotHit", "onAsteroidHit")
-    end
-
-    local shooterFaction, cultistFaction
-    if shooterEntity then
-        shooterFaction = shooterEntity.factionIndex
-    end
-
     for id, _ in pairs(CultistBehavior.cultists) do
-        local cultist = sector:getEntity(Uuid(id))
-        if cultist then
-            cultistFaction = cultist.factionIndex
-            cultist:unregisterCallback("onShotHit", "onCultistHit")
-        end
-
         local ai = ShipAI(Uuid(id))
         if ai then
             ai:setAggressive()
@@ -146,11 +138,11 @@ function CultistBehavior.setAggressive(shooterEntity)
         end
     end
 
-    if shooterFaction and shooterFaction ~= cultistFaction then
-        local currentRelations = Faction(cultistFaction):getRelations(shooterFaction)
-        if currentRelations >= -40000 then -- TODO
-            Galaxy():setFactionRelations(Faction(cultistFaction), Faction(shooterFaction), -75000)
-        end
+    local cultistFaction = Faction(CultistBehavior.factionIndex)
+    local currentRelations = cultistFaction:getRelations(shooterFaction)
+
+    if currentRelations >= -40000 then -- TODO
+        Galaxy():setFactionRelations(cultistFaction, Faction(shooterFaction), -75000)
     end
 end
 
@@ -159,21 +151,11 @@ function CultistBehavior.setNormal()
 
     local sector = Sector()
 
-    local asteroid = sector:getEntity(Uuid(CultistBehavior.asteroidID))
-    if asteroid then
-        asteroid:registerCallback("onShotHit", "onAsteroidHit")
-    end
-
     local cultistCount = tablelength(CultistBehavior.cultists)
     local cultistRadius = getFloat(200, 600)
     local i = 1
 
     for id, _ in pairs(CultistBehavior.cultists) do
-        local cultist = sector:getEntity(Uuid(id))
-        if cultist then
-            cultist:registerCallback("onShotHit", "onCultistHit")
-        end
-
         -- return back into circle formation
         local ai = ShipAI(Uuid(id))
         if ai then

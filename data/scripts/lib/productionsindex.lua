@@ -6,6 +6,8 @@ table.insert(productions, {factory="Gas Collector ${size}", ingredients={}, resu
 table.insert(productions, {factory="Gas Collector ${size}", ingredients={}, results={{name="Oxygen", amount=8}, {name="Hydrogen", amount=8}, {name="Nitrogen", amount=8}}, garbages={}})
 table.insert(productions, {factory="Gas Collector ${size}", ingredients={}, results={{name="Helium", amount=3}, {name="Hydrogen", amount=3}, {name="Chlorine", amount=3}, {name="Fluorine", amount=3}}, garbages={}})
 table.insert(productions, {factory="${good} Mine ${size}", ingredients={}, results={{name="Ore", amount=30}}, garbages={}})
+table.insert(productions, {factory="${good} Mine ${size}", ingredients={}, results={{name="Coal", amount=4}}, garbages={}})
+table.insert(productions, {factory="Oil Rig ${size}", ingredients={}, results={{name="Raw Oil", amount=5}}, garbages={}})
 table.insert(productions, {factory="${good} Farm ${size}", ingredients={}, results={{name="Crystal", amount=10}}, garbages={}})
 table.insert(productions, {factory="${good} Extractor ${size}", ingredients={}, results={{name="Mineral", amount=4}}, garbages={}})
 table.insert(productions, {factory="${good} Trader ${size}", ingredients={}, results={{name="Scrap Metal", amount=60}}, garbages={}})

@@ -8,6 +8,7 @@ local stationIndex
 local script
 local stage
 local waitCount
+local tractorWaitCount
 
 function getStationIndex()
     return stationIndex
@@ -72,8 +73,22 @@ function updateServer(timeStep)
 
         -- stage 0 is flying towards the light-line
         if stage == 0 then
-            if DockAI.flyToDock(ship, station) then
+            local flyToDock, tractorActive = DockAI.flyToDock(ship, station)
+
+            if flyToDock then
                 stage = 2
+            end
+
+            if tractorActive then
+                tractorWaitCount = tractorWaitCount or 0
+                tractorWaitCount = tractorWaitCount + timeStep
+
+                if tractorWaitCount > 2 * 60 then -- seconds
+                    local docks = DockingPositions(station)
+
+                    docks:stopDocking(ship)
+                    onTradingFinished(ship)
+                end
             end
         end
 

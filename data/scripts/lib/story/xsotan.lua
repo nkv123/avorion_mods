@@ -253,6 +253,7 @@ function Xsotan.createGuardian(position, volumeFactor)
     ShipUtility.addTurretsToCraft(boss, Xsotan.createPlasmaTurret(), numTurrets, numTurrets)
     ShipUtility.addTurretsToCraft(boss, Xsotan.createLaserTurret(), numTurrets, numTurrets)
     ShipUtility.addTurretsToCraft(boss, Xsotan.createRailgunTurret(), numTurrets, numTurrets)
+    ShipUtility.addBossAntiTorpedoEquipment(boss)
 
     boss.title = "Xsotan Wormhole Guardian"%_t
     boss.crew = boss.minCrew
@@ -405,7 +406,7 @@ function Xsotan.createBigInfectedAsteroid(position)
 
     desc.title = "Big Xsotan Breeder"%_t
     desc.position = MatrixLookUpPosition(random():getDirection(), random():getDirection(), position)
-    desc:setPlan(plan)
+    desc:setMovePlan(plan)
     desc.factionIndex = Xsotan.getFaction().index
 
     return Sector():createEntity(desc)
@@ -449,7 +450,7 @@ function Xsotan.infectShip(ship)
 
         local attach = tree:getBlocksByBox(Box(p, vec3(0.1, 0.1, 0.1)))
         if attach then
-            plan:addPlanDisplaced(attach.index, addition, addition.rootIndex, p)
+            plan:addPlanDisplaced(attach, addition, addition.rootIndex, p)
         end
     end
 
@@ -538,10 +539,10 @@ function Xsotan.infect(asteroid, level)
        ComponentType.Title
     )
 
-    local plan = asteroid:getPlan()
+    local plan = asteroid:getMovePlan()
     plan:addPlan(plan.rootIndex, addition, 0)
 
-    desc:setPlan(plan)
+    desc:setMovePlan(plan)
     desc.position = asteroid.position
     desc.title = "Small Xsotan Breeder"%_t
     desc.factionIndex = Xsotan.getFaction().index

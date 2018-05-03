@@ -29,7 +29,7 @@ function Placer.resolveIntersections(entities)
 
             for _, other in pairs(others) do
 
-                if other.index ~= entity.index then
+                if other.index ~= entity.index and other.mass then
 
                     -- check for intersection
                     local b = other:getBoundingSphere()

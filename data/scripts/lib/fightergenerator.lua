@@ -25,7 +25,11 @@ function FighterGenerator.generate(x, y, offset_in, rarity_in, type_in, material
     local miningDPS, miningTech = Balancing_GetSectorMiningDPS(sector, 0)
     local materialProbabilities = Balancing_GetMaterialProbability(sector, 0)
     local material = material_in or Material(getValueFromDistribution(materialProbabilities))
-    local weaponType = type_in or getValueFromDistribution(Balancing_GetWeaponProbability(sector, 0))
+
+    local weaponTypes = Balancing_GetWeaponProbability(sector, 0)
+    weaponTypes[WeaponType.AntiFighter] = nil
+
+    local weaponType = type_in or getValueFromDistribution(weaponTypes)
 
     miningDPS = miningDPS * 0.5
     weaponDPS = weaponDPS * 0.3

@@ -3,6 +3,7 @@ package.path = package.path .. ";data/scripts/?.lua"
 
 require ("galaxy")
 require ("stringutility")
+require ("randomext")
 local PlanGenerator = require ("plangenerator")
 local ShipUtility = require ("shiputility")
 
@@ -19,60 +20,69 @@ end
 
 function PirateGenerator.createScaledOutlaw(position)
     local scaling = PirateGenerator.getScaling()
-    return PirateGenerator.create(position, 0.75 * scaling, 0.25, "Outlaw"%_t)
+    return PirateGenerator.create(position, 0.75 * scaling, "Outlaw"%_T)
 end
 
 function PirateGenerator.createScaledBandit(position)
     local scaling = PirateGenerator.getScaling()
-    return PirateGenerator.create(position, 1.0 * scaling, 0.5, "Bandit"%_t)
+    return PirateGenerator.create(position, 1.0 * scaling, "Bandit"%_T)
 end
 
 function PirateGenerator.createScaledPirate(position)
     local scaling = PirateGenerator.getScaling()
-    return PirateGenerator.create(position, 1.5 * scaling, 0.65, "Pirate"%_t)
+    return PirateGenerator.create(position, 1.5 * scaling, "Pirate"%_T)
 end
 
 function PirateGenerator.createScaledMarauder(position)
     local scaling = PirateGenerator.getScaling()
-    return PirateGenerator.create(position, 2.0 * scaling, 0.75, "Marauder"%_t)
+    return PirateGenerator.create(position, 2.0 * scaling, "Marauder"%_T)
 end
 
 function PirateGenerator.createScaledRaider(position)
     local scaling = PirateGenerator.getScaling()
-    return PirateGenerator.create(position, 4.0 * scaling, 1.0, "Raider"%_t)
+    return PirateGenerator.create(position, 4.0 * scaling, "Raider"%_T)
+end
+
+function PirateGenerator.createScaledRavager(position)
+    local scaling = PirateGenerator.getScaling()
+    return PirateGenerator.create(position, 8.0 * scaling, "Ravager"%_T)
 end
 
 function PirateGenerator.createScaledBoss(position)
     local scaling = PirateGenerator.getScaling()
-    return PirateGenerator.create(position, 30.0 * scaling, 1.5, "Pirate Mothership"%_t)
+    return PirateGenerator.create(position, 30.0 * scaling, "Pirate Mothership"%_T)
 end
 
 
 function PirateGenerator.createOutlaw(position)
-    return PirateGenerator.create(position, 0.75, 0.5, "Outlaw"%_t)
+    return PirateGenerator.create(position, 0.75, "Outlaw"%_T)
 end
 
 function PirateGenerator.createBandit(position)
-    return PirateGenerator.create(position, 1.0, 1.0, "Bandit"%_t)
+    return PirateGenerator.create(position, 1.0, "Bandit"%_T)
 end
 
 function PirateGenerator.createPirate(position)
-    return PirateGenerator.create(position, 1.5, 1.0, "Pirate"%_t)
+    return PirateGenerator.create(position, 1.5, "Pirate"%_T)
 end
 
 function PirateGenerator.createMarauder(position)
-    return PirateGenerator.create(position, 2.0, 1.25, "Marauder"%_t)
+    return PirateGenerator.create(position, 2.0, "Marauder"%_T)
 end
 
 function PirateGenerator.createRaider(position)
-    return PirateGenerator.create(position, 4.0, 1.5, "Raider"%_t)
+    return PirateGenerator.create(position, 4.0, "Raider"%_T)
+end
+
+function PirateGenerator.createRavager(position)
+    return PirateGenerator.create(position, 8.0, "Ravager"%_T)
 end
 
 function PirateGenerator.createBoss(position)
-    return PirateGenerator.create(position, 30.0, 2.0, "Pirate Mothership"%_t)
+    return PirateGenerator.create(position, 30.0, "Pirate Mothership"%_T)
 end
 
-function PirateGenerator.create(position, volumeFactor, turretFactor, title)
+function PirateGenerator.create(position, volumeFactor, title)
     position = position or Matrix()
     local x, y = Sector():getCoordinates()
     PirateGenerator.pirateLevel = PirateGenerator.pirateLevel or Balancing_GetPirateLevel(x, y)
@@ -84,18 +94,7 @@ function PirateGenerator.create(position, volumeFactor, turretFactor, title)
     local plan = PlanGenerator.makeShipPlan(faction, volume)
     local ship = Sector():createShip(faction, "", plan, position)
 
-    -- turrets should also scale with pirate strength, but every pirate must have at least 1 turret
-    local turrets = math.max(2, math.floor(Balancing_GetEnemySectorTurrets(x, y) * turretFactor))
-
-    ShipUtility.addArmedTurretsToCraft(ship, turrets)
-
-    ship.crew = ship.minCrew
-    ship.title = title
-    ship.shieldDurability = ship.shieldMaxDurability
-
-    ShipAI(ship.index):setAggressive()
-
-    ship:setValue("is_pirate", 1)
+    PirateGenerator.addPirateEquipment(ship, title)
 
     return ship
 end
@@ -104,6 +103,68 @@ function PirateGenerator.getPirateFaction()
     local x, y = Sector():getCoordinates()
     PirateGenerator.pirateLevel = PirateGenerator.pirateLevel or Balancing_GetPirateLevel(x, y)
     return Galaxy():getPirateFaction(PirateGenerator.pirateLevel)
+end
+
+function PirateGenerator.addPirateEquipment(craft, title)
+    if title == "Outlaw" then
+        ShipUtility.addMilitaryEquipment(craft, 0.25, 0)
+    elseif title == "Bandit" then
+        ShipUtility.addMilitaryEquipment(craft, 0.5, 0)
+    elseif title == "Pirate" then
+        ShipUtility.addMilitaryEquipment(craft, 0.75, 0)
+    elseif title == "Marauder" then
+        local type = random():getInt(1, 3)
+        if type == 1 then
+            ShipUtility.addDisruptorEquipment(craft)
+        elseif type == 2 then
+            ShipUtility.addArtilleryEquipment(craft)
+        elseif type == 3 then
+            ShipUtility.addCIWSEquipment(craft)
+        end
+    elseif title == "Disruptor" then
+        local type = random():getInt(1, 2)
+        if type == 1 then
+            ShipUtility.addDisruptorEquipment(craft)
+        elseif type == 2 then
+            ShipUtility.addCIWSEquipment(craft)
+        end
+    elseif title == "Raider" then
+        local type = random():getInt(1, 3)
+        if type == 1 then
+            ShipUtility.addDisruptorEquipment(craft)
+        elseif type == 2 then
+            ShipUtility.addPersecutorEquipment(craft)
+        elseif type == 3 then
+            ShipUtility.addTorpedoBoatEquipment(craft)
+        end
+    elseif title == "Ravager" then
+        local type = random():getInt(1, 2)
+        if type == 1 then
+            ShipUtility.addArtilleryEquipment(craft)
+        elseif type == 2 then
+            ShipUtility.addPersecutorEquipment(craft)
+        end
+    elseif title == "Mothership" then
+        local type = random():getInt(1, 2)
+        if type == 1 then
+            ShipUtility.addCarrierEquipment(craft)
+        elseif type == 2 then
+            ShipUtility.addFlagShipEquipment(craft)
+        end
+        ShipUtility.addBossAntiTorpedoEquipment(boss)
+    else
+        ShipUtility.addMilitaryEquipment(craft, 1, 0)
+    end
+
+    if craft.numTurrets == 0 then
+        ShipUtility.addMilitaryEquipment(craft, 1, 0)
+    end
+
+    ShipAI(craft.index):setAggressive()
+    craft.title = title
+    craft.shieldDurability = craft.shieldMaxDurability
+
+    craft:setValue("is_pirate", 1)
 end
 
 

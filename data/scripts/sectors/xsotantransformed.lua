@@ -1,6 +1,8 @@
 package.path = package.path .. ";data/scripts/lib/?.lua"
 package.path = package.path .. ";data/scripts/?.lua"
 
+SectorGenerator = require ("SectorGenerator")
+
 local SectorTemplate = {}
 
 -- must be defined, will be used to get the probability of this sector
@@ -91,8 +93,11 @@ function SectorTemplate.generate(player, seed, x, y)
 
     template.generate(player, seed, x, y)
 
+    local generator = SectorGenerator(x, y)
+    local sector = Sector()
+
     -- destroy everything
-    local entities = {Sector():getEntitiesByComponent(ComponentType.Owner)}
+    local entities = {sector:getEntitiesByComponent(ComponentType.Owner)}
     for _, entity in pairs(entities) do
 
         -- remove backup script so there won't be any additional ships
@@ -105,32 +110,31 @@ function SectorTemplate.generate(player, seed, x, y)
         end
 
         if entity:hasComponent(ComponentType.Durability) then
-            SectorTemplate.split(entity)
+            if Faction(entity.factionIndex).isAIFaction then
+                local blockPlan = Plan(entity.id):getMove()
+                local wreckage = generator:createWreckage(faction, blockPlan, 0)
+                SectorTemplate.split(wreckage)
 
-            -- splitting it probably won't destroy it
-            -- make sure it will be destroyed
-            entity.durability = 0
+                entity:clearCargoBay()
+                sector:deleteEntity(entity)
+            end
         else
             entity.factionIndex = 0
         end
-
     end
 
     -- delete loot
-    local sector = Sector()
     local loot = {sector:getEntitiesByType(EntityType.Loot)}
     for _, entity in pairs(loot) do
         sector:deleteEntity(entity)
     end
 
     -- re-orient them all
-    for _, entity in pairs({Sector():getEntities()}) do
+    for _, entity in pairs({sector:getEntities()}) do
         entity.orientation = MatrixLookUp(vec3(math.random(), math.random(), math.random()), -vec3(math.random(), math.random(), math.random()))
     end
 
     -- generate xsotan
-    local generator = SectorGenerator(x, y)
-
     Xsotan.infectAsteroids()
 
     for i = 1, math.random(10, 15) do

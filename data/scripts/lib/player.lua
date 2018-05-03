@@ -13,6 +13,11 @@ function CheckShipDocked(faction, ship, object, errors, generic)
     local object = object or Entity()
     if not object then return false end
 
+    -- allow docking to itself
+    if ship and object and ship.id == object.id then
+        return true
+    end
+
     if not ship then
         local error = "You're not in a ship."%_T
         if faction.isPlayer then
@@ -27,7 +32,7 @@ function CheckShipDocked(faction, ship, object, errors, generic)
             error = errors[object.type] or generic or "You must be docked to the object for this."%_T
         end
     else
-        if object:getNearestDistance(ship) > 20 then
+        if object:getNearestDistance(ship) > 50 then
             error = errors[object.type] or generic or "You must be closer to the object for this."%_T
         end
     end

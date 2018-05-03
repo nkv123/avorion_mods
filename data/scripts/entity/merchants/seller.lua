@@ -72,6 +72,12 @@ function Seller.initialize(name_in, ...)
         end
 
         Seller.initializeTrading({}, sold)
+
+        if Faction().isAIFaction then
+            Sector():registerCallback("onRestoredFromDisk", "onRestoredFromDisk")
+        end
+
+        math.randomseed(appTimeMs())
     else
         Seller.requestGoods()
 
@@ -83,22 +89,14 @@ function Seller.initialize(name_in, ...)
 
 end
 
+function Seller.onRestoredFromDisk(timeSinceLastSimulation)
+    Seller.simulatePassedTime(timeSinceLastSimulation)
+end
+
 -- create all required UI elements for the client side
 function Seller.initUI()
 
-    local res = getResolution()
-    local size = vec2(950, 650)
-
-    local menu = ScriptUI()
-    window = menu:createWindow(Rect(res * 0.5 - size * 0.5, res * 0.5 + size * 0.5));
-    menu:registerWindow(window, "Buy Goods"%_t);
-
-    window.caption = ""
-    window.showCloseButton = 1
-    window.moveable = 1
-
-    -- create a tabbed window inside the main window
-    local tabbedWindow = window:createTabbedWindow(Rect(vec2(10, 10), size - 10))
+    local tabbedWindow = TradingAPI.CreateTabbedWindow()
 
     -- create buy tab
     local buyTab = tabbedWindow:createTab("Buy"%_t, "data/textures/icons/purse.png", "Buy from station"%_t)
@@ -122,7 +120,9 @@ function Seller.sendName()
 end
 
 function Seller.receiveName(name)
-    window.caption = name%_t
+    if TradingAPI.window.caption ~= "" and name ~= "" then
+        TradingAPI.window.caption = name%_t
+    end
 end
 
 function Seller.onShowWindow()

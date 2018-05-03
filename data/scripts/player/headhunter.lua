@@ -1,11 +1,12 @@
-if onServer() then
+if not onServer() then return end
 
 package.path = package.path .. ";data/scripts/lib/?.lua"
 package.path = package.path .. ";data/scripts/?.lua"
 
 require ("galaxy")
 require ("stringutility")
-local ShipGenerator = require ("shipgenerator")
+local AsyncShipGenerator = require ("asyncshipgenerator")
+local Placer = require("placer")
 
 local threshold = 60 * 15
 
@@ -83,29 +84,34 @@ end
 
 function HeadHunter.createEnemies(faction)
 
+    local onFinished = function(ships)
+        for _, ship in pairs(ships) do
+            ShipAI(ship):setAggressive()
+
+            if string.match(ship.title, "Persecutor") then
+                ship.title = "Head Hunter"%_T
+            end
+        end
+
+        Placer.resolveIntersections(ships)
+    end
+
     -- create the head hunters
     local dir = normalize(vec3(getFloat(-1, 1), getFloat(-1, 1), getFloat(-1, 1)))
     local up = vec3(0, 1, 0)
     local right = normalize(cross(dir, up))
     local pos = dir * 1500
 
-    local volume = Balancing_GetSectorShipVolume(faction:getHomeSectorCoordinates());
 
-    local enemy = ShipGenerator.createMilitaryShip(faction, MatrixLookUpPosition(-dir, up, pos), volume * 4)
-    enemy.title = "Head Hunter"%_t
-    ShipAI(enemy.index):setAggressive()
+    local generator = AsyncShipGenerator(HeadHunter, onFinished)
+    generator:startBatch()
 
-    local distance = enemy:getBoundingSphere().radius * 2 + 20
+    local volume = Balancing_GetSectorShipVolume(Sector():getCoordinates())
 
-    local enemy = ShipGenerator.createMilitaryShip(faction, MatrixLookUpPosition(-dir, up, pos + right * distance), volume * 2)
-    enemy.title = "Head Hunter"%_t
-    ShipAI(enemy.index):setAggressive()
+    generator:createPersecutorShip(faction, MatrixLookUpPosition(dir, up, pos), volume * 4)
+    generator:createPersecutorShip(faction, MatrixLookUpPosition(dir, up, pos), volume * 4)
+    generator:createBlockerShip(faction, MatrixLookUpPosition(dir, up, pos), volume * 2)
 
-    local enemy = ShipGenerator.createMilitaryShip(faction, MatrixLookUpPosition(-dir, up, pos + right * -distance), volume * 2)
-    enemy.title = "Hyperspace Blocker"%_t
-    enemy:addScript("blocker.lua", 1)
-    ShipAI(enemy.index):setAggressive()
-
-end
+    generator:endBatch()
 
 end

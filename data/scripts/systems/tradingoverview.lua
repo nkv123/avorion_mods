@@ -77,7 +77,7 @@ function getHistorySize(seed, rarity)
             return getInt(7, 15)
         elseif rarity.value == 4 then
             return getInt(4, 6)
-        elseif  rarity.value == 3 then
+        elseif rarity.value == 3 then
             return getInt(2, 3)
         end
     end
@@ -176,10 +176,10 @@ function collectSectorData()
 
     tradingData:insert({sellable = sellable, buyable = buyable})
 
-    analyzeSectorHistory()
+    updateTradingRoutes()
 end
 
-function analyzeSectorHistory()
+function updateTradingRoutes()
 
     if historySize == 0 then
         routes = {}
@@ -239,6 +239,9 @@ end
 
 function getData(playerIndex)
     local sellable, buyable = gatherData()
+    tradingData.data[tradingData.last] = {sellable = sellable, buyable = buyable}
+    updateTradingRoutes()
+
     invokeClientFunction(Player(playerIndex), "setData", sellable, buyable, routes)
 end
 

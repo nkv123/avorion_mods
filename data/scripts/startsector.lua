@@ -69,6 +69,10 @@ function SectorTemplate.generate(player, seed, x, y)
     generator:addAmbientEvents()
     Sector():removeScript("factionwar/initfactionwar.lua")
 
+    if GameSettings().difficulty <= Difficulty.Normal then
+        Sector():addScript("data/scripts/sector/neutralzone.lua")
+    end
+
     Placer.resolveIntersections()
 end
 

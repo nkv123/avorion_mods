@@ -55,6 +55,11 @@ function TradingPost.initialize()
 
         TradingPost.initializeTrading(bought, sold)
 
+        if Faction().isAIFaction then
+            Sector():registerCallback("onRestoredFromDisk", "onRestoredFromDisk")
+        end
+
+        math.randomseed(appTimeMs())
     else
         TradingPost.requestGoods()
 
@@ -68,23 +73,15 @@ function TradingPost.initialize()
     station:addScriptOnce("data/scripts/entity/merchants/cargotransportlicensemerchant.lua")
 end
 
+function TradingPost.onRestoredFromDisk(timeSinceLastSimulation)
+    TradingPost.simulatePassedTime(timeSinceLastSimulation)
+end
+
 -- this function gets called on creation of the entity the script is attached to, on client only
 -- AFTER initialize above
 -- create all required UI elements for the client side
 function TradingPost.initUI()
-    local size = vec2(950, 650)
-    local res = getResolution()
-
-    local menu = ScriptUI()
-    local mainWindow = menu:createWindow(Rect(res * 0.5 - size * 0.5, res * 0.5 + size * 0.5));
-    menu:registerWindow(mainWindow, "Buy / Sell Goods"%_t);
-
-    mainWindow.caption = "Trading Post"%_t
-    mainWindow.showCloseButton = 1
-    mainWindow.moveable = 1
-
-    -- create a tabbed window inside the main window
-    local tabbedWindow = mainWindow:createTabbedWindow(Rect(vec2(10, 10), size - 10))
+    local tabbedWindow = TradingAPI.CreateTabbedWindow("Trading Post"%_t)
 
     -- create buy tab
     local buyTab = tabbedWindow:createTab("Buy"%_t, "data/textures/icons/purse.png", "Buy from station"%_t)

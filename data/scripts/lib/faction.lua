@@ -53,11 +53,23 @@ function CheckFactionInteraction(playerIndex, relationThreshold, msg)
         interactor = player.alliance
     end
 
-    local faction = Faction()
+    local stationFaction = Faction()
+
+    -- alliance ships should always be able to interact with alliance-player stations
+    if stationFaction.isPlayer then
+        stationFaction = Player()
+
+        if interactor.isAlliance and stationFaction.allianceIndex == interactor.index then
+            return true
+        end
+    end
+
+    -- player ships should always be able to interact with alliance-stations
+    if stationFaction.index == player.allianceIndex then return true end
 
     if overriddenRelationThreshold then relationThreshold = overriddenRelationThreshold end
 
-    local relationLevel = interactor:getRelations(faction.index)
+    local relationLevel = interactor:getRelations(stationFaction.index)
 
     if relationLevel < relationThreshold then
         return false, msg or "Our records say that we're not allowed to do business with you.\n\nCome back when your relations to our faction are better."%_t
@@ -117,7 +129,7 @@ function getInteractingFactionByShip(shipIndex, callingPlayer, ...)
         player = Player(callingPlayer)
         if not player then return end
 
-        if player.craftIndex ~= shipIndex then return end
+        if player.craftIndex ~= Uuid(shipIndex) then return end
 
         if ship.factionIndex == player.allianceIndex then
             local requiredPrivileges = {...}

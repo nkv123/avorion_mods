@@ -48,6 +48,10 @@ function SellableFighterItem:boughtByPlayer(ship)
 
     local hangar = Hangar(ship.index)
 
+    if not hangar then
+        return "Your ship doesn't have a hangar."%_t, {}
+    end
+
     -- check if there is enough space in ship
     if hangar.freeSpace < self.fighter.volume then
         return "You don't have enough space in your hangar."%_t, {}
@@ -77,6 +81,10 @@ end
 function SellableFighterItem:soldByPlayer(ship)
 
     local hangar = Hangar(ship.index)
+
+    if not hangar then
+        return "Your ship doesn't have a hangar."%_t, {}
+    end
 
     self.fighter = hangar:getFighter(self.squadIndex, self.fighterIndex)
 

@@ -10,13 +10,13 @@ AIMine = {}
 local minedAsteroid = nil
 local minedLoot = nil
 local collectCounter = 0
-local canMine = false
+local canMine = nil
 
 function AIMine.getUpdateInterval()
     return 1
 end
 
-function AIMine.initialize()
+function AIMine.checkIfAbleToMine()
     if onServer() then
         local ship = Entity()
         if ship.numTurrets > 0 then
@@ -47,6 +47,10 @@ end
 -- this function will be executed every frame on the server only
 function AIMine.updateServer(timeStep)
     local ship = Entity()
+
+    if canMine == nil then
+        AIMine.checkIfAbleToMine()
+    end
 
     if ship.hasPilot or ship:getCrewMembers(CrewProfessionType.Captain) == 0 then
         terminate()

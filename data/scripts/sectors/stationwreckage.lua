@@ -65,25 +65,18 @@ function SectorTemplate.generate(player, seed, x, y)
         end
     end
 
-    -- destroy station
-    station:inflictDamage(station.durability * 10.0, 0, vec3(), station.index);
+    -- clear cargo bay so goods are not leaked when changing the plan
+    station:clearCargoBay()
 
-    -- delete loot
-    local sector = Sector()
-    local loot = {sector:getEntitiesByType(EntityType.Loot)}
-    for _, entity in pairs(loot) do
-        sector:deleteEntity(entity)
-    end
-
-    local wreckages = {sector:getEntitiesByType(EntityType.Wreckage)}
-    for _, entity in pairs(wreckages) do
-        local timer = DeletionTimer(entity.index)
-        timer:disable()
-    end
+    local blockPlan = Plan(station.id):getMove()
+    generator:createWreckage(faction, blockPlan, 10)
 
     if math.random() < generator:getWormHoleProbability() then generator:createRandomWormHole() end
 
-    Sector():addScript("data/scripts/sector/eventscheduler.lua", "events/pirateattack.lua")
+    local sector = Sector()
+    sector:deleteEntity(station)
+
+    sector:addScript("data/scripts/sector/eventscheduler.lua", "events/pirateattack.lua")
 
     Placer.resolveIntersections()
 end

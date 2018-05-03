@@ -65,7 +65,13 @@ function SpawnSwoks.spawnEnemies(player, x, y)
 
     pirates = {}
     table.insert(pirates, boss)
+    table.insert(pirates, PirateGenerator.createRaider(piratePosition()))
+    table.insert(pirates, PirateGenerator.createRaider(piratePosition()))
+    table.insert(pirates, PirateGenerator.createRavager(piratePosition()))
+    table.insert(pirates, PirateGenerator.createRavager(piratePosition()))
     table.insert(pirates, PirateGenerator.createMarauder(piratePosition()))
+    table.insert(pirates, PirateGenerator.createMarauder(piratePosition()))
+    table.insert(pirates, PirateGenerator.createPirate(piratePosition()))
     table.insert(pirates, PirateGenerator.createPirate(piratePosition()))
     table.insert(pirates, PirateGenerator.createBandit(piratePosition()))
     table.insert(pirates, PirateGenerator.createBandit(piratePosition()))

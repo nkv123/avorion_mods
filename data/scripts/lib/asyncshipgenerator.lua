@@ -38,6 +38,18 @@ local function finalizeShip(ship)
 end
 
 
+local function carriersPossible()
+    local x, y = Sector():getCoordinates()
+    return x * x + y * y < 290 * 290
+end
+
+local function disruptorsPossible()
+    local x, y = Sector():getCoordinates()
+    return x * x + y * y < 370 * 370
+end
+
+
+
 
 function AsyncShipGenerator:createShip(faction, position, volume)
     position = position or Matrix()
@@ -80,6 +92,8 @@ local function onDefenderPlanFinished(plan, generatorId, position, factionIndex)
     ship:addScript("antismuggle.lua")
     ship:setValue("is_armed", 1)
 
+    ship:addScript("icon.lua", "data/textures/icons/pixel/defender.png")
+
     finalizeShip(ship)
     onShipCreated(generatorId, ship)
 end
@@ -87,10 +101,16 @@ end
 
 
 function AsyncShipGenerator:createCarrier(faction, position, fighters)
+    if not carriersPossible() then
+        self:createMilitaryShip(faction, position)
+        return
+    end
+
     position = position or Matrix()
     fighters = fighters or 10
+
     -- carriers should be even beefier than the defenders
-    local volume = volume or Balancing_GetSectorShipVolume(Sector():getCoordinates()) * Balancing_GetShipVolumeDeviation()
+    local volume = volume or Balancing_GetSectorShipVolume(Sector():getCoordinates()) * 15.0
 
     PlanGenerator.makeAsyncCarrierPlan("_ship_generator_on_carrier_plan_generated", {self.generatorId, position, faction.index, fighters}, faction, volume)
     self:shipCreationStarted()
@@ -100,32 +120,8 @@ local function onCarrierPlanFinished(plan, generatorId, position, factionIndex, 
     local faction = Faction(factionIndex)
     local ship = Sector():createShip(faction, "", plan, position)
 
-    -- add fighters
-    local hangar = Hangar(ship.index)
-    hangar:addSquad("Alpha")
-    hangar:addSquad("Beta")
-    hangar:addSquad("Gamma")
-
-    local numFighters = 0
-    for squad = 0, 2 do
-        local fighter = FighterGenerator.generateArmed(faction:getHomeSectorCoordinates())
-        for i = 1, 7 do
-            hangar:addFighter(squad, fighter)
-
-            numFighters = numFighters + 1
-            if numFighters >= fighters then break end
-        end
-
-        if numFighters >= fighters then break end
-    end
-
-    local turrets = Balancing_GetEnemySectorTurrets(Sector():getCoordinates())
-
-    ShipUtility.addArmedTurretsToCraft(ship, turrets)
-    ship.title = ShipUtility.getMilitaryNameByVolume(ship.volume)
-
+    ShipUtility.addCarrierEquipment(ship, fighters)
     ship:addScript("ai/patrol.lua")
-    ship:setValue("is_armed", 1)
 
     finalizeShip(ship)
     onShipCreated(generatorId, ship)
@@ -145,11 +141,137 @@ local function onMilitaryPlanFinished(plan, generatorId, position, factionIndex)
     local faction = Faction(factionIndex)
     local ship = Sector():createShip(faction, "", plan, position)
 
-    local turrets = Balancing_GetEnemySectorTurrets(Sector():getCoordinates())
+    ShipUtility.addMilitaryEquipment(ship, 1, 0)
 
-    ShipUtility.addArmedTurretsToCraft(ship, turrets)
-    ship.title = ShipUtility.getMilitaryNameByVolume(ship.volume)
-    ship:setValue("is_armed", 1)
+    finalizeShip(ship)
+    onShipCreated(generatorId, ship)
+end
+
+
+
+function AsyncShipGenerator:createTorpedoShip(faction, position, volume)
+    position = position or Matrix()
+    volume = volume or Balancing_GetSectorShipVolume(Sector():getCoordinates()) * Balancing_GetShipVolumeDeviation()
+
+    PlanGenerator.makeAsyncShipPlan("_ship_generator_on_torpedo_plan_generated", {self.generatorId, position, faction.index}, faction, volume)
+    self:shipCreationStarted()
+end
+
+local function onTorpedoShipPlanFinished(plan, generatorId, position, factionIndex)
+    local faction = Faction(factionIndex)
+    local ship = Sector():createShip(faction, "", plan, position)
+
+    ShipUtility.addTorpedoBoatEquipment(ship)
+
+    finalizeShip(ship)
+    onShipCreated(generatorId, ship)
+end
+
+
+
+function AsyncShipGenerator:createDisruptorShip(faction, position, volume)
+    if not disruptorsPossible() then
+        self:createMilitaryShip(faction, position)
+        return
+    end
+
+    position = position or Matrix()
+    volume = volume or Balancing_GetSectorShipVolume(Sector():getCoordinates()) * Balancing_GetShipVolumeDeviation()
+
+    PlanGenerator.makeAsyncShipPlan("_ship_generator_on_disruptor_plan_generated", {self.generatorId, position, faction.index}, faction, volume)
+    self:shipCreationStarted()
+end
+
+local function onDisruptorShipPlanFinished(plan, generatorId, position, factionIndex)
+    local faction = Faction(factionIndex)
+    local ship = Sector():createShip(faction, "", plan, position)
+
+    ShipUtility.addDisruptorEquipment(ship)
+
+    finalizeShip(ship)
+    onShipCreated(generatorId, ship)
+end
+
+
+
+function AsyncShipGenerator:createCIWSShip(faction, position, volume)
+    if not carriersPossible() then
+        self:createMilitaryShip(faction, position)
+        return
+    end
+
+    position = position or Matrix()
+    volume = volume or Balancing_GetSectorShipVolume(Sector():getCoordinates()) * Balancing_GetShipVolumeDeviation()
+
+    PlanGenerator.makeAsyncShipPlan("_ship_generator_on_ciws_plan_generated", {self.generatorId, position, faction.index}, faction, volume)
+    self:shipCreationStarted()
+end
+
+local function onCIWSShipPlanFinished(plan, generatorId, position, factionIndex)
+    local faction = Faction(factionIndex)
+    local ship = Sector():createShip(faction, "", plan, position)
+
+    ShipUtility.addCIWSEquipment(ship)
+
+    finalizeShip(ship)
+    onShipCreated(generatorId, ship)
+end
+
+
+
+function AsyncShipGenerator:createPersecutorShip(faction, position, volume)
+    position = position or Matrix()
+    volume = volume or Balancing_GetSectorShipVolume(Sector():getCoordinates()) * Balancing_GetShipVolumeDeviation()
+
+    PlanGenerator.makeAsyncShipPlan("_ship_generator_on_persecutor_plan_generated", {self.generatorId, position, faction.index}, faction, volume)
+    self:shipCreationStarted()
+end
+
+local function onPersecutorShipPlanFinished(plan, generatorId, position, factionIndex)
+    local faction = Faction(factionIndex)
+    local ship = Sector():createShip(faction, "", plan, position)
+
+    ShipUtility.addPersecutorEquipment(ship)
+
+    finalizeShip(ship)
+    onShipCreated(generatorId, ship)
+end
+
+
+
+function AsyncShipGenerator:createBlockerShip(faction, position, volume)
+    position = position or Matrix()
+    volume = volume or Balancing_GetSectorShipVolume(Sector():getCoordinates()) * Balancing_GetShipVolumeDeviation()
+
+    PlanGenerator.makeAsyncShipPlan("_ship_generator_on_blocker_plan_generated", {self.generatorId, position, faction.index}, faction, volume)
+    self:shipCreationStarted()
+end
+
+local function onBlockerShipPlanFinished(plan, generatorId, position, factionIndex)
+    local faction = Faction(factionIndex)
+    local ship = Sector():createShip(faction, "", plan, position)
+
+    ShipUtility.addBlockerEquipment(ship)
+
+    finalizeShip(ship)
+    onShipCreated(generatorId, ship)
+end
+
+
+
+function AsyncShipGenerator:createFlagShip(faction, position, volume)
+    position = position or Matrix()
+    volume = volume or Balancing_GetSectorShipVolume(Sector():getCoordinates()) * Balancing_GetShipVolumeDeviation() * 40
+
+    PlanGenerator.makeAsyncShipPlan("_ship_generator_on_flagship_plan_generated", {self.generatorId, position, faction.index}, faction, volume)
+    self:shipCreationStarted()
+end
+
+local function onFlagShipPlanFinished(plan, generatorId, position, factionIndex)
+    local faction = Faction(factionIndex)
+    local ship = Sector():createShip(faction, "", plan, position)
+
+    ShipUtility.addFlagShipEquipment(ship)
 
     finalizeShip(ship)
     onShipCreated(generatorId, ship)
@@ -179,6 +301,8 @@ local function onTraderPlanFinished(plan, generatorId, position, factionIndex)
     ship:addScript("civilship.lua")
     ship:addScript("dialogs/storyhints.lua")
     ship:setValue("is_civil", 1)
+
+    ship:addScript("icon.lua", "data/textures/icons/pixel/civil-ship.png")
 
     finalizeShip(ship)
     onShipCreated(generatorId, ship)
@@ -210,6 +334,8 @@ local function onFreighterPlanFinished(plan, generatorId, position, factionIndex
     ship:addScript("dialogs/storyhints.lua")
     ship:setValue("is_civil", 1)
 
+    ship:addScript("icon.lua", "data/textures/icons/pixel/civil-ship.png")
+
     finalizeShip(ship)
     onShipCreated(generatorId, ship)
 end
@@ -236,6 +362,8 @@ local function onMiningPlanFinished(plan, generatorId, position, factionIndex)
     ship:addScript("civilship.lua")
     ship:addScript("dialogs/storyhints.lua")
     ship:setValue("is_civil", 1)
+
+    ship:addScript("icon.lua", "data/textures/icons/pixel/civil-ship.png")
 
     finalizeShip(ship)
     onShipCreated(generatorId, ship)
@@ -303,6 +431,12 @@ local function new(namespace, onGeneratedCallback)
         namespace._ship_generator_on_carrier_plan_generated = onCarrierPlanFinished
         namespace._ship_generator_on_freighter_plan_generated = onFreighterPlanFinished
         namespace._ship_generator_on_military_plan_generated = onMilitaryPlanFinished
+        namespace._ship_generator_on_torpedo_plan_generated = onTorpedoShipPlanFinished
+        namespace._ship_generator_on_disruptor_plan_generated = onDisruptorShipPlanFinished
+        namespace._ship_generator_on_persecutor_plan_generated = onPersecutorShipPlanFinished
+        namespace._ship_generator_on_blocker_plan_generated = onBlockerShipPlanFinished
+        namespace._ship_generator_on_ciws_plan_generated = onCIWSShipPlanFinished
+        namespace._ship_generator_on_flagship_plan_generated = onFlagShipPlanFinished
         namespace._ship_generator_on_trader_plan_generated = onTraderPlanFinished
         namespace._ship_generator_on_mining_plan_generated = onMiningPlanFinished
     else
@@ -312,6 +446,12 @@ local function new(namespace, onGeneratedCallback)
         _ship_generator_on_carrier_plan_generated = onCarrierPlanFinished
         _ship_generator_on_freighter_plan_generated = onFreighterPlanFinished
         _ship_generator_on_military_plan_generated = onMilitaryPlanFinished
+        _ship_generator_on_torpedo_plan_generated = onTorpedoShipPlanFinished
+        _ship_generator_on_disruptor_plan_generated = onDisruptorShipPlanFinished
+        _ship_generator_on_persecutor_plan_generated = onPersecutorShipPlanFinished
+        _ship_generator_on_blocker_plan_generated = onBlockerShipPlanFinished
+        _ship_generator_on_ciws_plan_generated = onCIWSShipPlanFinished
+        _ship_generator_on_flagship_plan_generated = onFlagShipPlanFinished
         _ship_generator_on_trader_plan_generated = onTraderPlanFinished
         _ship_generator_on_mining_plan_generated = onMiningPlanFinished
     end

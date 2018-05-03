@@ -71,6 +71,9 @@ function DockAI.flyToDock(ship, station)
         if station:isDocked(ship) then
             ai:setPassive()
             return true
+        else
+            -- tractor beams are active
+            return false, true
         end
     end
 

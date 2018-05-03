@@ -89,7 +89,7 @@ function addConstructionScaffold(entity)
     local connector = scaffold:addBlock(vec3(0, 0, 0), vec3(10 + middleDiameter, middleDiameter, middleDiameter), 0, -1, c, m, o, blank)
     local root = scaffold:addBlock(vec3(0, 0, 0), mblock, connector, -1, c, m, o, blank)
 
-    local plan = entity:getPlan()
+    local plan = entity:getMovePlan()
 
     local highestZ = plan:getNthBlock(0)
     local lowestZ = highestZ
@@ -115,7 +115,7 @@ function addConstructionScaffold(entity)
     end
 
     -- update plan
-    entity:setPlan(plan)
+    entity:setMovePlan(plan)
 end
 
 function addProductionCenters(entity, numAdditions, sizeX, sizeY)
@@ -250,7 +250,7 @@ function addProductionCenters(entity, numAdditions, sizeX, sizeY)
     local center = panels:getBlock(0).box.center
 
     -- find extremest blocks for +z and -z
-    local plan = entity:getPlan()
+    local plan = entity:getMovePlan()
 
     local highestZ = plan:getNthBlock(0)
     local lowestZ = highestZ
@@ -319,7 +319,7 @@ function addProductionCenters(entity, numAdditions, sizeX, sizeY)
     end
 
     -- update plan
-    entity:setPlan(plan)
+    entity:setMovePlan(plan)
 end
 
 function addFarmingCenters(entity, arms, sizeX, sizeY)
@@ -382,7 +382,7 @@ function addFarmingCenters(entity, arms, sizeX, sizeY)
     local center = panels:getBlock(0).box.center
 
     -- find extremest blocks for +z and -z
-    local plan = entity:getPlan()
+    local plan = entity:getMovePlan()
 
     local highestZ = plan:getNthBlock(0)
     local lowestZ = highestZ
@@ -445,7 +445,7 @@ function addFarmingCenters(entity, arms, sizeX, sizeY)
     end
 
     -- update plan
-    entity:setPlan(plan)
+    entity:setMovePlan(plan)
 end
 
 function addSolarPanels(entity, arms)
@@ -502,7 +502,7 @@ function addSolarPanels(entity, arms)
     end
 
     -- find extremest blocks for +y and -y
-    local plan = entity:getPlan()
+    local plan = entity:getMovePlan()
 
     local highest = plan:getNthBlock(0)
     local lowest = highest
@@ -552,7 +552,7 @@ function addSolarPanels(entity, arms)
     end
 
     -- update plan
-    entity:setPlan(plan)
+    entity:setMovePlan(plan)
 
 
 end
@@ -561,7 +561,7 @@ function addAsteroid(entity)
 
     local asteroid = PlanGenerator.makeBigAsteroidPlan(getFloat(80, 100), 0, Material(MaterialType.Iron), 15)
 
-    local plan = entity:getPlan()
+    local plan = entity:getMovePlan()
 
     -- make sure the station isn't too big, this looks weird in combination with the asteroid;
     -- 250 seems to be a good visually pleasing max height/width/depth
@@ -585,7 +585,7 @@ function addAsteroid(entity)
     plan:addPlanDisplaced(block.index, asteroid, 0, block.box.center + vec3(0, asteroid:getBoundingBox().size.y * 0.35, 0))
 
     -- update plan
-    entity:setPlan(plan)
+    entity:setMovePlan(plan)
 
 end
 
@@ -644,7 +644,7 @@ function addCargoStorage(entity, numAdditions, sizeX, sizeY)
     local center = containers:getBlock(0).box.center
 
     -- find extremest blocks for +z and -z
-    local plan = entity:getPlan()
+    local plan = entity:getMovePlan()
 
     local highestZ = plan:getNthBlock(0)
     local lowestZ = highestZ
@@ -713,5 +713,5 @@ function addCargoStorage(entity, numAdditions, sizeX, sizeY)
     end
 
     -- update plan
-    entity:setPlan(plan)
+    entity:setMovePlan(plan)
 end

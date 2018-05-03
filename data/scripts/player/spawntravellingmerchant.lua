@@ -24,6 +24,9 @@ function initialize()
 
     local ship = ShipGenerator.createTradingShip(faction, matrix)
 
+    ship:invokeFunction("icon.lua", "set", nil)
+    ship:removeScript("icon.lua")
+
     local index = random():getInt(1, #merchants)
     local merchant = merchants[index]
     local argument

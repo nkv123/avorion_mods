@@ -11,7 +11,7 @@ AntiSmuggle = {}
 local suspicion
 
 local values = {}
-values.timeOut = 60
+values.timeOut = 120
 
 local scannerTicker = 0
 local scannerTick = 10
@@ -157,10 +157,10 @@ function AntiSmuggle.updateSuspicionDetectedBehaviour(timeStep)
         suspicion.timeOut = values.timeOut
 
         local faction = Faction()
-        Galaxy():changeFactionRelations(faction, Faction(suspicion.factionIndex), -5000 - (2500 * faction:getTrait("strict")), true, true)
+        Galaxy():changeFactionRelations(faction, Faction(suspicion.factionIndex), -2500 - (1250 * faction:getTrait("strict")), true, true)
 
         if valid(suspicion.player) then
-            invokeClientFunction(suspicion.player, "startTalk", suspicion.type, suspicion.fine)
+            invokeClientFunction(suspicion.player, "startHailing", suspicion.type, suspicion.fine)
         end
     end
 
@@ -281,9 +281,17 @@ function AntiSmuggle.makeDangerousDialog(fine)
     return dialog0
 end
 
+function AntiSmuggle.startHailing(type, fine)
+    suspicion = {type = type, fine = fine}
 
-function AntiSmuggle.startTalk(type, fine)
+    ScriptUI():startHailing("startTalk", "startEnemyTalk")
+end
+
+function AntiSmuggle.startTalk()
     local dialog = nil
+
+    local type = suspicion.type
+    local fine = suspicion.fine
 
     fine = createMonetaryString(fine)
 
@@ -300,10 +308,8 @@ function AntiSmuggle.startTalk(type, fine)
     ScriptUI():interactShowDialog(dialog, 0)
 end
 
-function AntiSmuggle.startEnemyTalk(type)
-    local dialog = {text = "Your non-responsiveness is considered a hostile act."%_t}
-
-    ScriptUI():interactShowDialog(dialog, 0)
+function AntiSmuggle.startEnemyTalk(type)   
+    Player():sendChatMessage("Your non-responsiveness is considered a hostile act."%_t)
 end
 
 
@@ -313,7 +319,7 @@ function AntiSmuggle.onComply()
         return
     end
 
-if suspicion and suspicion.factionIndex and suspicion.player and suspicion.player.index == callingPlayer then
+    if suspicion and suspicion.factionIndex and suspicion.player and suspicion.player.index == callingPlayer then
         suspicion.responded = true
         Faction(suspicion.factionIndex):pay("Paid a fine of %1% credits."%_T, suspicion.fine)
     end

@@ -30,7 +30,7 @@ function BulletinBoard.initUI()
     window.caption = "${entity} Bulletin Board"%_t % {entity = (Entity().translatedTitle or "")%_t}
     window.showCloseButton = 1
     window.moveable = 1
-    menu:registerWindow(window, "Electronic Bulletin Board"%_t);
+    menu:registerWindow(window, "Bulletin Board"%_t);
 
     local hsplit = UIHorizontalSplitter(Rect(size), 10, 10, 0.6)
 

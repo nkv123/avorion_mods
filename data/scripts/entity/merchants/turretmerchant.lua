@@ -81,5 +81,5 @@ function TurretMerchant.initialize()
 end
 
 function TurretMerchant.initUI()
-    TurretMerchant.shop:initUI("Buy/Sell Turrets"%_t, "Turret Merchant"%_t)
+    TurretMerchant.shop:initUI("Trade Equipment"%_t, "Turret Merchant"%_t, "Turrets"%_t)
 end

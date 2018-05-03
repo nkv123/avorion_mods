@@ -37,7 +37,6 @@ local updateFrequency
 local updateTime
 
 function MilitaryOutpost.updateBulletins(timeStep)
-
     if not updateFrequency then
         -- more frequent updates when there are more ingredients
         updateFrequency = 60 * 60
@@ -60,8 +59,11 @@ function MilitaryOutpost.updateBulletins(timeStep)
     if updateTime < updateFrequency then return end
     updateTime = updateTime - updateFrequency
 
-    local bulletin = MilitaryOutpost.getBulletin()
-    if not bulletin then return end
+    local clear = MilitaryOutpost.getClear()
+    if not clear then return end
+
+    local explore = MilitaryOutpost.getExplore()
+    if not explore then return end
 
     -- since in this case "add" can override "remove", adding a bulletin is slightly more probable
     local add = r:getFloat() < 0.5
@@ -77,16 +79,93 @@ function MilitaryOutpost.updateBulletins(timeStep)
 
     if add then
         -- randomly add bulletins
-        Entity():invokeFunction("bulletinboard", "postBulletin", bulletin)
+        local choice = math.random(1,2)
+        if choice == 1 then
+            Entity():invokeFunction("bulletinboard", "postBulletin", clear)
+        elseif choice == 2 then
+            Entity():invokeFunction("bulletinboard", "postBulletin", explore)
+        end
+
     elseif remove then
         -- randomly remove bulletins
-        Entity():invokeFunction("bulletinboard", "removeBulletin", bulletin.brief)
+        local choice = math.random(1,2)
+        if choice == 1 then
+            Entity():invokeFunction("bulletinboard", "removeBulletin", clear.brief)
+        elseif choice == 2 then
+            Entity():invokeFunction("bulletinboard", "removeBulletin", explore.brief)
+        end
     end
+
+
+
 
 end
 
-function MilitaryOutpost.getBulletin()
+function MilitaryOutpost.getExplore()
+    return MilitaryOutpost.getExploreSectorBulletin()
+end
+
+function MilitaryOutpost.getClear()
     return MilitaryOutpost.getClearSectorBulletin()
+end
+
+function MilitaryOutpost.getExploreSectorBulletin()
+    local specs = SectorSpecifics()
+    local x, y = Sector():getCoordinates()
+    local coords = specs.getShuffledCoordinates(random(), x, y, 10, 20)
+    local serverSeed = Server().seed
+    local target = nil
+
+    for _, coord in pairs(coords) do
+        local regular, offgrid, blocked, home = specs:determineContent(coord.x, coord.y, serverSeed)
+
+        if not regular and offgrid and not blocked and not home then
+            specs:initialize(coord.x, coord.y, serverSeed)
+
+            --only sectors with containerfield, cultists, wreckage, pirates, resitance or smugglers should be used
+            if specs.generationTemplate.path == "sectors/containerfield"
+                or specs.generationTemplate.path == "sectors/cultists"
+                or specs.generationTemplate.path == "sectors/functionalwreckage"
+                or specs.generationTemplate.path == "sectors/pirateastroidfield"
+                or specs.generationTemplate.path == "sectors/piratefight"
+                or specs.generationTemplate.path == "sectors/piratestation"
+                or specs.generationTemplate.path == "sectors/resitancecell"
+                or specs.generationTemplate.path == "sectors/smugglerhideout"
+                or specs.generationTemplate.path == "sectors/stationwreckage"
+                or specs.generationTemplate.path == "sectors/wreckageastroidfield"
+                or specs.generationTemplate.path == "sectors/wreckagefiled" then
+                target = coord
+            end
+        end
+    end
+
+    if not target then return end
+
+    local description = "We are interested in a nearby sector. We need someone to explore it in our name.\n\nSector: (${x} : ${y})"%_t
+
+    reward = 20000 * Balancing.GetSectorRichnessFactor(Sector():getCoordinates())
+
+    local bulletin =
+    {
+        brief = "Explore Sector"%_t,
+        description = description,
+        difficulty = "Easy /*difficulty*/"%_t,
+        reward = "$${reward}",
+        script = "missions/exploresector/exploresector.lua",
+        arguments = {Entity().index, target.x, target.y, reward},
+        formatArguments = {x = target.x, y = target.y, reward = createMonetaryString(reward)},
+        msg = "The sector is \\s(%i:%i)."%_T,
+        entityTitle = Entity().title,
+        entityTitleArgs = Entity():getTitleArguments(),
+        onAccept = [[
+            local self, player = ...
+            local title = self.entityTitle % self.entityTitleArgs
+            player:sendChatMessage(title, 0, self.msg, self.formatArguments.x, self.formatArguments.y)
+        ]]
+    }
+
+    return bulletin
+
 end
 
 function MilitaryOutpost.getClearSectorBulletin()
@@ -97,7 +176,6 @@ function MilitaryOutpost.getClearSectorBulletin()
     local coords = specs.getShuffledCoordinates(random(), x, y, 2, 15)
     local serverSeed = Server().seed
     local target = nil
-    local destinations = specs.getRegularStationSectors()
 
     for _, coord in pairs(coords) do
         local regular, offgrid, blocked, home = specs:determineContent(coord.x, coord.y, serverSeed)

@@ -29,6 +29,9 @@ function RelationChanges.onDestroyed(destroyedIndex, destroyerIndex)
     if destroyed.factionIndex == destroyer.factionIndex then return end
     if destroyedFaction == -1 or destroyedFaction == 0 or destroyerFaction == -1 or destroyerFaction == 0 then return end
 
+    -- no relation losses for torpedoes
+    if destroyed.type == EntityType.Torpedo then return end
+
     -- find all factions that are present in the sector
     local crafts = {Sector():getEntitiesByComponent(ComponentType.Crew)}
 

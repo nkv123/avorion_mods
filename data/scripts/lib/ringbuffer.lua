@@ -6,7 +6,8 @@ local function new(max)
 end
 
 function RingBuffer:insert(element)
-    self.data[self.index + 1] = element
+    self.last = self.index + 1
+    self.data[self.last] = element
     self.index = ((self.index + 1) % self.max)
 end
 

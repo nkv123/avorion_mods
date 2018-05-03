@@ -40,7 +40,7 @@ end
 function getTooltipLines(seed, rarity)
     return
     {
-        {ltext = "All Turrets"%_t, rtext = "+" .. getNumTurrets(seed, rarity), icon = "data/textures/icons/turret.png"}
+        {ltext = "Armed or Unarmed Turrets"%_t, rtext = "+" .. getNumTurrets(seed, rarity), icon = "data/textures/icons/turret.png"}
     }
 end
 

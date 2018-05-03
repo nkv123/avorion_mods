@@ -8,7 +8,7 @@ function execute(sender, commandName, ...)
         str = str .. v .. " "
     end
 
-    Server():broadcastChatMessage("", 0, str)
+    Server():broadcastChatMessage("", ChatMessageType.ServerInfo, str)
 
     return 0, "", ""
 end

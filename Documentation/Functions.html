@@ -80,6 +80,12 @@
 <a href="#async">async</a>
 </td></tr>
 <tr><td>
+<a href="#getCurrentLanguage">getCurrentLanguage</a>
+</td></tr>
+<tr><td>
+<a href="#checkSecureFilename">checkSecureFilename</a>
+</td></tr>
+<tr><td>
 <a href="#copy">copy</a>
 </td></tr>
 <tr><td>
@@ -93,12 +99,6 @@
 </td></tr>
 <tr><td>
 <a href="#deferredCallback">deferredCallback</a>
-</td></tr>
-<tr><td>
-<a href="#systemTimeMs">systemTimeMs</a>
-</td></tr>
-<tr><td>
-<a href="#systemTime">systemTime</a>
 </td></tr>
 <tr><td>
 <a href="#appTimeMs">appTimeMs</a>
@@ -129,6 +129,12 @@
 </td></tr>
 <tr><td>
 <a href="#async">async</a>
+</td></tr>
+<tr><td>
+<a href="#onServer">onServer</a>
+</td></tr>
+<tr><td>
+<a href="#onClient">onClient</a>
 </td></tr>
 <tr><td>
 <a href="#getParentFaction">getParentFaction</a>
@@ -371,7 +377,7 @@
 <div id="invokeClientFunction", class="codecontainer">
 <div id="invokeClientFunction", class="function">
 <p>
-<span class="keyword">function var</span> invokeClientFunction(<span class="type">Player</span> <span class="parameter">playerIndex</span>, <span class="type">string</span> <span class="parameter">functionName</span>, <span class="type">var...</span> <span class="parameter">arguments</span>) <br/>
+<span class="keyword">function var</span> invokeClientFunction(<span class="type">Player</span> <span class="parameter">player</span>, <span class="type">string</span> <span class="parameter">functionName</span>, <span class="type">var...</span> <span class="parameter">arguments</span>) <br/>
 </p>
 </div>
 <div id="invokeClientFunction", class="">
@@ -380,8 +386,8 @@ Invokes a function on a remote client, in the client instance of the caller scri
 </p>
 <p><span class="docheader">Parameters</span></p>
 <div class="indented">
-<span class="parameter">playerIndex</span>
-The player index of the client the function should be invoked on <br/>
+<span class="parameter">player</span>
+The player of the client the function should be invoked on <br/>
 <span class="parameter">functionName</span>
 The name of the scripting function that is to be executed <br/>
 <span class="parameter">arguments</span>
@@ -767,6 +773,38 @@ nothing
 </p>
 </div>
 </div>
+<div id="getCurrentLanguage", class="codecontainer">
+<div id="getCurrentLanguage", class="function">
+<p>
+<span class="keyword">function string</span> getCurrentLanguage() <br/>
+</p>
+</div>
+<div id="getCurrentLanguage", class="">
+<p>
+Returns the current language code. <br/><br/><span class="warning">This function is only available on the client.</span>
+</p>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+The language code, e.g. "en", "de", "ru", etc. 
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="checkSecureFilename", class="codecontainer">
+<div id="checkSecureFilename", class="function">
+<p>
+<span class="keyword">function var</span> checkSecureFilename(<span class="type">string</span> <span class="parameter">filename</span>) <br/>
+</p>
+</div>
+<div id="checkSecureFilename", class="">
+<p>
+<span class="warning">This function is only available on the client.</span>
+</p>
+</p>
+</div>
+</div>
 <div id="copy", class="codecontainer">
 <div id="copy", class="function">
 <p>
@@ -881,44 +919,6 @@ Arguments that will be passed to the callback function <br/>
 <div class="indented">
 <p>
 true if the callback was registered, false otherwise 
-</p>
-</div>
-</p>
-</div>
-</div>
-<div id="systemTimeMs", class="codecontainer">
-<div id="systemTimeMs", class="function">
-<p>
-<span class="keyword">function double</span> systemTimeMs() <br/>
-</p>
-</div>
-<div id="systemTimeMs", class="">
-<p>
-Returns the system time in milliseconds. Since lua doesn't support clocks that are accurate down to milliseconds. 
-</p>
-<p><span class="docheader">Returns</span></p>
-<div class="indented">
-<p>
-The system time in milliseconds 
-</p>
-</div>
-</p>
-</div>
-</div>
-<div id="systemTime", class="codecontainer">
-<div id="systemTime", class="function">
-<p>
-<span class="keyword">function double</span> systemTime() <br/>
-</p>
-</div>
-<div id="systemTime", class="">
-<p>
-Returns the system time in seconds. Since lua doesn't support clocks that are accurate down to milliseconds. 
-</p>
-<p><span class="docheader">Returns</span></p>
-<div class="indented">
-<p>
-The system time in seconds 
 </p>
 </div>
 </p>
@@ -1087,7 +1087,7 @@ nothing
 <div id="createMonetaryString", class="codecontainer">
 <div id="createMonetaryString", class="function">
 <p>
-<span class="keyword">function string</span> createMonetaryString(<span class="type">int</span> <span class="parameter">number</span>) <br/>
+<span class="keyword">function string</span> createMonetaryString(<span class="type">double</span> <span class="parameter">number</span>) <br/>
 </p>
 </div>
 <div id="createMonetaryString", class="">
@@ -1134,6 +1134,38 @@ A string containing the path to the top-level script file
 </p>
 </div>
 <div id="async", class="">
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="onServer", class="codecontainer">
+<div id="onServer", class="function">
+<p>
+<span class="keyword">function var</span> onServer() <br/>
+</p>
+</div>
+<div id="onServer", class="">
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="onClient", class="codecontainer">
+<div id="onClient", class="function">
+<p>
+<span class="keyword">function var</span> onClient() <br/>
+</p>
+</div>
+<div id="onClient", class="">
 <p><span class="docheader">Returns</span></p>
 <div class="indented">
 <p>
@@ -2152,9 +2184,12 @@ Returns the target slot on success, nil otherwise.
 <a href="PlayerFunctions.html">Player</a>
 <a href="SectorFunctions.html">Sector</a>
 <a href="ServerFunctions.html">Server</a>
+<a href="UsableInventoryItemFunctions.html">UsableInventoryItem</a>
 </div><div class="headerlisting">
 <span class="docheader">Common Components</span>
-<br><a href="DockingPositions.html">DockingPositions</a>
+<br><a href="TorpedoLauncher.html">TorpedoLauncher</a>
+<a href="ReadOnlyTorpedoLauncher.html">ReadOnlyTorpedoLauncher</a>
+<a href="DockingPositions.html">DockingPositions</a>
 <a href="Hangar.html">Hangar</a>
 <a href="ReadOnlyHangar.html">ReadOnlyHangar</a>
 <a href="BspTree.html">BspTree</a>
@@ -2209,9 +2244,11 @@ Returns the target slot on success, nil otherwise.
 <a href="Format.html">Format</a>
 <a href="Seed.html">Seed</a>
 <a href="Random.html">Random</a>
+<a href="UsableInventoryItem.html">UsableInventoryItem</a>
 <a href="FighterTemplate.html">FighterTemplate</a>
 <a href="BlockStatistics.html">BlockStatistics</a>
 <a href="VanillaInventoryItem.html">VanillaInventoryItem</a>
+<a href="GameSettings.html">GameSettings</a>
 <a href="Rarity.html">Rarity</a>
 <a href="PlanetSpecifics.html">PlanetSpecifics</a>
 <a href="CraftStyle.html">CraftStyle</a>
@@ -2221,6 +2258,7 @@ Returns the target slot on success, nil otherwise.
 <a href="Language.html">Language</a>
 <a href="Inventory.html">Inventory</a>
 <a href="PlanBspTree.html">PlanBspTree</a>
+<a href="TorpedoTemplate.html">TorpedoTemplate</a>
 <a href="Weapon.html">Weapon</a>
 <a href="Crew.html">Crew</a>
 <a href="CrewProfession.html">CrewProfession</a>
@@ -2316,16 +2354,15 @@ Returns the target slot on success, nil otherwise.
 <a href="Galaxy [Server].html">Galaxy [Server]</a>
 <a href="Alliance [Server].html">Alliance [Server]</a>
 <a href="Faction [Server].html">Faction [Server]</a>
-<a href="GameSettings.html">GameSettings</a>
 <a href="Player [Server].html">Player [Server]</a>
 </div><div class="lastheaderlisting">
 <span class="docheader">Enums</span>
 <br><a href="Enums.html#SoundType">SoundType</a>
 <a href="Enums.html#FontType">FontType</a>
-<a href="Enums.html#Difficulty">Difficulty</a>
 <a href="Enums.html#ChatMessageType">ChatMessageType</a>
 <a href="Enums.html#ComponentType">ComponentType</a>
 <a href="Enums.html#WeaponCategory">WeaponCategory</a>
+<a href="Enums.html#Difficulty">Difficulty</a>
 <a href="Enums.html#RarityType">RarityType</a>
 <a href="Enums.html#MoonType">MoonType</a>
 <a href="Enums.html#PlanetType">PlanetType</a>
@@ -2346,7 +2383,7 @@ Returns the target slot on success, nil otherwise.
 </div></div>
 <div class="disclaimer">
 <p>This is the official documentation for the scripting API of Avorion. This documentation is automatically generated and <strong>not</strong> necessarily complete. Depending on the context in which functions exist, some documentation such as descriptions, return values or variable names or types may be missing.</p>
-<p>Work in Progress. Documentation of Avorion Version: Beta 0.15 r9816</p>
+<p>Work in Progress. Documentation of Avorion Version: Beta 0.16.7 r11165</p>
 </div>
 <div class="footer">
 <p align="center">Work in Progress.</p>

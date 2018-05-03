@@ -103,7 +103,7 @@ function createMainDialog()
     revenge.text = "You'll get revenge on a man who betrayed you."%_t
     revenge.followUp = {text = "And, maybe, we can extract the Xsotan tech from his ship. I'll modify it so you can integrate it into your ship."%_t, answers = mainAnswers}
 
-    chiefEngineer.text = "I was Bottan's chief engineer. As such, I know everyhting about his hyperspace engine. It was me who integrated the Xsotan Technology into the ship."%_t
+    chiefEngineer.text = "I was Bottan's chief engineer. As such, I know everything about his hyperspace engine. It was me who integrated the Xsotan Technology into the ship."%_t
     chiefEngineer.followUp = {text = "That same drive that allows him to jump extreme distances very quickly."%_t, followUp = {
     text = "Since I know how it works, I can build a ray that disables his engine."%_t, answers = mainAnswers
     }}

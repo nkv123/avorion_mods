@@ -7,8 +7,6 @@ require ("stringutility")
 local TradingAPI = require ("tradingmanager")
 local Dialog = require("dialogutility")
 
-local window
-
 -- Don't remove or alter the following comment, it tells the game the namespace this script lives in. If you remove it, the script will break.
 -- namespace Consumer
 Consumer = {}
@@ -72,6 +70,12 @@ function Consumer.initialize(name_in, ...)
         end
 
         Consumer.initializeTrading(bought, {})
+
+        if Faction().isAIFaction then
+            Sector():registerCallback("onRestoredFromDisk", "onRestoredFromDisk")
+        end
+
+        math.randomseed(appTimeMs())
     else
         Consumer.requestGoods()
 
@@ -83,22 +87,14 @@ function Consumer.initialize(name_in, ...)
 
 end
 
+function Consumer.onRestoredFromDisk(timeSinceLastSimulation)
+    Consumer.simulatePassedTime(timeSinceLastSimulation)
+end
+
 -- create all required UI elements for the client side
 function Consumer.initUI()
 
-    local res = getResolution()
-    local size = vec2(950, 650)
-
-    local menu = ScriptUI()
-    window = menu:createWindow(Rect(res * 0.5 - size * 0.5, res * 0.5 + size * 0.5));
-    menu:registerWindow(window, "Sell Goods"%_t);
-
-    window.caption = ""
-    window.showCloseButton = 1
-    window.moveable = 1
-
-    -- create a tabbed window inside the main window
-    local tabbedWindow = window:createTabbedWindow(Rect(vec2(10, 10), size - 10))
+    local tabbedWindow = TradingAPI.CreateTabbedWindow()
 
     -- create buy tab
     local buyTab = tabbedWindow:createTab("Buy"%_t, "data/textures/icons/purse.png", "Buy from station"%_t)
@@ -112,9 +108,11 @@ function Consumer.initUI()
 
     Consumer.trader.guiInitialized = 1
 
-    invokeServerFunction("sendName")
-    Consumer.requestGoods()
+    if TradingAPI.window.caption ~= "" then
+        invokeServerFunction("sendName")
+    end
 
+    Consumer.requestGoods()
 end
 
 function Consumer.sendName()
@@ -122,7 +120,9 @@ function Consumer.sendName()
 end
 
 function Consumer.receiveName(name)
-    window.caption = name%_t
+    if TradingAPI.window.caption ~= "" and name ~= "" then
+        TradingAPI.window.caption = name%_t
+    end
 end
 
 function Consumer.onShowWindow()

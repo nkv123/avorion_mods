@@ -31,20 +31,26 @@ local function fillWeaponTooltipData(obj, tooltip)
     line.iconColor = iconColor
     tooltip:addLine(line)
 
+    local line = TooltipLine(lineHeight, fontSize)
+    line.ltext = "Material"%_t
+    line.rtext = obj.material.name
+    line.rcolor = obj.material.color
+    line.icon = "data/textures/icons/metal-bar.png";
+    line.iconColor = iconColor
+    tooltip:addLine(line)
+
     -- empty line
     tooltip:addLine(TooltipLine(15, 15))
 
     if obj.damage > 0 then
-        if obj.continuousBeam then
+        local line = TooltipLine(lineHeight, fontSize)
+        line.ltext = "Damage /s"%_t
+        line.rtext = round(obj.dps, 1)
+        line.icon = "data/textures/icons/screen-impact.png";
+        line.iconColor = iconColor
+        tooltip:addLine(line)
 
-            local line = TooltipLine(lineHeight, fontSize)
-            line.ltext = "Damage /s"%_t
-            line.rtext = round(obj.dps, 1)
-            line.icon = "data/textures/icons/screen-impact.png";
-            line.iconColor = iconColor
-            tooltip:addLine(line)
-
-        else
+        if not obj.continuousBeam then
             -- damage
             local line = TooltipLine(lineHeight, fontSize)
             line.ltext = "Damage"%_t
@@ -162,8 +168,44 @@ local function fillWeaponTooltipData(obj, tooltip)
     line.iconColor = iconColor
     tooltip:addLine(line)
 
+    local weapon = obj:getWeapons() -- take first weapon
+    if weapon.blockPenetration > 1 then
+        local line = TooltipLine(lineHeight, fontSize)
+        line.ltext = "Hull Penetration"%_t
+        line.rtext = weapon.blockPenetration .. " blocks"%_t
+        line.icon = "data/textures/icons/drill.png";
+        line.iconColor = iconColor
+        tooltip:addLine(line)
+    end
+
     -- empty line
     tooltip:addLine(TooltipLine(15, 15))
+
+    if obj.shotsUntilOverheated > 0 then
+        local line = TooltipLine(lineHeight, fontSize)
+        line.ltext = "Continuous Shots"%_t
+        line.rtext = obj.shotsUntilOverheated
+        line.icon = "data/textures/icons/lucifer-cannon.png";
+        line.iconColor = iconColor
+        tooltip:addLine(line)
+
+        local line = TooltipLine(lineHeight, fontSize)
+        line.ltext = "Time Until Overheated"%_t
+        line.rtext = round(obj.shootingTime, 1) .. "s /* Unit for seconds */"%_t
+        line.icon = "data/textures/icons/flame.png";
+        line.iconColor = iconColor
+        tooltip:addLine(line)
+
+        local line = TooltipLine(lineHeight, fontSize)
+        line.ltext = "Cooling Time"%_t
+        line.rtext = round(obj.coolingTime, 1) .. "s /* Unit for seconds */"%_t
+        line.icon = "data/textures/icons/snowflake-2.png";
+        line.iconColor = iconColor
+        tooltip:addLine(line)
+
+        -- empty line
+        tooltip:addLine(TooltipLine(15, 15))
+    end
 
     if obj.coolingType == 1 or obj.coolingType == 2 then
 
@@ -189,15 +231,6 @@ local function fillWeaponTooltipData(obj, tooltip)
         -- empty line
         tooltip:addLine(TooltipLine(15, 15))
     end
-
-    local line = TooltipLine(lineHeight, fontSize)
-    line.ltext = "Material"%_t
-    line.rtext = obj.material.name
-    line.rcolor = obj.material.color
-    line.icon = "data/textures/icons/metal-bar.png";
-    line.iconColor = iconColor
-    tooltip:addLine(line)
-
 end
 
 local function fillDescriptions(obj, tooltip, additional)
@@ -321,6 +354,17 @@ function makeTurretTooltip(turret)
     line.iconColor = iconColor
     tooltip:addLine(line)
 
+    -- slots
+    local line = TooltipLine(lineHeight, fontSize)
+    line.ltext = "Slots"%_t
+    line.rtext = round(turret.slots, 1)
+    line.icon = "data/textures/icons/small-square.png";
+    line.iconColor = iconColor
+    tooltip:addLine(line)
+
+    -- empty line
+    tooltip:addLine(TooltipLine(15, 15))
+
     -- automatic/independent firing
     if turret.automatic then
         local line = TooltipLine(lineHeight, fontSize)
@@ -328,10 +372,10 @@ function makeTurretTooltip(turret)
         line.icon = "data/textures/icons/cog.png";
         line.iconColor = iconColor
         tooltip:addLine(line)
-    end
 
-    -- empty line
-    tooltip:addLine(TooltipLine(15, 15))
+        -- empty line
+        tooltip:addLine(TooltipLine(15, 15))
+    end
 
     -- crew requirements
     local crew = turret:getCrew()
@@ -357,6 +401,10 @@ function makeTurretTooltip(turret)
     local description = {}
     if turret.automatic then
         table.insert(description, "Independent targeting, but deals less damage"%_t)
+    end
+
+    if turret.shieldDamageMultiplicator == 0 then
+        table.insert(description, "No damage to shields"%_t)
     end
 
     fillDescriptions(turret, tooltip, description)
@@ -468,4 +516,193 @@ function makeFighterTooltip(fighter)
     fillDescriptions(fighter, tooltip)
 
     return tooltip
+end
+
+function makeTorpedoTooltip(torpedo)
+    -- create tool tip
+    local tooltip = Tooltip()
+    tooltip.icon = torpedo.icon
+
+    -- title
+    local title
+
+    local line = TooltipLine(headLineSize, headLineFont)
+    line.ctext = torpedo.name
+    line.ccolor = torpedo.rarity.color
+    tooltip:addLine(line)
+
+    -- primary stats, one by one
+    local fontSize = 14
+    local lineHeight = 20
+
+    -- rarity name
+    local line = TooltipLine(5, 12)
+    line.ctext = tostring(torpedo.rarity)
+    line.ccolor = torpedo.rarity.color
+    tooltip:addLine(line)
+
+    -- primary stats, one by one
+    local fontSize = 14
+    local lineHeight = 20
+
+    local line = TooltipLine(lineHeight, fontSize)
+    line.ltext = "Tech"%_t
+    line.rtext = torpedo.tech
+    line.icon = "data/textures/icons/circuitry.png";
+    line.iconColor = iconColor
+    tooltip:addLine(line)
+
+    -- empty line
+    tooltip:addLine(TooltipLine(15, 15))
+
+    if torpedo.hullDamage > 0 and torpedo.damageVelocityFactor == 0 then
+        local line = TooltipLine(lineHeight, fontSize)
+        line.ltext = "Damage"%_t
+        line.rtext = toReadableValue(round(torpedo.hullDamage), "")
+        line.icon = "data/textures/icons/screen-impact.png";
+        line.iconColor = iconColor
+        tooltip:addLine(line)
+    elseif torpedo.damageVelocityFactor > 0 then
+        local line = TooltipLine(lineHeight, fontSize)
+        line.ltext = "Hull Damage"%_t
+        line.rtext = "up to ${damage}"%_t % {damage = toReadableValue(round(torpedo.maxVelocity * torpedo.damageVelocityFactor), "")}
+        line.icon = "data/textures/icons/screen-impact.png";
+        line.iconColor = iconColor
+        tooltip:addLine(line)
+    end
+
+    if torpedo.shieldDamage > 0 and torpedo.shieldDamage ~= torpedo.hullDamage then
+        local line = TooltipLine(lineHeight, fontSize)
+        line.ltext = "Shield Damage"%_t
+        line.rtext = toReadableValue(round(torpedo.shieldDamage), "")
+        line.icon = "data/textures/icons/screen-impact.png";
+        line.iconColor = iconColor
+        tooltip:addLine(line)
+    end
+
+    -- empty line
+    tooltip:addLine(TooltipLine(15, 15))
+
+    -- maneuverability
+    local line = TooltipLine(lineHeight, fontSize)
+    line.ltext = "Maneuverability"%_t
+    line.rtext = round(torpedo.turningSpeed, 2)
+    line.icon = "data/textures/icons/dodge.png";
+    line.iconColor = iconColor
+    tooltip:addLine(line)
+
+    local line = TooltipLine(lineHeight, fontSize)
+    line.ltext = "Speed"%_t
+    line.rtext = round(torpedo.maxVelocity * 10.0)
+    line.icon = "data/textures/icons/afterburn.png";
+    line.iconColor = iconColor
+    tooltip:addLine(line)
+
+    if torpedo.acceleration > 0 then
+        local line = TooltipLine(lineHeight, fontSize)
+        line.ltext = "Acceleration"%_t
+        line.rtext = round(torpedo.acceleration * 10.0)
+        line.icon = "data/textures/icons/blaster.png";
+        line.iconColor = iconColor
+        tooltip:addLine(line)
+    end
+
+    local line = TooltipLine(lineHeight, fontSize)
+    line.ltext = "Range"%_t
+    line.rtext = "${range} km" % {range = round(torpedo.reach * 10 / 1000, 2)}
+    line.icon = "data/textures/icons/target-shot.png";
+    line.iconColor = iconColor
+    tooltip:addLine(line)
+
+    if torpedo.storageEnergyDrain > 0 then
+        local line = TooltipLine(lineHeight, fontSize)
+        line.ltext = "Storage Energy"%_t
+        line.rtext = toReadableValue(round(torpedo.storageEnergyDrain), "W")
+        line.icon = "data/textures/icons/electric.png";
+        line.iconColor = iconColor
+        tooltip:addLine(line)
+    end
+
+    -- empty line
+    tooltip:addLine(TooltipLine(15, 15))
+
+    -- size
+    local line = TooltipLine(lineHeight, fontSize)
+    line.ltext = "Size"%_t
+    line.rtext = round(torpedo.size, 1)
+    line.icon = "data/textures/icons/missile-pod.png";
+    line.iconColor = iconColor
+    tooltip:addLine(line)
+
+    -- durability
+    local line = TooltipLine(lineHeight, fontSize)
+    line.ltext = "Durability"%_t
+    line.rtext = round(torpedo.durability)
+    line.icon = "data/textures/icons/health-normal.png";
+    line.iconColor = iconColor
+    tooltip:addLine(line)
+
+    -- empty line
+    tooltip:addLine(TooltipLine(15, 15))
+    tooltip:addLine(TooltipLine(15, 15))
+
+    -- specialties
+    local extraLines = 0
+
+    if torpedo.damageVelocityFactor > 0 then
+        local line = TooltipLine(lineHeight, fontSize)
+        line.ltext = "Damage Dependent on Velocity"%_t
+        tooltip:addLine(line)
+
+        extraLines = extraLines + 1
+    end
+
+    if torpedo.shieldDeactivation then
+        local line = TooltipLine(lineHeight, fontSize)
+        line.ltext = "Briefly Deactivates Shields"%_t
+        tooltip:addLine(line)
+
+        extraLines = extraLines + 1
+    end
+
+    if torpedo.energyDrain then
+        local line = TooltipLine(lineHeight, fontSize)
+        line.ltext = "Drains Target's Energy"%_t
+        tooltip:addLine(line)
+
+        extraLines = extraLines + 1
+    end
+
+    if torpedo.shieldPenetration then
+        local line = TooltipLine(lineHeight, fontSize)
+        line.ltext = "Penetrates Shields"%_t
+        tooltip:addLine(line)
+
+        extraLines = extraLines + 1
+    end
+
+    if torpedo.shieldAndHullDamage then
+        local line = TooltipLine(lineHeight, fontSize)
+        line.ltext = "Damages Both Shield and Hull"%_t
+        tooltip:addLine(line)
+
+        extraLines = extraLines + 1
+    end
+
+    if torpedo.storageEnergyDrain > 0 then
+        local line = TooltipLine(lineHeight, fontSize)
+        line.ltext = "Requires Energy in Storage"%_t
+        tooltip:addLine(line)
+
+        extraLines = extraLines + 1
+    end
+
+    for i = 1, 3 - extraLines do
+        -- empty line
+        tooltip:addLine(TooltipLine(15, 15))
+    end
+
+
+    return tooltip
+
 end

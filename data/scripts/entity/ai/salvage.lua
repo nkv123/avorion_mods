@@ -10,13 +10,13 @@ AISalvage = {}
 local minedWreckage = nil
 local minedLoot = nil
 local collectCounter = 0
-local canSalvage = false
+local canSalvage = nil
 
 function AISalvage.getUpdateInterval()
     return 1
 end
 
-function AISalvage.initialize()
+function AISalvage.checkIfAbleToSalvage()
     if onServer() then
         local ship = Entity()
         if ship.numTurrets > 0 then
@@ -47,6 +47,10 @@ end
 -- this function will be executed every frame on the server only
 function AISalvage.updateServer(timeStep)
     local ship = Entity()
+
+    if canSalvage == nil then
+        AISalvage.checkIfAbleToSalvage()
+    end
 
     if ship.hasPilot or ship:getCrewMembers(CrewProfessionType.Captain) == 0 then
         terminate()

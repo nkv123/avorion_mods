@@ -29,10 +29,12 @@ UpgradeGenerator.add("data/scripts/systems/miningsystem.lua", 1)
 UpgradeGenerator.add("data/scripts/systems/radarbooster.lua", 1)
 UpgradeGenerator.add("data/scripts/systems/scannerbooster.lua", 1)
 UpgradeGenerator.add("data/scripts/systems/shieldbooster.lua", 1)
+UpgradeGenerator.add("data/scripts/systems/shieldimpenetrator.lua", 1)
 UpgradeGenerator.add("data/scripts/systems/tradingoverview.lua", 1)
 UpgradeGenerator.add("data/scripts/systems/velocitybypass.lua", 1)
 UpgradeGenerator.add("data/scripts/systems/energytoshieldconverter.lua", 1)
 UpgradeGenerator.add("data/scripts/systems/valuablesdetector.lua", 1)
+UpgradeGenerator.add("data/scripts/systems/lootrangebooster.lua", 1)
 
 function UpgradeGenerator.initialize(seed)
     if seed then

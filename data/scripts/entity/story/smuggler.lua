@@ -8,6 +8,7 @@ local canFlee = true
 function initialize()
     if onServer() then
         Entity():registerCallback("onShotHit", "onShotHit")
+        Entity():registerCallback("onCollision", "onShotHit")
 
     end
 end

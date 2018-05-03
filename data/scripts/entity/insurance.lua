@@ -360,6 +360,7 @@ end
 function Insurance.generateInsuranceMailText()
     local entity = Entity()
     local receiver = Faction()
+    if not receiver then return end
 
     local insurance_loss_payment = [[Dear ${player},
 

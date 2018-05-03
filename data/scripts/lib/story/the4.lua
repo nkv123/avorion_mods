@@ -187,6 +187,7 @@ function The4.spawnHealer(x, y)
     local boss = The4.createShip(faction, position, volume, "Style 1")
     local turret = The4.createHealingTurret()
     ShipUtility.addTurretsToCraft(boss, turret, 15, 15)
+    ShipUtility.addBossAntiTorpedoEquipment(boss)
     boss.title = "Reconstructo"
     boss:addScript("story/healer")
     boss:addScript("story/the4")
@@ -206,6 +207,7 @@ function The4.spawnShieldBreaker(x, y)
     local boss = The4.createShip(faction, position, volume, "Style 2")
     local turret = The4.createPlasmaTurret()
     ShipUtility.addTurretsToCraft(boss, turret, 15, 15)
+    ShipUtility.addBossAntiTorpedoEquipment(boss)
     boss.title = "Shieldbreaker"
     boss:addScript("story/the4")
 
@@ -224,6 +226,7 @@ function The4.spawnHullBreaker(x, y)
     local boss = The4.createShip(faction, position, volume, "Style 2")
     local turret = The4.createRailgunTurret()
     ShipUtility.addTurretsToCraft(boss, turret, 15, 15)
+    ShipUtility.addBossAntiTorpedoEquipment(boss)
     boss.title = "Hullbreaker"
     boss:addScript("story/the4")
 
@@ -242,6 +245,7 @@ function The4.spawnTank(x, y)
     local boss = The4.createShip(faction, position, volume, "Style 3")
     local turret = The4.createLaserTurret()
     ShipUtility.addTurretsToCraft(boss, turret, 20, 20)
+    ShipUtility.addBossAntiTorpedoEquipment(boss)
     boss.title = "Tankem"
     boss:addScript("story/the4")
 

@@ -51,6 +51,18 @@
 <a class="inheritedproperty" href="#hasPilot">hasPilot</a>
 </td></tr>
 <tr><td>
+<a class="inheritedproperty" href="#playerOwned">playerOwned</a>
+</td></tr>
+<tr><td>
+<a class="inheritedproperty" href="#aiOwned">aiOwned</a>
+</td></tr>
+<tr><td>
+<a class="inheritedproperty" href="#allianceOwned">allianceOwned</a>
+</td></tr>
+<tr><td>
+<a class="inheritedproperty" href="#radius">radius</a>
+</td></tr>
+<tr><td>
 <a class="inheritedproperty" href="#name">name</a>
 </td></tr>
 <tr><td>
@@ -237,7 +249,17 @@
 </tr>
 <tr>
 <td>
+<a class="inheritedcode" href="#setMovePlan">setMovePlan</a>
+</td>
+</tr>
+<tr>
+<td>
 <a class="inheritedcode" href="#getPlan">getPlan</a>
+</td>
+</tr>
+<tr>
+<td>
+<a class="inheritedcode" href="#getMovePlan">getMovePlan</a>
 </td>
 </tr>
 <tr>
@@ -258,6 +280,11 @@
 <tr>
 <td>
 <a class="inheritedcode" href="#getPlanResourceValue">getPlanResourceValue</a>
+</td>
+</tr>
+<tr>
+<td>
+<a class="inheritedcode" href="#waitUntilAsyncWorkFinished">waitUntilAsyncWorkFinished</a>
 </td>
 </tr>
 <tr>
@@ -562,6 +589,11 @@
 </tr>
 <tr>
 <td>
+<a class="inheritedcode" href="#clearCargoBay">clearCargoBay</a>
+</td>
+</tr>
+<tr>
+<td>
 <a class="inheritedcode" href="#resolveScriptPath">resolveScriptPath</a>
 </td>
 </tr>
@@ -742,6 +774,22 @@ A new instance of EntityDescriptor
 <div id="hasPilot">
 <table style="width:100%;"><tr>
 <td><span class="keyword">property</span> <span class="type">bool </span> hasPilot</td><td align="right"><span>[read-only]</span></td></tr></table>
+</div>
+<div id="playerOwned">
+<table style="width:100%;"><tr>
+<td><span class="keyword">property</span> <span class="type">bool </span> playerOwned</td><td align="right"><span>[read-only]</span></td></tr></table>
+</div>
+<div id="aiOwned">
+<table style="width:100%;"><tr>
+<td><span class="keyword">property</span> <span class="type">bool </span> aiOwned</td><td align="right"><span>[read-only]</span></td></tr></table>
+</div>
+<div id="allianceOwned">
+<table style="width:100%;"><tr>
+<td><span class="keyword">property</span> <span class="type">bool </span> allianceOwned</td><td align="right"><span>[read-only]</span></td></tr></table>
+</div>
+<div id="radius">
+<table style="width:100%;"><tr>
+<td><span class="keyword">property</span> <span class="type">var </span> radius</td><td align="right"><span>[read-only]</span></td></tr></table>
 </div>
 <div id="name">
 <table style="width:100%;"><tr>
@@ -1046,9 +1094,39 @@ nothing
 </div>
 <div id="setPlan", class="">
 <p>
-<span class="inheritedcode">Inherited from <a href="Entity.html">Entity</a></span>
+Set the new plan of the entity. The entity will get deleted if the plan is empty. This copies the entire plan that is given as argument, keep that in mind when setting plans with large block counts. <span class="inheritedcode">Inherited from <a href="Entity.html">Entity</a></span>
 
 </p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">plan</span>
+The new BlockPlan of the entity <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="setMovePlan", class="codecontainer">
+<div id="setMovePlan", class="function">
+<p>
+<span class="keyword">function var</span> setMovePlan(<span class="type">BlockPlan</span> <span class="parameter">plan</span>) <br/>
+</p>
+</div>
+<div id="setMovePlan", class="">
+<p>
+Set the new plan of the entity. The entity will get deleted if the plan is empty. This moves all the data out of the plan that is used as the first argument. The content of the plan given as argument is then undefined, but still valid. It might be empty, it might contain the previous plan. This operation is independent of the size of the plan, use it when you have to set large plans with lots of blocks. <span class="inheritedcode">Inherited from <a href="Entity.html">Entity</a></span>
+
+</p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">plan</span>
+The new BlockPlan of the entity <br/>
+</div>
 <p><span class="docheader">Returns</span></p>
 <div class="indented">
 <p>
@@ -1066,9 +1144,35 @@ nothing
 </div>
 <div id="getPlan", class="">
 <p>
-<span class="inheritedcode">Inherited from <a href="Entity.html">Entity</a></span>
+Returns the plan of the entity. This copies the entire plan, keep that in mind when using plans with large block counts. <span class="inheritedcode">Inherited from <a href="Entity.html">Entity</a></span>
 
 </p>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+A copy of the plan of the entity 
+</p>
+</div>
+</p>
+</div>
+</div>
+<div id="getMovePlan", class="codecontainer">
+<div id="getMovePlan", class="function">
+<p>
+<span class="keyword">function BlockPlan</span> getMovePlan() <br/>
+</p>
+</div>
+<div id="getMovePlan", class="">
+<p>
+Returns the plan of the entity. This function will move the plan out of the entity, and replace the entity's plan with a single block. This operation is independent of the size of the plan, use it when you have to get large plans with lots of blocks. <span class="inheritedcode">Inherited from <a href="Entity.html">Entity</a></span>
+
+</p>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+The plan of the entity 
+</p>
+</div>
 </p>
 </div>
 </div>
@@ -1125,6 +1229,26 @@ nothing
 <span class="inheritedcode">Inherited from <a href="Entity.html">Entity</a></span>
 
 </p>
+</p>
+</div>
+</div>
+<div id="waitUntilAsyncWorkFinished", class="codecontainer">
+<div id="waitUntilAsyncWorkFinished", class="function">
+<p>
+<span class="keyword">function var</span> waitUntilAsyncWorkFinished() <br/>
+</p>
+</div>
+<div id="waitUntilAsyncWorkFinished", class="">
+<p>
+<span class="inheritedcode">Inherited from <a href="Entity.html">Entity</a></span>
+
+</p>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
 </p>
 </div>
 </div>
@@ -1309,7 +1433,7 @@ Returns Bounding Sphere for entity. Much faster than Bounding Box, but not as ac
 </div>
 <div id="moveBy", class="">
 <p>
-<span class="inheritedcode">Inherited from <a href="Entity.html">Entity</a></span>
+Teleports entity by vector <span class="inheritedcode">Inherited from <a href="Entity.html">Entity</a></span>
 
 </p>
 <p><span class="docheader">Returns</span></p>
@@ -1329,9 +1453,16 @@ nothing
 </div>
 <div id="getBoostedValue", class="">
 <p>
-<span class="inheritedcode">Inherited from <a href="Entity.html">Entity</a></span>
+Returns value with included bonus, in case a bonus exists. Returns Nil if no bonuses at all, returns value if no bonuses for this stat exist. <span class="inheritedcode">Inherited from <a href="Entity.html">Entity</a></span>
 
 </p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">type</span>
+type of bonus stat, e.g. acceleration, higher level crew <br/>
+<span class="parameter">value</span>
+the value, that might be changed by bonuses <br/>
+</div>
 </p>
 </div>
 </div>
@@ -1343,9 +1474,22 @@ nothing
 </div>
 <div id="addBaseMultiplier", class="">
 <p>
-<span class="inheritedcode">Inherited from <a href="Entity.html">Entity</a></span>
+Adds a multiplyer for stat of type <b>type</b>. This is to increase a stat, so a factor of 0.3 will become 1.3. <span class="inheritedcode">Inherited from <a href="Entity.html">Entity</a></span>
 
 </p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">type</span>
+Type of Bonus, e.g. acceleration, higher level crew <br/>
+<span class="parameter">factor</span>
+Factor that is used as Multiplier <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+key that can be used to access the multiplier 
+</p>
+</div>
 </p>
 </div>
 </div>
@@ -1357,93 +1501,192 @@ nothing
 </div>
 <div id="addMultiplier", class="">
 <p>
-<span class="inheritedcode">Inherited from <a href="Entity.html">Entity</a></span>
+Adds a multiplyer for stat of type <b>type</b>. The factor will be used unchanged. <span class="inheritedcode">Inherited from <a href="Entity.html">Entity</a></span>
 
 </p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">type</span>
+Type of Bonus, e.g. acceleration, higher level crew <br/>
+<span class="parameter">factor</span>
+Factor that is used as Multiplier <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+key that can be used to access the multiplier 
+</p>
+</div>
 </p>
 </div>
 </div>
 <div id="addMultiplyableBias", class="codecontainer">
 <div id="addMultiplyableBias", class="function">
 <p>
-<span class="keyword">function var</span> addMultiplyableBias(<span class="type">int</span> <span class="parameter">type</span>, <span class="type">float</span> <span class="parameter">factor</span>) <br/>
+<span class="keyword">function var</span> addMultiplyableBias(<span class="type">int</span> <span class="parameter">type</span>, <span class="type">float</span> <span class="parameter">value</span>) <br/>
 </p>
 </div>
 <div id="addMultiplyableBias", class="">
 <p>
-<span class="inheritedcode">Inherited from <a href="Entity.html">Entity</a></span>
+Adds a bias for stat of type <b>type</b>. This bias will be added to stat before multipliers are considered. <span class="inheritedcode">Inherited from <a href="Entity.html">Entity</a></span>
 
 </p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">type</span>
+Type of Bonus, e.g. acceleration, higher level crew <br/>
+<span class="parameter">value</span>
+Bias added to base stats. <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+key that can be used to access the multiplier 
+</p>
+</div>
 </p>
 </div>
 </div>
 <div id="addAbsoluteBias", class="codecontainer">
 <div id="addAbsoluteBias", class="function">
 <p>
-<span class="keyword">function var</span> addAbsoluteBias(<span class="type">int</span> <span class="parameter">type</span>, <span class="type">float</span> <span class="parameter">factor</span>) <br/>
+<span class="keyword">function var</span> addAbsoluteBias(<span class="type">int</span> <span class="parameter">type</span>, <span class="type">float</span> <span class="parameter">value</span>) <br/>
 </p>
 </div>
 <div id="addAbsoluteBias", class="">
 <p>
-<span class="inheritedcode">Inherited from <a href="Entity.html">Entity</a></span>
+Adds a flat bias for stat of type <b>type</b>. This bias will be added to stat after multipliers are considered. <span class="inheritedcode">Inherited from <a href="Entity.html">Entity</a></span>
 
 </p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">type</span>
+Type of Bonus, e.g. acceleration, higher level crew <br/>
+<span class="parameter">value</span>
+Bias added to base stats. <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+key that can be used to access the multiplier 
+</p>
+</div>
 </p>
 </div>
 </div>
 <div id="addKeyedBaseMultiplier", class="codecontainer">
 <div id="addKeyedBaseMultiplier", class="function">
 <p>
-<span class="keyword">function var</span> addKeyedBaseMultiplier(<span class="type">int</span> <span class="parameter">type</span>, <span class="type">int</span> <span class="parameter">key</span>, <span class="type">float</span> <span class="parameter">factor</span>) <br/>
+<span class="keyword">function var</span> addKeyedBaseMultiplier(<span class="type">int</span> <span class="parameter">type</span>, <span class="type">int</span> <span class="parameter">key</span>, <span class="type">float</span> <span class="parameter">value</span>) <br/>
 </p>
 </div>
 <div id="addKeyedBaseMultiplier", class="">
 <p>
-<span class="inheritedcode">Inherited from <a href="Entity.html">Entity</a></span>
+Exchanges multiplier at <b>key</b> with new value <span class="inheritedcode">Inherited from <a href="Entity.html">Entity</a></span>
 
 </p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">type</span>
+Bonus type <br/>
+<span class="parameter">key</span>
+Location of the bonus that will be changed <br/>
+<span class="parameter">value</span>
+New value <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+key that can be used to access the multiplier 
+</p>
+</div>
 </p>
 </div>
 </div>
 <div id="addKeyedMultiplier", class="codecontainer">
 <div id="addKeyedMultiplier", class="function">
 <p>
-<span class="keyword">function var</span> addKeyedMultiplier(<span class="type">int</span> <span class="parameter">type</span>, <span class="type">int</span> <span class="parameter">key</span>, <span class="type">float</span> <span class="parameter">factor</span>) <br/>
+<span class="keyword">function var</span> addKeyedMultiplier(<span class="type">int</span> <span class="parameter">type</span>, <span class="type">int</span> <span class="parameter">key</span>, <span class="type">float</span> <span class="parameter">value</span>) <br/>
 </p>
 </div>
 <div id="addKeyedMultiplier", class="">
 <p>
-<span class="inheritedcode">Inherited from <a href="Entity.html">Entity</a></span>
+Exchanges multiplier at <b>key</b> with new value <span class="inheritedcode">Inherited from <a href="Entity.html">Entity</a></span>
 
 </p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">type</span>
+Bonus type <br/>
+<span class="parameter">key</span>
+Location of the bonus that will be changed <br/>
+<span class="parameter">value</span>
+New value <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+key that can be used to access the multiplier 
+</p>
+</div>
 </p>
 </div>
 </div>
 <div id="addKeyedMultiplyableBias", class="codecontainer">
 <div id="addKeyedMultiplyableBias", class="function">
 <p>
-<span class="keyword">function var</span> addKeyedMultiplyableBias(<span class="type">int</span> <span class="parameter">type</span>, <span class="type">int</span> <span class="parameter">key</span>, <span class="type">float</span> <span class="parameter">factor</span>) <br/>
+<span class="keyword">function var</span> addKeyedMultiplyableBias(<span class="type">int</span> <span class="parameter">type</span>, <span class="type">int</span> <span class="parameter">key</span>, <span class="type">float</span> <span class="parameter">value</span>) <br/>
 </p>
 </div>
 <div id="addKeyedMultiplyableBias", class="">
 <p>
-<span class="inheritedcode">Inherited from <a href="Entity.html">Entity</a></span>
+Exchanges bias at <b>key</b> with new value <span class="inheritedcode">Inherited from <a href="Entity.html">Entity</a></span>
 
 </p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">type</span>
+Bonus type <br/>
+<span class="parameter">key</span>
+Location of the bonus that will be changed <br/>
+<span class="parameter">value</span>
+New value <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+key that can be used to access the multiplier 
+</p>
+</div>
 </p>
 </div>
 </div>
 <div id="addKeyedAbsoluteBias", class="codecontainer">
 <div id="addKeyedAbsoluteBias", class="function">
 <p>
-<span class="keyword">function var</span> addKeyedAbsoluteBias(<span class="type">int</span> <span class="parameter">type</span>, <span class="type">int</span> <span class="parameter">key</span>, <span class="type">float</span> <span class="parameter">factor</span>) <br/>
+<span class="keyword">function var</span> addKeyedAbsoluteBias(<span class="type">int</span> <span class="parameter">type</span>, <span class="type">int</span> <span class="parameter">key</span>, <span class="type">float</span> <span class="parameter">value</span>) <br/>
 </p>
 </div>
 <div id="addKeyedAbsoluteBias", class="">
 <p>
-<span class="inheritedcode">Inherited from <a href="Entity.html">Entity</a></span>
+Exchanges flat bias at <b>key</b> with new value <span class="inheritedcode">Inherited from <a href="Entity.html">Entity</a></span>
 
 </p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">type</span>
+Bonus type <br/>
+<span class="parameter">key</span>
+Location of the bonus that will be changed <br/>
+<span class="parameter">value</span>
+New value <br/>
+</div>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+key that can be used to access the multiplier 
+</p>
+</div>
 </p>
 </div>
 </div>
@@ -1455,9 +1698,14 @@ nothing
 </div>
 <div id="removeBonus", class="">
 <p>
-<span class="inheritedcode">Inherited from <a href="Entity.html">Entity</a></span>
+Deletes bonus <span class="inheritedcode">Inherited from <a href="Entity.html">Entity</a></span>
 
 </p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">key</span>
+Location of the bonus <br/>
+</div>
 <p><span class="docheader">Returns</span></p>
 <div class="indented">
 <p>
@@ -1470,14 +1718,23 @@ nothing
 <div id="damageShield", class="codecontainer">
 <div id="damageShield", class="function">
 <p>
-<span class="keyword">function var</span> damageShield(<span class="type">double</span> <span class="parameter">amount</span>, <span class="type">vec3</span> <span class="parameter">location</span>, <span class="type">Uuid</span> <span class="parameter">inflictorId</span>) <br/>
+<span class="keyword">function var</span> damageShield(<span class="type">double</span> <span class="parameter">delta</span>, <span class="type">vec3</span> <span class="parameter">location</span>, <span class="type">Uuid</span> <span class="parameter">inflictorId</span>) <br/>
 </p>
 </div>
 <div id="damageShield", class="">
 <p>
-<span class="inheritedcode">Inherited from <a href="Entity.html">Entity</a></span>
+Damages shield by delta amount, location and inflictorId are not necessary, but can be added if it is needed, e.g. you want to do effects on hitpoint. <span class="inheritedcode">Inherited from <a href="Entity.html">Entity</a></span>
 
 </p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">delta</span>
+<br/>
+<span class="parameter">location</span>
+<br/>
+<span class="parameter">inflictorId</span>
+<br/>
+</div>
 <p><span class="docheader">Returns</span></p>
 <div class="indented">
 <p>
@@ -1490,14 +1747,19 @@ nothing
 <div id="healShield", class="codecontainer">
 <div id="healShield", class="function">
 <p>
-<span class="keyword">function var</span> healShield(<span class="type">double</span> <span class="parameter">amount</span>) <br/>
+<span class="keyword">function var</span> healShield(<span class="type">double</span> <span class="parameter">delta</span>) <br/>
 </p>
 </div>
 <div id="healShield", class="">
 <p>
-<span class="inheritedcode">Inherited from <a href="Entity.html">Entity</a></span>
+Increases shield durability by delta <span class="inheritedcode">Inherited from <a href="Entity.html">Entity</a></span>
 
 </p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">delta</span>
+<br/>
+</div>
 <p><span class="docheader">Returns</span></p>
 <div class="indented">
 <p>
@@ -1515,9 +1777,14 @@ nothing
 </div>
 <div id="changeShield", class="">
 <p>
-<span class="inheritedcode">Inherited from <a href="Entity.html">Entity</a></span>
+Adds delta to shield durability <span class="inheritedcode">Inherited from <a href="Entity.html">Entity</a></span>
 
 </p>
+<p><span class="docheader">Parameters</span></p>
+<div class="indented">
+<span class="parameter">delta</span>
+<br/>
+</div>
 <p><span class="docheader">Returns</span></p>
 <div class="indented">
 <p>
@@ -2192,6 +2459,26 @@ The number of goods
 </p>
 </div>
 </div>
+<div id="clearCargoBay", class="codecontainer">
+<div id="clearCargoBay", class="function">
+<p>
+<span class="keyword">function var</span> clearCargoBay() <br/>
+</p>
+</div>
+<div id="clearCargoBay", class="">
+<p>
+<span class="inheritedcode">Inherited from <a href="Entity.html">Entity</a></span>
+
+</p>
+<p><span class="docheader">Returns</span></p>
+<div class="indented">
+<p>
+nothing
+</p>
+</div>
+</p>
+</div>
+</div>
 <div id="resolveScriptPath", class="codecontainer">
 <div id="resolveScriptPath", class="function">
 <p>
@@ -2691,9 +2978,12 @@ nothing
 <a href="PlayerFunctions.html">Player</a>
 <a href="SectorFunctions.html">Sector</a>
 <a href="ServerFunctions.html">Server</a>
+<a href="UsableInventoryItemFunctions.html">UsableInventoryItem</a>
 </div><div class="headerlisting">
 <span class="docheader">Common Components</span>
-<br><a href="DockingPositions.html">DockingPositions</a>
+<br><a href="TorpedoLauncher.html">TorpedoLauncher</a>
+<a href="ReadOnlyTorpedoLauncher.html">ReadOnlyTorpedoLauncher</a>
+<a href="DockingPositions.html">DockingPositions</a>
 <a href="Hangar.html">Hangar</a>
 <a href="ReadOnlyHangar.html">ReadOnlyHangar</a>
 <a href="BspTree.html">BspTree</a>
@@ -2748,9 +3038,11 @@ nothing
 <a href="Format.html">Format</a>
 <a href="Seed.html">Seed</a>
 <a href="Random.html">Random</a>
+<a href="UsableInventoryItem.html">UsableInventoryItem</a>
 <a href="FighterTemplate.html">FighterTemplate</a>
 <a href="BlockStatistics.html">BlockStatistics</a>
 <a href="VanillaInventoryItem.html">VanillaInventoryItem</a>
+<a href="GameSettings.html">GameSettings</a>
 <a href="Rarity.html">Rarity</a>
 <a href="PlanetSpecifics.html">PlanetSpecifics</a>
 <a href="CraftStyle.html">CraftStyle</a>
@@ -2760,6 +3052,7 @@ nothing
 <a href="Language.html">Language</a>
 <a href="Inventory.html">Inventory</a>
 <a href="PlanBspTree.html">PlanBspTree</a>
+<a href="TorpedoTemplate.html">TorpedoTemplate</a>
 <a href="Weapon.html">Weapon</a>
 <a href="Crew.html">Crew</a>
 <a href="CrewProfession.html">CrewProfession</a>
@@ -2855,16 +3148,15 @@ nothing
 <a href="Galaxy [Server].html">Galaxy [Server]</a>
 <a href="Alliance [Server].html">Alliance [Server]</a>
 <a href="Faction [Server].html">Faction [Server]</a>
-<a href="GameSettings.html">GameSettings</a>
 <a href="Player [Server].html">Player [Server]</a>
 </div><div class="lastheaderlisting">
 <span class="docheader">Enums</span>
 <br><a href="Enums.html#SoundType">SoundType</a>
 <a href="Enums.html#FontType">FontType</a>
-<a href="Enums.html#Difficulty">Difficulty</a>
 <a href="Enums.html#ChatMessageType">ChatMessageType</a>
 <a href="Enums.html#ComponentType">ComponentType</a>
 <a href="Enums.html#WeaponCategory">WeaponCategory</a>
+<a href="Enums.html#Difficulty">Difficulty</a>
 <a href="Enums.html#RarityType">RarityType</a>
 <a href="Enums.html#MoonType">MoonType</a>
 <a href="Enums.html#PlanetType">PlanetType</a>
@@ -2885,7 +3177,7 @@ nothing
 </div></div>
 <div class="disclaimer">
 <p>This is the official documentation for the scripting API of Avorion. This documentation is automatically generated and <strong>not</strong> necessarily complete. Depending on the context in which functions exist, some documentation such as descriptions, return values or variable names or types may be missing.</p>
-<p>Work in Progress. Documentation of Avorion Version: Beta 0.15 r9816</p>
+<p>Work in Progress. Documentation of Avorion Version: Beta 0.16.7 r11165</p>
 </div>
 <div class="footer">
 <p align="center">Work in Progress.</p>

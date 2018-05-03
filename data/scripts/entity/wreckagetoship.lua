@@ -1,6 +1,7 @@
 package.path = package.path .. ";data/scripts/lib/?.lua"
 
 require("defaultscripts")
+require("faction")
 require("stringutility")
 
 -- if this function returns false, the script will not be listed in the interaction window,
@@ -19,7 +20,7 @@ function interactionPossible(playerIndex, option)
         return true
     end
 
-    return false, "You'e not close enough to claim the object."%_t
+    return false, "You're not close enough to claim the object."%_t
 end
 
 -- create all required UI elements for the client side
@@ -39,14 +40,17 @@ function repair()
         return
     end
 
+    local faction, ship, player = getInteractingFaction(callingPlayer)
+    if not faction then return end
+
     local wreckage = Entity()
-    local plan = wreckage:getPlan()
+    local plan = wreckage:getMovePlan()
 
     -- set an empty plan, this will both delete the entity and avoid collisions with the ship
     -- that we're creating at this exact position
     wreckage:setPlan(BlockPlan())
 
-    local ship = Sector():createShip(Player(callingPlayer), wreckage.name, plan, wreckage.position)
+    local ship = Sector():createShip(faction, wreckage.name, plan, wreckage.position)
 
     AddDefaultShipScripts(ship)
     terminate()

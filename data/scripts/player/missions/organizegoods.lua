@@ -16,7 +16,7 @@ function initialize(goodName, amount, stationIndex, cx, cy, reward)
         missionData.good = ""
         missionData.plural = ""
         missionData.amount = 0
-        missionData.stationIndex = 0
+        missionData.stationIndex = ""
         missionData.location = {x = 0, y = 0}
         missionData.sectorName = ""
         missionData.stationTitle = ""
@@ -38,7 +38,7 @@ function initialize(goodName, amount, stationIndex, cx, cy, reward)
         missionData.good = g.name
         missionData.plural = g.plural
         missionData.amount = amount
-        missionData.stationIndex = stationIndex
+        missionData.stationIndex = stationIndex.string
         missionData.location = {x = cx, y = cy}
         missionData.sectorName = Sector().name
         missionData.stationTitle = station.translatedTitle
@@ -54,7 +54,7 @@ end
 
 local interactedEntityIndex
 function onStartDialog(entityId)
-    if entityId == missionData.stationIndex and not missionData.fulfilled then
+    if entityId == Uuid(missionData.stationIndex) and not missionData.fulfilled then
         interactedEntityIndex = entityId
         ScriptUI(entityId):addDialogOption("Deliver ${amount} ${plural}"%_t % missionData, "onDeliver")
     end

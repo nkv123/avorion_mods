@@ -83,32 +83,53 @@ end
 -- this function gets called on creation of the entity the script is attached to, on client only
 -- AFTER initialize above
 -- create all required UI elements for the client side
-function Shop:initUI(buttonCaption, windowCaption)
-
-    local size = vec2(900, 690)
-    local res = getResolution()
+function Shop:initUI(interactionCaption, windowCaption, tabCaption)
 
     local menu = ScriptUI()
-    local window = menu:createWindow(Rect(res * 0.5 - size * 0.5, res * 0.5 + size * 0.5));
-    menu:registerWindow(window, buttonCaption);
 
-    window.caption = windowCaption
-    window.showCloseButton = 1
-    window.moveable = 1
+    if not self.shared.window then
+        local size = vec2(900, 690)
+        local res = getResolution()
 
-    -- create a tabbed window inside the main window
-    self.tabbedWindow = window:createTabbedWindow(Rect(vec2(10, 10), size - 10))
+        local window = menu:createWindow(Rect(res * 0.5 - size * 0.5, res * 0.5 + size * 0.5));
+
+        window.caption = windowCaption
+        window.showCloseButton = 1
+        window.moveable = 1
+
+        -- create a tabbed window inside the main window
+        self.tabbedWindow = window:createTabbedWindow(Rect(vec2(10, 10), size - 10))
+
+        -- create sell tab
+        self.sellTab = self.tabbedWindow:createTab("Sell"%_t, "data/textures/icons/coins.png", "Sell Items"%_t)
+        self:buildSellGui(self.sellTab)
+
+        self.buyBackTab = self.tabbedWindow:createTab("Buyback"%_t, "data/textures/icons/cycle.png", "Buy Back Sold Items"%_t)
+        self:buildBuyBackGui(self.buyBackTab)
+
+        self.shared.window = window
+        self.shared.tabbedWindow = self.tabbedWindow
+        self.shared.sellTab = self.sellTab
+        self.shared.buyBackTab = self.buyBackTab
+
+        self.manageSellAndBuyback = true
+    end
+
+    -- registers the window for this script, enabling the default window interaction calls like onShowWindow(), renderUI(), etc.
+    -- if the same window is registered more than once, an interaction option will only be shown for the first registration
+    menu:registerWindow(self.shared.window, interactionCaption);
+
+    self.window = self.shared.window
+    self.tabbedWindow = self.shared.tabbedWindow
+    self.sellTab = self.shared.sellTab
+    self.buyBackTab = self.shared.buyBackTab
 
     -- create buy tab
-    self.buyTab = self.tabbedWindow:createTab("Buy"%_t, "data/textures/icons/purse.png", "Buy from station"%_t)
+    self.buyTab = self.tabbedWindow:createTab("Buy"%_t, "data/textures/icons/purse.png", tabCaption)
     self:buildBuyGui(self.buyTab)
 
-    -- create sell tab
-    self.sellTab = self.tabbedWindow:createTab("Sell"%_t, "data/textures/icons/coins.png", "Sell to station"%_t)
-    self:buildSellGui(self.sellTab)
-
-    self.buyBackTab = self.tabbedWindow:createTab("Buyback"%_t, "data/textures/icons/cycle.png", "Buy back sold items"%_t)
-    self:buildBuyBackGui(self.buyBackTab)
+    self.tabbedWindow:moveTabToTheRight(self.sellTab)
+    self.tabbedWindow:moveTabToTheRight(self.buyBackTab)
 
     self.guiInitialized = true
 
@@ -239,6 +260,8 @@ function Shop:onShowWindow()
     self:updatePlayerItems()
     self:updateBuyGui()
     self:updateBuybackGui()
+
+    self.tabbedWindow:selectTab(self.buyTab)
 end
 
 -- send a request to the server for the sold items
@@ -338,6 +361,13 @@ function Shop:updateSellGui() -- client
     for i, v in pairs(self.soldItemButtons) do v:hide() end
     for i, v in pairs(self.soldItemIcons) do v:hide() end
 
+    local faction = Faction()
+    local buyer = Player()
+    local playerCraft = buyer.craft
+    if playerCraft.factionIndex == buyer.allianceIndex then
+        buyer = buyer.alliance
+    end
+
     for index, item in pairs(self.soldItems) do
 
         self.soldItemFrames[index]:show()
@@ -364,7 +394,8 @@ function Shop:updateSellGui() -- client
             self.soldItemIcons[index].color = item.rarity.color
         end
 
-        self.soldItemPriceLabels[index].caption = createMonetaryString(item.price)
+        local price = self:getSellPriceAndTax(item.price, faction, buyer)
+        self.soldItemPriceLabels[index].caption = createMonetaryString(price)
 
         self.soldItemStockLabels[index].caption = item.amount
 
@@ -376,6 +407,7 @@ end
 function Shop:updateBuyGui() -- client
 
     if not self.guiInitialized then return end
+    if not self.manageSellAndBuyback then return end
 
     local numDifferentItems = #self.boughtItems
 
@@ -386,7 +418,6 @@ function Shop:updateBuyGui() -- client
     if self.boughtItemsPage < 0 then
         self.boughtItemsPage = 0
     end
-
 
     for i, v in pairs(self.boughtItemFrames) do v:hide() end
     for i, v in pairs(self.boughtItemNameLabels) do v:hide() end
@@ -421,7 +452,8 @@ function Shop:updateBuyGui() -- client
         self.boughtItemNameLabels[uiIndex].color = item.rarity.color
         self.boughtItemNameLabels[uiIndex].bold = false
 
-        self.boughtItemPriceLabels[uiIndex].caption = createMonetaryString(item.price * 0.25)
+        local price = Shop.getBuyPrice(item.price)
+        self.boughtItemPriceLabels[uiIndex].caption = createMonetaryString(price)
 
         if item.material then
             self.boughtItemMaterialLabels[uiIndex].caption = item.material.name
@@ -453,6 +485,7 @@ end
 function Shop:updateBuybackGui() -- client
 
     if not self.guiInitialized then return end
+    if not self.manageSellAndBuyback then return end
 
     for i, v in pairs(self.buybackItemFrames) do v:hide() end
     for i, v in pairs(self.buybackItemNameLabels) do v:hide() end
@@ -478,7 +511,8 @@ function Shop:updateBuybackGui() -- client
         self.buybackItemNameLabels[index].color = item.rarity.color
         self.buybackItemNameLabels[index].bold = false
 
-        self.buybackItemPriceLabels[index].caption = createMonetaryString(item.price * 0.25)
+        local price = Shop.getBuyPrice(item.price)
+        self.buybackItemPriceLabels[index].caption = createMonetaryString(price)
 
         if item.material then
             self.buybackItemMaterialLabels[index].caption = item.material.name
@@ -652,8 +686,8 @@ function Shop:buyFromPlayer(itemIndex) -- server
 
     -- no transaction tax here since it could be abused by 2 players working together
     -- receiveTransactionTax(station, item.price * 0.25 * self.tax)
-
-    buyer:receive("Sold an item for %1% credits."%_T, item.price * 0.25)
+    local price = Shop.getBuyPrice(item.price)
+    buyer:receive("Sold an item for %1% credits."%_T, price)
 
     -- insert the item into buyback list
     for i = 14, 1, -1 do
@@ -698,7 +732,8 @@ function Shop:buyTrashFromPlayer() -- server
                 return
             end
 
-            buyer:receive("Sold an item for %1% credits."%_T, item.price * 0.25)
+            local price = Shop.getBuyPrice(item.price)
+            buyer:receive("Sold an item for %1% credits."%_T, price)
 
             -- insert the item into buyback list
             for i = 14, 1, -1 do
@@ -730,7 +765,8 @@ function Shop:sellBackToPlayer(itemIndex) -- server
         return
     end
 
-    local canPay, msg, args = buyer:canPay(item.price * 0.25)
+    local price = Shop.getBuyPrice(item.price)
+    local canPay, msg, args = buyer:canPay(price)
     if not canPay then
         player:sendChatMessage(station.title, 1, msg, unpack(args))
         return
@@ -753,7 +789,7 @@ function Shop:sellBackToPlayer(itemIndex) -- server
     -- no transaction tax here since it could be abused by 2 players working together
     -- receiveTransactionTax(station, item.price * 0.25 * self.tax)
 
-    buyer:pay("Bought back an item for %1% credits."%_T, item.price * 0.25)
+    buyer:pay("Bought back an item for %1% credits."%_T, price)
 
     -- remove item
     item.amount = item.amount - 1
@@ -858,6 +894,39 @@ function Shop:renderUI()
     end
 end
 
+function Shop:getSellPriceAndTax(price, stationFaction, buyerFaction)
+    local taxAmount = round(price * self.tax)
+
+    if stationFaction.index == buyerFaction.index then
+        price = price - taxAmount
+        -- don't pay out for the second time
+        taxAmount = 0
+    end
+
+    return price, taxAmount
+end
+
+function Shop.getBuyPrice(price)
+    -- buying items from players yields no tax income for the buying station
+    return price * 0.25
+end
+
+function Shop:getNumSoldItems()
+    return tablelength(self.soldItems)
+end
+
+function Shop:getNumBuybackItems()
+    return tablelength(self.buybackItems)
+end
+
+function Shop:getSoldItemPrice(index)
+    return self.soldItems[index].price
+end
+
+function Shop:getTax()
+    return self.tax
+end
+
 PublicNamespace.CreateShop = setmetatable({new = new}, {__call = function(_, ...) return new(...) end})
 
 function PublicNamespace.CreateNamespace()
@@ -865,6 +934,7 @@ function PublicNamespace.CreateNamespace()
 
     local shop = PublicNamespace.CreateShop()
 
+    shop.shared = PublicNamespace
     result.shop = shop
     result.onShowWindow = function(...) return shop:onShowWindow(...) end
     result.sendItems = function(...) return shop:sendItems(...) end
@@ -883,6 +953,12 @@ function PublicNamespace.CreateNamespace()
     result.renderUI = function(...) return shop:renderUI(...) end
     result.add = function(...) return shop:add(...) end
     result.addFront = function(...) return shop:addFront(...) end
+    result.getBuyPrice = function(...) return shop.getBuyPrice(...) end
+    result.getNumSoldItems = function() return shop:getNumSoldItems() end
+    result.getNumBuybackItems = function() return shop:getNumBuybackItems() end
+    result.getSoldItemPrice = function(...) return shop:getSoldItemPrice(...) end
+    result.getBoughtItemPrice = function(...) return shop:getBoughtItemPrice(...) end
+    result.getTax = function() return shop:getTax() end
 
     return result
 end

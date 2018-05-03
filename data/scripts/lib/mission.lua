@@ -44,7 +44,11 @@ function updateMission(timeStep)
         missionData.timePassed = (missionData.timePassed or 0) + timeStep
 
         if missionData.timePassed > missionData.timeLimit then
-            fail()
+            if missionData.fulfilled and missionData.fulfilled == 1 or missionData.fulfilled == true then
+                finish()
+            else
+                fail()
+            end
         end
     end
 

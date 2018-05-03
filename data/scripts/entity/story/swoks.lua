@@ -41,7 +41,7 @@ function payUp()
     end
 
     local player = Player(callingPlayer)
-    local sum = math.max(math.ceil(player.money / 3000) * 1000, 10000)
+    local sum = getPayAmount(player)
 
     local canPay, msg, args = player:canPayMoney(sum)
 
@@ -88,9 +88,13 @@ function payFailedDialog()
     return dialog
 end
 
+function getPayAmount(player)
+    return math.max(math.ceil(player.money / 3000) * 1000, 10000)
+end
+
 function normalDialog()
     local entity = Entity()
-    local sum = math.max(math.ceil(Player().money / 3000) * 1000, 10000)
+    local sum = getPayAmount(Player())
 
     local choose = {
         text = "Now, what will it be?"%_t,

@@ -44,12 +44,16 @@ function SectorTemplate.generate(player, seed, x, y)
 
     OperationExodus.tryGenerateBeacon(generator)
 
-    local numShips = math.random(5, 10)
+    local numShips = math.random(3, 8)
 
     -- skip creating pirates in some cases
     if math.random(1, 3) == 1 then numShips = 0 end
 
+    PirateGenerator.createRaider(generator:getPositionInSector(5000))
+    PirateGenerator.createRavager(generator:getPositionInSector(5000))
+
     for i = 1, numShips do
+        PirateGenerator.createMarauder(generator:getPositionInSector(5000))
         PirateGenerator.createBandit(generator:getPositionInSector(5000))
     end
 

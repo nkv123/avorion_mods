@@ -45,7 +45,7 @@ function CargoTransportLicenseMerchant.updateServer()
 end
 
 function CargoTransportLicenseMerchant.initUI()
-    CargoTransportLicenseMerchant.shop:initUI("Buy/Sell Special Cargo Transport License"%_t, "Trading Post"%_t)
+    CargoTransportLicenseMerchant.shop:initUI("Buy Cargo License"%_t, "Trading Post"%_t, "Licenses"%_t)
     CargoTransportLicenseMerchant.shop.tabbedWindow:deactivateTab(CargoTransportLicenseMerchant.shop.sellTab)
     CargoTransportLicenseMerchant.shop.tabbedWindow:deactivateTab(CargoTransportLicenseMerchant.shop.buyBackTab)
 end

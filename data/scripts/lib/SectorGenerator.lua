@@ -8,6 +8,7 @@ require ("utility")
 require ("stringutility")
 require ("defaultscripts")
 require ("goods")
+require ("merchantutility")
 ShipGenerator = require ("shipgenerator")
 PlanGenerator = require ("plangenerator")
 ShipUtility = require ("shiputility")
@@ -249,7 +250,7 @@ function SectorGenerator:createClaimableAsteroid(position)
        )
 
     desc.position = position or self:getPositionInSector()
-    desc:setPlan(PlanGenerator.makeBigAsteroidPlan(100, 0, Material(0)))
+    desc:setMovePlan(PlanGenerator.makeBigAsteroidPlan(100, 0, Material(0)))
     desc:addScript("claim.lua")
 
     return Sector():createEntity(desc)
@@ -394,6 +395,18 @@ function SectorGenerator:createStation(faction, scriptPath, scale)
 end
 
 function SectorGenerator:createWreckage(faction, plan, breaks)
+    local wreckages = {SectorGenerator:createUnstrippedWreckage(faction, plan, breaks)}
+
+    for _, wreckage in pairs(wreckages) do
+        if random():test(0.9) then
+            ShipUtility.stripWreckage(wreckage)
+        end
+    end
+
+    return unpack(wreckages)
+end
+
+function SectorGenerator:createUnstrippedWreckage(faction, plan, breaks)
 
     breaks = breaks or 10
 
@@ -467,7 +480,14 @@ function SectorGenerator:createEquipmentDock(faction)
 
     station:addScript("data/scripts/entity/merchants/turretmerchant.lua")
     station:addScript("data/scripts/entity/merchants/fightermerchant.lua")
+    station:addScript("data/scripts/entity/merchants/utilitymerchant.lua")
     station:addScript("data/scripts/entity/merchants/consumer.lua", EquipmentDockConsumerArguments())
+
+    local x, y = Sector():getCoordinates()
+    local dist2 = x * x + y * y
+    if dist2 < 380 * 380 then
+        station:addScript("data/scripts/entity/merchants/torpedomerchant.lua")
+    end
 
     ShipUtility.addArmedTurretsToCraft(station)
 
@@ -503,35 +523,7 @@ end
 function SectorGenerator:createTurretFactory(faction)
     local station = self:createStation(faction, "data/scripts/entity/merchants/turretfactory.lua");
 
-    local goods =
-    {
-        "Servo", "Steel Tube", "Ammunition S", "Steel", "Aluminium", "Lead",
-        "Servo", "High Pressure Tube", "Ammunition M", "Explosive Charge", "Steel", "Aluminium",
-        "Laser Head", "Laser Compressor", "High Capacity Lens", "Laser Modulator", "Steel", "Crystal",
-        "Plasma Cell", "Energy Tube", "Conductor", "Energy Container", "Steel", "Crystal",
-        "Servo", "Warhead", "High Pressure Tube", "Explosive Charge", "Steel", "Wire",
-        "Servo", "Rocket", "High Pressure Tube", "Fuel", "Targeting Card", "Steel", "Wire",
-        "Servo", "Electromagnetic Charge", "Electro Magnet", "Gauss Rail", "High Pressure Tube", "Steel", "Copper",
-        "Nanobot", "Transformator", "Laser Modulator", "Conductor", "Gold",  "Steel",
-        "Laser Compressor", "Laser Modulator", "High Capacity Lens", "Conductor", "Steel",
-        "Laser Compressor", "Laser Modulator", "High Capacity Lens",  "Conductor", "Steel",
-        "Force Generator", "Energy Inverter", "Energy Tube", "Conductor", "Steel", "Zinc",
-        "Industrial Tesla Coil", "Electromagnetic Charge", "Energy Inverter", "Conductor", "Copper", "Energy Cell",
-        "Military Tesla Coil", "High Capacity Lens", "Electromagnetic Charge", "Conductor", "Copper", "Energy Cell",
-    }
-
-    local selected = {}
-    for i = 1, 15 do
-        selected[randomEntry(random(), goods)] = true
-    end
-
-    local used = {}
-
-    for good, _ in pairs(selected) do
-        table.insert(used, good)
-    end
-
-    station:addScript("data/scripts/entity/merchants/turretfactoryseller.lua", "Turret Factory"%_t, unpack(used))
+    station:addScript("data/scripts/entity/merchants/turretfactoryseller.lua", "Turret Factory"%_t, unpack(getTurretFactorySoldGoods()))
 
     return station
 end
@@ -566,7 +558,7 @@ function SectorGenerator:createBeacon(position, faction, text, args)
     local plan = PlanGenerator.makeBeaconPlan()
 
     desc.position = position or self:getPositionInSector()
-    desc:setPlan(plan)
+    desc:setMovePlan(plan)
     desc.title = "Beacon"%_t
     if faction then desc.factionIndex = faction.index end
 
@@ -581,8 +573,21 @@ function SectorGenerator:createGates()
     local targets = map:getConnectedSectors({x = self.coordX, y = self.coordY})
 
     for _, target in pairs(targets) do
+        -- get start sector
+        local firstPlayer = Player(1)
+        local startSectorX, startSectorY
+        if firstPlayer then
+            startSectorX, startSectorY = firstPlayer:getHomeSectorCoordinates()
+        end
 
-        local faction = Galaxy():getLocalFaction(target.x, target.y)
+        local faction
+        if startSectorX and startSectorX == target.x and startSectorY == target.y then
+            -- use nearest faction for the start sector
+            faction = Galaxy():getNearestFaction(target.x, target.y)
+        else
+            faction = Galaxy():getLocalFaction(target.x, target.y)
+        end
+
         if faction ~= nil then
 
             local desc = EntityDescriptor()
@@ -618,7 +623,7 @@ function SectorGenerator:createGates()
 
             local specs = SectorSpecifics(target.x, target.y, Server().seed)
 
-            desc:setPlan(plan)
+            desc:setMovePlan(plan)
             desc.position = position
             desc.factionIndex = faction.index
             desc.invincible = true
@@ -684,6 +689,9 @@ function SectorGenerator:createRingWormHole(angle)
     x = x + math.random(-20, 20)
     y = y + math.random(-20, 20)
 
+    x = round(x)
+    y = round(y)
+
     local from = {x = self.coordX, y = self.coordY}
     local to = {x = x, y = y}
 
@@ -710,6 +718,9 @@ function SectorGenerator:createDeepWormHole(wormHoleDistance)
     x = x + math.random(-wormHoleDistance / 5, wormHoleDistance / 5);
     y = y + math.random(-wormHoleDistance / 5, wormHoleDistance / 5);
 
+    x = round(x)
+    y = round(y)
+
     local from = {x = self.coordX, y = self.coordY}
     local to = {x = x, y = y}
 
@@ -724,6 +735,9 @@ function SectorGenerator:createRandomizedWormHole()
     -- completely random
     local x = math.random(self.coordX - 200, self.coordX + 200)
     local y = math.random(self.coordY - 200, self.coordY + 200)
+
+    x = round(x)
+    y = round(y)
 
     local from = {x = self.coordX, y = self.coordY}
     local to = {x = x, y = y}

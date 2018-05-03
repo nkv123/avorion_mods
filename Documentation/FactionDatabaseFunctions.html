@@ -21,6 +21,9 @@
 <tr><td>
 <a href="#initializeAIFaction">initializeAIFaction</a>
 </td></tr>
+<tr><td>
+<a href="#initializeAlliance">initializeAlliance</a>
+</td></tr>
 </table>
 </div>
 </div>
@@ -61,6 +64,22 @@ The newly created faction <br/>
 </p>
 </div>
 </div>
+<div id="initializeAlliance", class="codecontainer">
+<p>
+<span class="keyword">function</span> initializeAlliance(alliance, alliance->getIndex())) <br/>
+</p>
+<div id="initializeAlliance", class="code">
+<p>
+Called when a new alliance was created. Use this function to initialize the alliances and give them their first equipment or money. <br/><br/><span class="warning">Server Function: This function is only called on the server.</span>
+</p>
+<p><span class="parameter">Parameters</span></p>
+<div class="indented">
+<span class="parameter">alliance</span>
+The newly created alliance <br/>
+</div>
+</p>
+</div>
+</div>
 <h2><br/>FactionDatabase Example Script</h2>
 <div class="codecontainer">
 <code>
@@ -74,6 +93,12 @@ The newly created faction <br/>
 <span class="comment">-- give them their first equipment or money. </span><br/>
 <span class="comment">-- Server Function: This function is only called on the server.</span><br/>
 <span class="keyword">function</span> initializeAIFaction(faction, faction->getIndex()))<br/>
+    <br/>
+<span class="keyword">end</span><br/>
+<br/><span class="comment">-- Called when a new alliance was created. Use this function to initialize the alliances and give </span><br/>
+<span class="comment">-- them their first equipment or money. </span><br/>
+<span class="comment">-- Server Function: This function is only called on the server.</span><br/>
+<span class="keyword">function</span> initializeAlliance(alliance, alliance->getIndex()))<br/>
     <br/>
 <span class="keyword">end</span><br/>
 
@@ -104,9 +129,12 @@ The newly created faction <br/>
 <a href="PlayerFunctions.html">Player</a>
 <a href="SectorFunctions.html">Sector</a>
 <a href="ServerFunctions.html">Server</a>
+<a href="UsableInventoryItemFunctions.html">UsableInventoryItem</a>
 </div><div class="headerlisting">
 <span class="docheader">Common Components</span>
-<br><a href="DockingPositions.html">DockingPositions</a>
+<br><a href="TorpedoLauncher.html">TorpedoLauncher</a>
+<a href="ReadOnlyTorpedoLauncher.html">ReadOnlyTorpedoLauncher</a>
+<a href="DockingPositions.html">DockingPositions</a>
 <a href="Hangar.html">Hangar</a>
 <a href="ReadOnlyHangar.html">ReadOnlyHangar</a>
 <a href="BspTree.html">BspTree</a>
@@ -161,9 +189,11 @@ The newly created faction <br/>
 <a href="Format.html">Format</a>
 <a href="Seed.html">Seed</a>
 <a href="Random.html">Random</a>
+<a href="UsableInventoryItem.html">UsableInventoryItem</a>
 <a href="FighterTemplate.html">FighterTemplate</a>
 <a href="BlockStatistics.html">BlockStatistics</a>
 <a href="VanillaInventoryItem.html">VanillaInventoryItem</a>
+<a href="GameSettings.html">GameSettings</a>
 <a href="Rarity.html">Rarity</a>
 <a href="PlanetSpecifics.html">PlanetSpecifics</a>
 <a href="CraftStyle.html">CraftStyle</a>
@@ -173,6 +203,7 @@ The newly created faction <br/>
 <a href="Language.html">Language</a>
 <a href="Inventory.html">Inventory</a>
 <a href="PlanBspTree.html">PlanBspTree</a>
+<a href="TorpedoTemplate.html">TorpedoTemplate</a>
 <a href="Weapon.html">Weapon</a>
 <a href="Crew.html">Crew</a>
 <a href="CrewProfession.html">CrewProfession</a>
@@ -268,16 +299,15 @@ The newly created faction <br/>
 <a href="Galaxy [Server].html">Galaxy [Server]</a>
 <a href="Alliance [Server].html">Alliance [Server]</a>
 <a href="Faction [Server].html">Faction [Server]</a>
-<a href="GameSettings.html">GameSettings</a>
 <a href="Player [Server].html">Player [Server]</a>
 </div><div class="lastheaderlisting">
 <span class="docheader">Enums</span>
 <br><a href="Enums.html#SoundType">SoundType</a>
 <a href="Enums.html#FontType">FontType</a>
-<a href="Enums.html#Difficulty">Difficulty</a>
 <a href="Enums.html#ChatMessageType">ChatMessageType</a>
 <a href="Enums.html#ComponentType">ComponentType</a>
 <a href="Enums.html#WeaponCategory">WeaponCategory</a>
+<a href="Enums.html#Difficulty">Difficulty</a>
 <a href="Enums.html#RarityType">RarityType</a>
 <a href="Enums.html#MoonType">MoonType</a>
 <a href="Enums.html#PlanetType">PlanetType</a>
@@ -298,7 +328,7 @@ The newly created faction <br/>
 </div></div>
 <div class="disclaimer">
 <p>This is the official documentation for the scripting API of Avorion. This documentation is automatically generated and <strong>not</strong> necessarily complete. Depending on the context in which functions exist, some documentation such as descriptions, return values or variable names or types may be missing.</p>
-<p>Work in Progress. Documentation of Avorion Version: Beta 0.15 r9816</p>
+<p>Work in Progress. Documentation of Avorion Version: Beta 0.16.7 r11165</p>
 </div>
 <div class="footer">
 <p align="center">Work in Progress.</p>

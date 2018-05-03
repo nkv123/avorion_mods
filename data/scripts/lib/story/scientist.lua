@@ -107,6 +107,8 @@ function Scientist.spawn(player, x, y)
     local boss = ShipGenerator.createShip(faction, position, volume)
     local turret = Scientist.createLightningTurret()
     ShipUtility.addTurretsToCraft(boss, turret, 15, 15)
+    ShipUtility.addBossAntiTorpedoEquipment(boss, 15, ColorRGB(0, 1, 1))
+
     boss.title = "Mobile Energy Lab"%_T
 
     spawnCoords = {x=x, y=y}

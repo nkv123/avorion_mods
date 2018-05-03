@@ -18,7 +18,7 @@ function TurretGenerator.generate(x, y, offset_in, rarity_in, type_in, material_
     local offset = offset_in or 0
     local seed = rand:createSeed()
     local dps = 0
-    local sector = math.floor(length(vec2(x, y))) + offset
+    local sector = math.max(0, math.floor(length(vec2(x, y))) + offset)
 
     local weaponDPS, weaponTech = Balancing_GetSectorWeaponDPS(sector, 0)
     local miningDPS, miningTech = Balancing_GetSectorMiningDPS(sector, 0)

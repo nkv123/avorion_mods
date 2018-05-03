@@ -85,3 +85,69 @@ function FighterPrice(fighter)
 
     return value
 end
+
+function TorpedoPrice(torpedo)
+
+    -- print ("## price calculation for " .. torpedo.rarity.name .. " " .. torpedo.name)
+    local value = 0
+
+    -- primary stat: damage value, calculation is very similar to turrets
+    local damageValue = (torpedo.hullDamage + torpedo.shieldDamage) * 0.5 -- use the average since usually only either one will be dealt
+    damageValue = damageValue + torpedo.maxVelocity * torpedo.damageVelocityFactor * 0.75 -- don't weigh velocity damage as high since it depends on the situation
+    if torpedo.shieldAndHullDamage then damageValue = damageValue * 2 end  -- in this case we deal both shield and hull damage -> re-increase price back to 100%
+
+    local reachValue = torpedo.reach * 0.35
+
+    value = value + damageValue * reachValue
+    value = value / 3500  -- lower value since you can fire torpedoes only once
+
+    -- penetration, value is two and a half times the normal value because penetration is very strong
+    local penetrationValue = 0
+    if torpedo.shieldPenetration then penetrationValue = value * 1.5 end
+    value = value + penetrationValue
+
+    -- EMP
+    local empValue = 0
+    if torpedo.shieldDeactivation then empValue = empValue + 100000 end
+    if torpedo.energyDrain then empValue = empValue + 100000 end
+    value = value + empValue
+
+    -- durability
+    local durabilityValue = torpedo.durability * 20
+    value = value + durabilityValue
+
+    local speedValue = value * torpedo.maxVelocity / 300 * 0.1
+    value = value + speedValue
+
+    -- maneuverability of 1 is median, above makes it more expensive, below makes it cheaper
+    local maneuverValue = value * torpedo.turningSpeed * 0.25
+    value = value + maneuverValue
+
+    -- rarity
+    local rarityFactor = (1.1 ^ torpedo.rarity.value) - 1
+    local rarityValue = value * rarityFactor
+    value = value + rarityValue
+
+    -- check for numerical errors that can occur by changing weapon stats to things like NaN or inf
+    value = math.max(0, value)
+    if value ~= value then value = 0 end
+    if not (value > -math.huge and value < math.huge) then value = 0 end
+
+    if value == 0 then
+        value = 100000
+    end
+
+    value = round(value / 100) * 100
+
+    -- print ("damage + reach: " .. createMonetaryString(damageValue * reachValue * 0.001))
+    -- print ("durability: " .. createMonetaryString(durabilityValue))
+    -- print ("speed: " .. createMonetaryString(speedValue))
+    -- print ("maneuver: " .. createMonetaryString(maneuverValue))
+    -- print ("emp: " .. createMonetaryString(empValue))
+    -- print ("penetration: " .. createMonetaryString(penetrationValue))
+    -- print ("rarity: " .. createMonetaryString(rarityValue))
+    -- print ("total: " .. createMonetaryString(value))
+    -- print ("## end")
+
+    return value
+end

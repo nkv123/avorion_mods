@@ -12,6 +12,7 @@ local TradingAPI = require ("tradingmanager")
 SmugglersMarket = {}
 SmugglersMarket = TradingAPI:CreateNamespace()
 SmugglersMarket.trader.tax = 0.2
+SmugglersMarket.trader.factionPaymentFactor = 0.0
 
 local brandLines = {}
 local playerCargos = {}
@@ -140,7 +141,11 @@ function SmugglersMarket.setCrewInteractionThresholds()
 end
 
 function SmugglersMarket.onShowWindow()
-    local ship = Player().craft
+    local buyer = Player()
+    local ship = buyer.craft
+    if ship.factionIndex == buyer.allianceIndex then
+        buyer = buyer.alliance
+    end
 
     -- read cargos and sort
     local cargos = {}
@@ -161,6 +166,7 @@ function SmugglersMarket.onShowWindow()
     end
 
     SmugglersMarket.trader.boughtGoods = {}
+    local faction = Faction()
     local boughtGoods = SmugglersMarket.trader.boughtGoods
     local i = 1
     for _, p in pairs(cargos) do
@@ -174,7 +180,7 @@ function SmugglersMarket.onShowWindow()
             line:show()
             line.icon.picture = good.icon
             line.name.caption = good.displayName
-            line.price.caption = createMonetaryString(round(good.price * 0.25))
+            line.price.caption = createMonetaryString(round(SmugglersMarket.getStolenBuyPrice(good.name)))
             line.size.caption = round(good.size, 2)
             line.you.caption = amount
             line.stock.caption = "   -"
@@ -187,7 +193,10 @@ function SmugglersMarket.onShowWindow()
             line:show()
             line.icon.picture = good.icon
             line.name.caption = good.displayName
-            line.price.caption = createMonetaryString(round(good.price * 0.5))
+
+            local unbrandPrice = SmugglersMarket.getUnbrandPriceAndTax(good.price, 1, faction, buyer)
+            line.price.caption = createMonetaryString(round(unbrandPrice))
+
             line.you.caption = amount
 
             i = i + 1
@@ -279,21 +288,20 @@ function SmugglersMarket.onSellButtonPressed(button)
 end
 
 function SmugglersMarket.buyIllegalGood(goodName, amount)
-    local buyer, ship, player = getInteractingFaction(callingPlayer, AlliancePrivilege.SpendResources)
-    if not buyer then return end
+    local seller, ship, player = getInteractingFaction(callingPlayer, AlliancePrivilege.AddResources, AlliancePrivilege.SpendItems)
+    if not seller then return end
 
     local self = SmugglersMarket.trader
 
     -- check if the specific good from the player can be bought (ie. it's not illegal or something like that)
     local cargos = ship:findCargos(goodName)
     local good = nil
-    local msg = "You don't have any %s that the station buys!"%_t
-    local args = {goodName}
+    local msg
 
     for g, amount in pairs(cargos) do
         local ok
         ok, msg = self:isBoughtBySelf(g)
-        args = {}
+
         if ok and g.stolen then
             good = g
             break
@@ -302,7 +310,7 @@ function SmugglersMarket.buyIllegalGood(goodName, amount)
 
     msg = msg or "You don't have any %s that the station buys!"%_t
     if not good then
-        self:sendError(buyer, msg, unpack(args))
+        self:sendError(seller, msg, goodName)
         return
     end
 
@@ -316,7 +324,7 @@ function SmugglersMarket.buyIllegalGood(goodName, amount)
         amount = amountOnShip
 
         if amountOnShip == 0 then
-            self:sendError(buyer, "You don't have any %s on your ship"%_t, good.plural)
+            self:sendError(seller, "You don't have any %s on your ship"%_t, good.plural)
         end
     end
 
@@ -325,21 +333,15 @@ function SmugglersMarket.buyIllegalGood(goodName, amount)
     end
 
     -- begin transaction
-    -- calculate price. if the seller is the owner of the station, the price is 0
-    local price = self:getBuyPrice(good.name, buyer.index) * amount
-
-    local canPay, msg, args = stationFaction:canPay(price);
-    if not canPay then
-        self:sendError(buyer, "This station's faction doesn't have enough money."%_t)
-        return
-    end
+    -- calculate price
+    local price = SmugglersMarket.getStolenBuyPrice(good.name) * amount
 
     if not noDockCheck then
         -- test the docking last so the player can know what he can buy from afar already
         local errors = {}
         errors[EntityType.Station] = "You must be docked to the station to trade."%_T
         errors[EntityType.Ship] = "You must be closer to the ship to trade."%_T
-        if not CheckShipDocked(buyer, ship, station, errors) then
+        if not CheckShipDocked(seller, ship, station, errors) then
             return
         end
     end
@@ -366,7 +368,7 @@ function SmugglersMarket.buyIllegalGood(goodName, amount)
     }
 
     -- give money to ship faction
-    self:transferMoney(stationFaction, stationFaction, buyer, price, fromDescription, toDescription)
+    self:transferMoney(stationFaction, stationFaction, seller, price, fromDescription, toDescription)
 
     -- remove goods from ship
     ship:removeCargo(good, amount)
@@ -380,7 +382,7 @@ function SmugglersMarket.buyIllegalGood(goodName, amount)
         relationsChange = relationsChange * 1.5
     end
 
-    Galaxy():changeFactionRelations(buyer, stationFaction, relationsChange)
+    Galaxy():changeFactionRelations(seller, stationFaction, relationsChange)
 
     invokeClientFunction(Player(callingPlayer), "onShowWindow")
 end
@@ -417,7 +419,7 @@ function SmugglersMarket.unbrand(goodName, amount)
         return
     end
 
-    local price = amount * round(good.price * 0.5)
+    local price, tax = SmugglersMarket.getUnbrandPriceAndTax(good.price, amount, Faction(), buyer)
 
     local canPay, msg, args = buyer:canPay(price)
     if not canPay then
@@ -431,7 +433,7 @@ function SmugglersMarket.unbrand(goodName, amount)
     end
 
     -- pay and exchange
-    receiveTransactionTax(station, price * SmugglersMarket.trader.tax)
+    receiveTransactionTax(station, tax)
 
     buyer:pay("Paid %1% credits to unbrand stolen goods."%_T, price)
 
@@ -442,6 +444,23 @@ function SmugglersMarket.unbrand(goodName, amount)
     ship:addCargo(purified, amount)
 
     invokeClientFunction(player, "onShowWindow")
+end
+
+function SmugglersMarket.getUnbrandPriceAndTax(goodPrice, num, stationFaction, buyerFaction)
+    local price = num * round(goodPrice * 0.5)
+    local tax = round(price * SmugglersMarket.trader.tax)
+
+    if stationFaction.index == buyerFaction.index then
+        price = price - tax
+        -- don't pay out for the second time
+        tax = 0
+    end
+
+    return price, tax
+end
+
+function SmugglersMarket.getUnbrandPriceAndTaxTest(goodPrice, num)
+    return SmugglersMarket.getUnbrandPriceAndTax(goodPrice, num, Faction(), Faction(Player(callingPlayer).craft.factionIndex))
 end
 
 function SmugglersMarket.receiveGoods()
@@ -464,14 +483,9 @@ function SmugglersMarket.buyFromShip(...)
 end
 
 -- price for which goods are bought from players
-function SmugglersMarket.trader:getBuyPrice(goodName)
+function SmugglersMarket.getStolenBuyPrice(goodName)
     local good = goods[goodName]
     if not good then return 0 end
 
-    return round(good.price * 0.15)
+    return round(good.price * 0.25)
 end
-
---function onSellTextEntered()
---
---end
-

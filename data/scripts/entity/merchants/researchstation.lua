@@ -496,6 +496,17 @@ function research(itemIndices)
 
 end
 
+function researchTest(...)
+    local indices = {}
+
+    for _, index in pairs({...}) do
+        local amount = indices[index] or 0
+        indices[index] = amount + 1
+    end
+
+    research(indices)
+end
+
 function receiveResult(result)
     results:clear();
 

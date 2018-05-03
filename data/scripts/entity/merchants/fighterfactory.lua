@@ -268,7 +268,10 @@ function FighterFactory.onShowWindow()
 
     FighterFactory.fillPlans()
     FighterFactory.fillTurrets()
-    FighterFactory.refreshPointLabels()
+    --FighterFactory.refreshPointLabels()
+    -- players might consecutively interact as self or alliance
+    -- disable ui to get new calculated price and different turrets
+    FighterFactory.disableUI()
 
 end
 
@@ -343,7 +346,14 @@ function FighterFactory.refreshPointLabels(plan, turret)
     statsLabels[4].caption = tostring(round(fighter.maxVelocity * 10, 1))
 
     local boughtFighter = SellableFighter(fighter)
-    local price = boughtFighter:getPrice()
+
+    local buyer = Player()
+    local playerCraft = buyer.craft
+    if playerCraft.factionIndex == buyer.allianceIndex then
+        buyer = buyer.alliance
+    end
+
+    local price = FighterFactory.getPriceAndTax(boughtFighter, Faction(), buyer)
 
     statsLabels[5].caption = "${price} Cr"%_t % {price = createMonetaryString(price)}
 end
@@ -717,7 +727,7 @@ function FighterFactory.makeFighter(type, plan, turret, sizePoints, durabilityPo
         end
 
         for _, weapon in pairs({turret:getWeapons()}) do
-            weapon.damage = weapon.damage * 0.3
+            weapon.damage = weapon.damage * 0.3 / turret.slots
             weapon.fireRate = weapon.fireRate * fireRateFactor
             fighter:addWeapon(weapon)
         end
@@ -771,10 +781,11 @@ function FighterFactory.createFighter(type, plan, turretIndex, sizePoints, durab
     local fighter = FighterFactory.makeFighter(type, plan, turret, sizePoints, durabilityPoints, turningSpeedPoints, velocityPoints)
     local boughtFighter = SellableFighter(fighter)
 
-    local price = boughtFighter:getPrice()
+    local price, tax = FighterFactory.getPriceAndTax(boughtFighter, Faction(), buyer)
+
     local canPay, msg, args = buyer:canPay(price)
     if not canPay then
-        player:sendChatMessage("Fighter Factory"%_t, ChatMessageType.Error, msg, args)
+        player:sendChatMessage("Fighter Factory"%_t, ChatMessageType.Error, msg, unpack(args))
         return
     end
 
@@ -797,9 +808,36 @@ function FighterFactory.createFighter(type, plan, turretIndex, sizePoints, durab
         buyer:getInventory():remove(turretIndex)
     end
 
-    receiveTransactionTax(station, price * FighterFactory.tax)
+    receiveTransactionTax(station, tax)
 
     buyer:pay("Paid %1% credits to build a fighter."%_T, price)
 
     invokeClientFunction(player, "refreshUI")
+end
+
+function FighterFactory.getPriceAndTax(fighter, stationFaction, buyerFaction)
+    local price = fighter:getPrice()
+    local tax = price * FighterFactory.tax
+
+    if stationFaction.index == buyerFaction.index then
+        price = price - tax
+        -- don't pay out for the second time
+        tax = 0
+    end
+
+    return price, tax
+end
+
+function FighterFactory.getPriceAndTaxTest(type, plan, turretIndex, sizePoints, durabilityPoints, turningSpeedPoints, velocityPoints)
+    local buyer = Faction(Player(callingPlayer).craft.factionIndex)
+    local turret
+    if type == FighterType.Fighter then
+        turret = buyer:getInventory():find(turretIndex)
+        if not turret then return end
+    end
+
+    local fighter = FighterFactory.makeFighter(type, plan, turret, sizePoints, durabilityPoints, turningSpeedPoints, velocityPoints)
+    local boughtFighter = SellableFighter(fighter)
+
+    return FighterFactory.getPriceAndTax(boughtFighter, Faction(), buyer)
 end

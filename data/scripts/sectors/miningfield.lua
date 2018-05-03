@@ -46,13 +46,6 @@ function SectorTemplate.generate(player, seed, x, y)
         local mine = generator:createStation(faction);
         mine:addScript("data/scripts/entity/merchants/factory.lua", "nothing")
         mine:invokeFunction("factory.lua", "setProduction", p.production)
-        mine:addScript("data/scripts/entity/merchants/consumer.lua", "Mine"%_t,
-                      "Mining Robot",
-                      "Medical Supplies",
-                      "Antigrav Unit",
-                      "Fusion Generator",
-                      "Acid",
-                      "Drill")
 
         mine.position = pos
     end

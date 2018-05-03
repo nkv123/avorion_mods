@@ -53,8 +53,12 @@ function Shipyard.initialize()
 
             math.randomseed(Sector().seed + Sector().numEntities)
             addConstructionScaffold(station)
-            math.randomseed(os.time())
+            math.randomseed(appTimeMs())
         end
+    end
+
+    if onServer() then
+        Sector():registerCallback("onRestoredFromDisk", "onRestoredFromDisk")
     end
 
     if onClient() and EntityIcon().icon == "" then
@@ -62,6 +66,10 @@ function Shipyard.initialize()
         InteractionText(station.index).text = Dialog.generateStationInteractionText(station, random())
     end
 
+end
+
+function Shipyard.onRestoredFromDisk(timeSinceLastSimulation)
+    Shipyard.update(timeSinceLastSimulation)
 end
 
 -- if this function returns false, the script will not be listed in the interaction window,
@@ -347,6 +355,34 @@ end
 
 function Shipyard.getRequiredResources(plan, orderingFaction)
     return {plan:getResourceValue()}
+end
+
+function Shipyard.getRequiredMoneyTest(styleName, seed, volume, material, scale)
+    local style = Faction():getShipStyle(styleName)
+    plan = GeneratePlanFromStyle(style, Seed(seed), volume, 2000, 1, Material(material))
+
+    plan:scale(vec3(scale, scale, scale))
+
+    -- get the money required for the plan
+    local buyer = Faction(Player(callingPlayer).craft.factionIndex)
+    return Shipyard.getRequiredMoney(plan, buyer)
+end
+
+function Shipyard.getRequiredResourcesTest(styleName, seed, volume, material, scale)
+    local style = Faction():getShipStyle(styleName)
+    plan = GeneratePlanFromStyle(style, Seed(seed), volume, 2000, 1, Material(material))
+
+    plan:scale(vec3(scale, scale, scale))
+
+    -- get the money required for the plan
+    local buyer = Faction(Player(callingPlayer).craft.factionIndex)
+    local requiredResources = Shipyard.getRequiredResources(plan, buyer)
+
+    for i = 1, NumMaterials() do
+        requiredResources[i] = requiredResources[i] or 0
+    end
+
+    return unpack(requiredResources)
 end
 
 function Shipyard.transactionComplete()

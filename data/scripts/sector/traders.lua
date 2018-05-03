@@ -7,7 +7,6 @@ package.path = package.path .. ";?"
 require ("galaxy")
 require ("randomext")
 local TradingUtility = require ("tradingutility")
-local AsyncShipGenerator = require ("asyncshipgenerator")
 
 -- Don't remove or alter the following comment, it tells the game the namespace this script lives in. If you remove it, the script will break.
 -- namespace Traders

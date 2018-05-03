@@ -3,6 +3,7 @@
 
 data = data or {}
 data.interacted = {}
+data.hail = false
 
 local receivedData
 
@@ -24,7 +25,19 @@ function updateClient(timeStep)
 
     rememberInteractionWithPlayer()
 
+    if data.hail then
+        ScriptUI():startHailing("onHailAccepted", "onHailRejected")
+    else
+        onHailAccepted()
+    end
+end
+
+function onHailAccepted()
     ScriptUI():interactShowDialog(getSingleInteractionDialog())
+end
+
+function onHailRejected()
+
 end
 
 

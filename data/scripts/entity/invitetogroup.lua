@@ -11,7 +11,9 @@ InviteToGroup = {}
 function InviteToGroup.interactionPossible(playerIndex, option)
     local self = Entity()
 
-    local faction = Faction(self.factionIndex)
+    local faction = Faction()
+    if not faction then return end
+
     if faction.isAIFaction then return false end
 
     -- inviting self should not be possible

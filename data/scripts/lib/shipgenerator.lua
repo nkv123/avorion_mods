@@ -37,10 +37,14 @@ function ShipGenerator.createDefender(faction, position)
     ship.crew = ship.minCrew
     ship.title = ShipUtility.getMilitaryNameByVolume(ship.volume)
 
+    ship.shieldDurability = ship.shieldMaxDurability
+
     ship:addScript("ai/patrol.lua")
     ship:addScript("antismuggle.lua")
 
     ship:setValue("is_armed", 1)
+
+    ship:addScript("icon.lua", "data/textures/icons/pixel/defender.png")
 
     return ship
 end
@@ -87,6 +91,8 @@ function ShipGenerator.createCarrier(faction, position, fighters)
     ship:addScript("ai/patrol.lua")
     ship:setValue("is_armed", 1)
 
+    ship:addScript("icon.lua", "data/textures/icons/pixel/carrier.png")
+
     return ship
 end
 
@@ -98,8 +104,11 @@ function ShipGenerator.createMilitaryShip(faction, position, volume)
     ShipUtility.addArmedTurretsToCraft(ship, turrets)
     ship.crew = ship.minCrew
     ship.title = ShipUtility.getMilitaryNameByVolume(ship.volume)
+    ship.shieldDurability = ship.shieldMaxDurability
 
     ship:setValue("is_armed", 1)
+
+    ship:addScript("icon.lua", "data/textures/icons/pixel/military-ship.png")
 
     return ship
 end
@@ -115,10 +124,13 @@ function ShipGenerator.createTradingShip(faction, position, volume)
 
     ship.crew = ship.minCrew
     ship.title = ShipUtility.getTraderNameByVolume(ship.volume)
+    ship.shieldDurability = ship.shieldMaxDurability
 
     ship:addScript("civilship.lua")
     ship:addScript("dialogs/storyhints.lua")
     ship:setValue("is_civil", 1)
+
+    ship:addScript("icon.lua", "data/textures/icons/pixel/civil-ship.png")
 
     return ship
 end
@@ -148,6 +160,8 @@ function ShipGenerator.createFreighterShip(faction, position, volume)
     ship:addScript("dialogs/storyhints.lua")
     ship:setValue("is_civil", 1)
 
+    ship:addScript("icon.lua", "data/textures/icons/pixel/civil-ship.png")
+
     return ship
 end
 
@@ -159,10 +173,13 @@ function ShipGenerator.createMiningShip(faction, position, volume)
     ShipUtility.addUnarmedTurretsToCraft(ship, turrets)
     ship.crew = ship.minCrew
     ship.title = ShipUtility.getMinerNameByVolume(ship.volume)
+    ship.shieldDurability = ship.shieldMaxDurability
 
     ship:addScript("civilship.lua")
     ship:addScript("dialogs/storyhints.lua")
     ship:setValue("is_civil", 1)
+
+    ship:addScript("icon.lua", "data/textures/icons/pixel/civil-ship.png")
 
     return ship
 end

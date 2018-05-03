@@ -123,6 +123,7 @@ ManageShips<br/>
 FlyCrafts<br/>
 ModifyCrafts<br/>
 ModifyMessageOfTheDay<br/>
+NegotiateRelations<br/>
 </div>
 <div id="BlockType", class="codecontainer">
 <span class="type">enum BlockType </span><br/><br/>
@@ -183,6 +184,8 @@ RichStoneOuterCorner<br/>
 Portal<br/>
 TurretImmobilizer<br/>
 Assembly<br/>
+TorpedoLauncher<br/>
+TorpedoStorage<br/>
 BlackBox<br/>
 DirectionalThruster<br/>
 InertiaDampener<br/>
@@ -197,6 +200,7 @@ Information<br/>
 Error<br/>
 Warning<br/>
 Whisp<br/>
+ServerInfo<br/>
 </div>
 <div id="ComponentType", class="codecontainer">
 <span class="type">enum ComponentType </span><br/><p>
@@ -228,11 +232,12 @@ Turrets<br/>
 ControlUnit<br/>
 ShipSystem<br/>
 DockingPositions<br/>
-FighterPhysics<br/>
+DirectFlightPhysics<br/>
 Mothership<br/>
 ShipAI<br/>
 Hangar<br/>
 FighterAI<br/>
+TorpedoAI<br/>
 FighterController<br/>
 StatsBonuses<br/>
 InteractionText<br/>
@@ -241,6 +246,8 @@ TurretController<br/>
 Rotator<br/>
 DamageMultiplier<br/>
 FighterDodge<br/>
+ShotIntersection<br/>
+TorpedoLauncher<br/>
 EnergySystem<br/>
 Shield<br/>
 LifeSupport<br/>
@@ -267,6 +274,8 @@ ParentEntity<br/>
 RecoilApplyer<br/>
 WormHole<br/>
 DeletionTimer<br/>
+LootAttractor<br/>
+HitFeedbackSender<br/>
 PlanMesh<br/>
 TurretMesh<br/>
 ShieldMesh<br/>
@@ -295,6 +304,8 @@ InstancingNotifier<br/>
 AmbientLightCache<br/>
 RemovedBlocksMesh<br/>
 InertiaDampenerBrightness<br/>
+TorpedoMeshBuilder<br/>
+CustomMesh<br/>
 CraftDecay<br/>
 ShipInfoUpdater<br/>
 FactionNotifier<br/>
@@ -316,6 +327,7 @@ Loot<br/>
 CrewBehaviour<br/>
 DeathLocationMarker<br/>
 CrewEjector<br/>
+TorpedoImpact<br/>
 PlayerNotifier<br/>
 DockingPartner<br/>
 DummyComponent0<br/>
@@ -349,6 +361,7 @@ Energy<br/>
 Crumple<br/>
 Decay<br/>
 Arbitrary<br/>
+Fragments<br/>
 Invalid<br/>
 </div>
 <div id="Difficulty", class="codecontainer">
@@ -375,6 +388,7 @@ Wreckage<br/>
 Anomaly<br/>
 Loot<br/>
 WormHole<br/>
+Torpedo<br/>
 Fighter<br/>
 Unknown<br/>
 Other<br/>
@@ -416,6 +430,7 @@ Turret<br/>
 TurretTemplate<br/>
 SystemUpgrade<br/>
 VanillaItem<br/>
+UsableItem<br/>
 </div>
 <div id="MaterialType", class="codecontainer">
 <span class="type">enum MaterialType </span><br/><br/>
@@ -480,6 +495,9 @@ HyperspaceCooldown<br/>
 HyperspaceRechargeEnergy<br/>
 ShieldDurability<br/>
 ShieldRecharge<br/>
+ShieldTimeUntilRechargeAfterHit<br/>
+ShieldTimeUntilRechargeAfterDepletion<br/>
+ShieldImpenetrable<br/>
 Velocity<br/>
 Acceleration<br/>
 GeneratedEnergy<br/>
@@ -489,6 +507,7 @@ ArbitraryTurrets<br/>
 UnarmedTurrets<br/>
 ArmedTurrets<br/>
 CargoHold<br/>
+LootCollectionRange<br/>
 Engineers<br/>
 Mechanics<br/>
 Gunners<br/>
@@ -511,6 +530,7 @@ Heal<br/>
 <div id="WeaponType", class="codecontainer">
 <span class="type">enum WeaponType </span><br/><br/>
 ChainGun<br/>
+PointDefenseChainGun<br/>
 Laser<br/>
 MiningLaser<br/>
 PlasmaGun<br/>
@@ -524,6 +544,8 @@ TeslaGun<br/>
 ForceGun<br/>
 SalvagingLaser<br/>
 PulseCannon<br/>
+AntiFighter<br/>
+PointDefenseLaser<br/>
 </div>
 </div>
 </div>
@@ -550,9 +572,12 @@ PulseCannon<br/>
 <a href="PlayerFunctions.html">Player</a>
 <a href="SectorFunctions.html">Sector</a>
 <a href="ServerFunctions.html">Server</a>
+<a href="UsableInventoryItemFunctions.html">UsableInventoryItem</a>
 </div><div class="headerlisting">
 <span class="docheader">Common Components</span>
-<br><a href="DockingPositions.html">DockingPositions</a>
+<br><a href="TorpedoLauncher.html">TorpedoLauncher</a>
+<a href="ReadOnlyTorpedoLauncher.html">ReadOnlyTorpedoLauncher</a>
+<a href="DockingPositions.html">DockingPositions</a>
 <a href="Hangar.html">Hangar</a>
 <a href="ReadOnlyHangar.html">ReadOnlyHangar</a>
 <a href="BspTree.html">BspTree</a>
@@ -607,9 +632,11 @@ PulseCannon<br/>
 <a href="Format.html">Format</a>
 <a href="Seed.html">Seed</a>
 <a href="Random.html">Random</a>
+<a href="UsableInventoryItem.html">UsableInventoryItem</a>
 <a href="FighterTemplate.html">FighterTemplate</a>
 <a href="BlockStatistics.html">BlockStatistics</a>
 <a href="VanillaInventoryItem.html">VanillaInventoryItem</a>
+<a href="GameSettings.html">GameSettings</a>
 <a href="Rarity.html">Rarity</a>
 <a href="PlanetSpecifics.html">PlanetSpecifics</a>
 <a href="CraftStyle.html">CraftStyle</a>
@@ -619,6 +646,7 @@ PulseCannon<br/>
 <a href="Language.html">Language</a>
 <a href="Inventory.html">Inventory</a>
 <a href="PlanBspTree.html">PlanBspTree</a>
+<a href="TorpedoTemplate.html">TorpedoTemplate</a>
 <a href="Weapon.html">Weapon</a>
 <a href="Crew.html">Crew</a>
 <a href="CrewProfession.html">CrewProfession</a>
@@ -714,16 +742,15 @@ PulseCannon<br/>
 <a href="Galaxy [Server].html">Galaxy [Server]</a>
 <a href="Alliance [Server].html">Alliance [Server]</a>
 <a href="Faction [Server].html">Faction [Server]</a>
-<a href="GameSettings.html">GameSettings</a>
 <a href="Player [Server].html">Player [Server]</a>
 </div><div class="lastheaderlisting">
 <span class="docheader">Enums</span>
 <br><a href="Enums.html#SoundType">SoundType</a>
 <a href="Enums.html#FontType">FontType</a>
-<a href="Enums.html#Difficulty">Difficulty</a>
 <a href="Enums.html#ChatMessageType">ChatMessageType</a>
 <a href="Enums.html#ComponentType">ComponentType</a>
 <a href="Enums.html#WeaponCategory">WeaponCategory</a>
+<a href="Enums.html#Difficulty">Difficulty</a>
 <a href="Enums.html#RarityType">RarityType</a>
 <a href="Enums.html#MoonType">MoonType</a>
 <a href="Enums.html#PlanetType">PlanetType</a>
@@ -744,7 +771,7 @@ PulseCannon<br/>
 </div></div>
 <div class="disclaimer">
 <p>This is the official documentation for the scripting API of Avorion. This documentation is automatically generated and <strong>not</strong> necessarily complete. Depending on the context in which functions exist, some documentation such as descriptions, return values or variable names or types may be missing.</p>
-<p>Work in Progress. Documentation of Avorion Version: Beta 0.15 r9816</p>
+<p>Work in Progress. Documentation of Avorion Version: Beta 0.16.7 r11165</p>
 </div>
 <div class="footer">
 <p align="center">Work in Progress.</p>

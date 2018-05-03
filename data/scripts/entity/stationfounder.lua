@@ -6,6 +6,7 @@ require ("productions")
 require ("stringutility")
 require ("goods")
 require ("defaultscripts")
+require ("merchantutility")
 
 -- Don't remove or alter the following comment, it tells the game the namespace this script lives in. If you remove it, the script will break.
 -- namespace StationFounder
@@ -68,6 +69,8 @@ local stations =
             {script = "data/scripts/entity/merchants/equipmentdock.lua"},
             {script = "data/scripts/entity/merchants/turretmerchant.lua"},
             {script = "data/scripts/entity/merchants/fightermerchant.lua"},
+            {script = "data/scripts/entity/merchants/torpedomerchant.lua"},
+            {script = "data/scripts/entity/merchants/utilitymerchant.lua"},
             {script = "data/scripts/entity/merchants/consumer.lua", args = {EquipmentDockConsumerArguments()}},
         },
         getPrice = function()
@@ -121,7 +124,11 @@ local stations =
     {
         name = "Turret Factory"%_t,
         tooltip = "Produces customized turrets and sells turret parts for high prices. The owner gets 20% of every transaction, as well as cheaper prices."%_t,
-        scripts = {{script = "data/scripts/entity/merchants/turretfactory.lua"}},
+        scripts = {
+            {script = "data/scripts/entity/merchants/turretfactory.lua"},
+            {script = "data/scripts/entity/merchants/turretfactoryseller.lua", args = {"Turret Factory"%_t, unpack(getTurretFactorySoldGoods())}}
+
+        },
         price = 30000000
     },
     {
@@ -244,6 +251,7 @@ function StationFounder.initUI()
     warnWindowLabel = warnWindow:createLabel(ihsplit.bottom.lower, "Text"%_t, 14)
     warnWindowLabel.size = ihsplit.bottom.size
     warnWindowLabel:setTopAligned();
+    warnWindowLabel.wordBreak = true
 
 
     local vsplit = UIVerticalSplitter(hsplit.bottom, 10, 0, 0.5)
@@ -326,9 +334,8 @@ function StationFounder.buildFactoryGui(levels, tab)
     for _, productions in pairs(productionsByGood) do
 
         for index, production in pairs(productions) do
-
             -- mines shouldn't be built just like that, they need asteroids
-            if not string.match(production.factory, "Mine") then
+            if not string.match(production.factory, "Mine") and not string.match(production.factory, "Oil Rig") then
 
                 -- read data from production
                 local result = goods[production.results[1].name];
@@ -351,6 +358,10 @@ function StationFounder.buildFactoryGui(levels, tab)
         local nameB = b.production.factory
         if b.production.fixedName == false then
             nameB = b.production.results[1].name%_t .. " " .. nameB%_t
+        end
+
+        if nameA == nameB then
+            return a.production.index < b.production.index
         end
 
         return nameA < nameB
@@ -408,7 +419,7 @@ function StationFounder.buildFactoryGui(levels, tab)
         end
         label.tooltip = tooltip
 
-        local costs = StationFounder.getFactoryCost(production)
+        local costs = getFactoryCost(production)
 
         local label = frame:createLabel(vsplit.right.lower, createMonetaryString(costs) .. " Cr"%_t, 14)
         label.size = vec2(vsplit.right.size.x, vsplit.right.size.y)
@@ -434,11 +445,6 @@ function StationFounder.onFoundFactoryButtonPress(button)
 
     warnWindow:show()
 end
-
-function StationFounder.onConfirmTransformationButtonPress(button)
-    invokeServerFunction("foundFactory", selectedProduction.goodName, selectedProduction.index)
-end
-
 
 function StationFounder.onFoundStationButtonPress(button)
     selectedStation = stationsByButton[button.index]
@@ -486,7 +492,7 @@ function StationFounder.foundFactory(goodName, productionIndex)
     end
 
     -- check if player has enough money
-    local cost = StationFounder.getFactoryCost(production)
+    local cost = getFactoryCost(production)
 
     local canPay, msg, args = buyer:canPay(cost)
     if not canPay then
@@ -599,13 +605,13 @@ function StationFounder.transformToStation()
 
     -- create the station
     -- get plan of ship
-    local plan = ship:getPlan()
+    local plan = ship:getMovePlan()
     local crew = ship.crew
 
     -- create station
     local desc = StationDescriptor()
     desc.factionIndex = ship.factionIndex
-    desc:setPlan(plan)
+    desc:setMovePlan(plan)
     desc.position = ship.position
     desc.name = ship.name
 
@@ -614,6 +620,11 @@ function StationFounder.transformToStation()
     local station = Sector():createEntity(desc)
 
     AddDefaultStationScripts(station)
+
+    -- move player from ship to station
+    if player.craftIndex == ship.index then
+        player.craftIndex = station.index
+    end
 
     -- this will delete the ship and deactivate the collision detection so the ship doesn't interfere with the new station
     ship:setPlan(BlockPlan())
@@ -632,29 +643,6 @@ function StationFounder.transformToStation()
     end
 
     return station
-end
-
-function StationFounder.getFactoryCost(production)
-
-    -- calculate the difference between the value of ingredients and results
-    local ingredientValue = 0
-    local resultValue = 0
-
-    for _, ingredient in pairs(production.ingredients) do
-        local good = goods[ingredient.name]
-        ingredientValue = ingredientValue + good.price * ingredient.amount
-    end
-
-    for _, result in pairs(production.results) do
-        local good = goods[result.name]
-        resultValue = resultValue + good.price * result.amount
-    end
-
-    local diff = resultValue - ingredientValue
-
-    local costs = 3000000 -- 3 mio minimum for a factory
-    costs = costs + diff * 4500
-    return costs
 end
 
 

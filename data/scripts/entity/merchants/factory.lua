@@ -11,13 +11,14 @@ require ("stringutility")
 local TradingUtility = require ("tradingutility")
 local TradingAPI = require ("tradingmanager")
 local Dialog = require("dialogutility")
+local UICollection = require("uicollection")
 
 -- Don't remove or alter the following comment, it tells the game the namespace this script lives in. If you remove it, the script will break.
 -- namespace Factory
 Factory = {}
 Factory = TradingAPI:CreateNamespace()
 
-local tabbedWindow = 0
+local tabbedWindow = nil
 
 
 local production = nil
@@ -41,6 +42,12 @@ local allowBuyCheckBox
 local allowSellCheckBox
 local activelyRequestCheckBox
 local activelySellCheckBox
+local upgradePriceLabel
+local upgradeButton
+local productionErrorSign
+
+local productionError
+local newProductionError
 
 local deliveredStationsCombos = {}
 local deliveringStationsCombos = {}
@@ -64,7 +71,7 @@ Factory.maxNumProductions = 2
 
 Factory.lowestPriceFactor = 0.7
 Factory.highestPriceFactor = 1.3
-Factory.traderRequestCooldown = random():getFloat(1, 120)
+Factory.traderRequestCooldown = random():getFloat(30, 150)
 
 -- this is only important for initialization, won't be used afterwards
 Factory.minLevel = nil
@@ -73,7 +80,7 @@ Factory.maxLevel = nil
 -- if this function returns false, the script will not be listed in the interaction window on the client,
 -- even though its UI may be registered
 function Factory.interactionPossible(playerIndex, option)
-    if Player(playerIndex).craftIndex == Entity().index then return false end
+    -- if Player(playerIndex).craftIndex == Entity().index then return false end
 
     return CheckFactionInteraction(playerIndex, -10000)
 end
@@ -115,6 +122,9 @@ function Factory.initialize(producedGood, productionIndex, size)
         self:registerCallback("onFighterLanded", "onFighterLanded")
         self:registerCallback("onBlockPlanChanged", "onBlockPlanChanged")
 
+
+        Sector():registerCallback("onRestoredFromDisk", "onRestoredFromDisk")
+
         -- execute the callback for initialization, to be sure
         Factory.onBlockPlanChanged(self.id, true)
     else
@@ -123,6 +133,84 @@ function Factory.initialize(producedGood, productionIndex, size)
         Factory.sync()
     end
 
+end
+
+function Factory.onRestoredFromDisk(timeSinceLastSimulation)
+    local boughtStock, soldStock = Factory.getInitialGoods(Factory.trader.boughtGoods, Factory.trader.soldGoods)
+    local entity = Entity()
+
+    local factor = math.max(0, math.min(1, (timeSinceLastSimulation - 10 * 60) / (100 * 60)))
+
+    -- simulate deliveries to factory
+    if Faction().isAIFaction then
+        for good, amount in pairs(boughtStock) do
+            local curAmount = entity:getCargoAmount(good)
+            local diff = math.floor((amount - curAmount) * factor)
+
+            if diff > 0 then
+                Factory.increaseGoods(good.name, diff)
+            end
+        end
+    end
+
+    -- calculate production
+    -- limit by time
+    local maxAmountProduced = math.floor(timeSinceLastSimulation / Factory.timeToProduce) * Factory.maxNumProductions
+
+    -- limit by goods
+    for _, ingredient in pairs(production.ingredients) do
+        if ingredient.optional == 0 then
+            maxAmountProduced = math.min(maxAmountProduced, math.floor(Factory.getNumGoods(ingredient.name) / ingredient.amount))
+        end
+    end
+
+    -- limit by space
+    local productSpace = 0
+    for _, ingredient in pairs(production.ingredients) do
+        if ingredient.optional == 0 then
+            local size = Factory.getGoodSize(ingredient.name)
+            productSpace = productSpace - ingredient.amount * size
+        end
+    end
+
+    for _, garbage in pairs(production.garbages) do
+        local size = Factory.getGoodSize(garbage.name)
+        productSpace = productSpace + garbage.amount * size
+    end
+
+    for _, result in pairs(production.results) do
+        local size = Factory.getGoodSize(result.name)
+        productSpace = productSpace + result.amount * size
+    end
+
+    if productSpace > 0 then
+        maxAmountProduced = math.min(maxAmountProduced, math.floor(entity.freeCargoSpace / productSpace))
+    end
+
+    -- do production
+    for _, ingredient in pairs(production.ingredients) do
+        Factory.decreaseGoods(ingredient.name, ingredient.amount * maxAmountProduced)
+    end
+
+    for _, garbage in pairs(production.garbages) do
+        Factory.increaseGoods(garbage.name, garbage.amount * maxAmountProduced)
+    end
+
+    for _, result in pairs(production.results) do
+        Factory.increaseGoods(result.name, result.amount * maxAmountProduced)
+    end
+
+    -- simulate goods bought from the factory
+    if Faction().isAIFaction then
+        for good, amount in pairs(soldStock) do
+            local curAmount = entity:getCargoAmount(good)
+            local diff = math.floor((amount - curAmount) * factor)
+
+            if diff < 0 then
+                Factory.decreaseGoods(good.name, -diff)
+            end
+        end
+    end
 end
 
 function Factory.initializeProduction(producedGood, productionIndex, size)
@@ -236,6 +324,7 @@ function Factory.initializeProduction(producedGood, productionIndex, size)
         Factory.setProduction(chosenProduction, size)
     end
 
+    math.randomseed(appTimeMs())
 end
 
 function Factory.setBuySellFactor(factor)
@@ -275,58 +364,75 @@ function Factory.setProduction(production_in, size)
 
     -- set title
     if station.title == "" then
-        station.title = "Factory"%_t
-
-        local size = ""
-        if factorySize == 1 then size = "S /* Size, as in S, M, L, XL etc.*/"%_t
-        elseif factorySize == 2 then size = "M /* Size, as in S, M, L, XL etc.*/"%_t
-        elseif factorySize == 3 then size = "L /* Size, as in S, M, L, XL etc.*/"%_t
-        elseif factorySize == 4 then size = "XL /* Size, as in S, M, L, XL etc.*/"%_t
-        elseif factorySize == 5 then size = "XXL /* Size, as in S, M, L, XL etc.*/"%_t
-        end
-
-        local name, args = formatFactoryName(production, size)
-
-        local station = Entity()
-        station:setTitle(name, args)
-
-        local arms = factorySize
-
-        if string.match(production.factory, "Solar") then
-            addSolarPanels(station, arms)
-        end
-
-        if string.match(production.factory, "Mine") then
-            addAsteroid(station)
-        end
-
-        if string.match(production.factory, "Farm") or string.match(production.factory, "Ranch") then
-
-            local x = 4 + math.floor(factorySize * 2.5)
-            local y = 5 + factorySize * 4
-
-            addFarmingCenters(station, arms, x, y)
-        end
-
-        if string.match(production.factory, "Factory")
-            or string.match(production.factory, "Manufacturer")
-            or string.match(production.factory, "Extractor") then
-
-            local x = 4 + math.floor(factorySize * 1.5)
-            local y = 5 + factorySize * 2
-
-            addProductionCenters(station, arms, x, y)
-        end
-
-        if string.match(production.factory, "Collector") then
-            addCollectors(station, arms)
-        end
-
+        Factory.updateTitle()
+        Factory.addPlanExtensions()
     end
 
     Factory.refreshProductionTime()
 
     Factory.initializeTrading(bought, sold)
+end
+
+function Factory.updateTitle()
+    local station = Entity()
+    station.title = "Factory"%_t
+
+    local size = ""
+    if factorySize == 1 then size = "S /* Size, as in S, M, L, XL etc.*/"%_t
+    elseif factorySize == 2 then size = "M /* Size, as in S, M, L, XL etc.*/"%_t
+    elseif factorySize == 3 then size = "L /* Size, as in S, M, L, XL etc.*/"%_t
+    elseif factorySize == 4 then size = "XL /* Size, as in S, M, L, XL etc.*/"%_t
+    elseif factorySize == 5 then size = "XXL /* Size, as in S, M, L, XL etc.*/"%_t
+    end
+
+    local name, args = formatFactoryName(production, size)
+
+    local station = Entity()
+    station:setTitle(name, args)
+end
+
+function Factory.addPlanExtensions()
+    local station = Entity()
+    local arms = factorySize
+
+    if string.match(production.factory, "Solar") then
+        addSolarPanels(station, arms)
+    end
+
+    if string.match(production.factory, "Mine") or string.match(production.factory, "Oil Rig") then
+        addAsteroid(station)
+
+        station:addScriptOnce("data/scripts/entity/merchants/consumer.lua", "Mine"%_t,
+                      "Mining Robot",
+                      "Medical Supplies",
+                      "Antigrav Unit",
+                      "Fusion Generator",
+                      "Acid",
+                      "Drill")
+
+    end
+
+    if string.match(production.factory, "Farm") or string.match(production.factory, "Ranch") then
+
+        local x = 4 + math.floor(factorySize * 2.5)
+        local y = 5 + factorySize * 4
+
+        addFarmingCenters(station, arms, x, y)
+    end
+
+    if string.match(production.factory, "Factory")
+        or string.match(production.factory, "Manufacturer")
+        or string.match(production.factory, "Extractor") then
+
+        local x = 4 + math.floor(factorySize * 1.5)
+        local y = 5 + factorySize * 2
+
+        addProductionCenters(station, arms, x, y)
+    end
+
+    if string.match(production.factory, "Collector") then
+        addCollectors(station, arms)
+    end
 end
 
 function Factory.sync(data)
@@ -359,38 +465,27 @@ end
 -- create all required UI elements for the client side
 function Factory.initUI()
 
-    local res = getResolution()
-    local size = vec2(950, 650)
-
-    local menu = ScriptUI()
-    local window = menu:createWindow(Rect(res * 0.5 - size * 0.5, res * 0.5 + size * 0.5))
-    menu:registerWindow(window, "Buy/Sell Goods"%_t)
-
-    window.caption = "Factory"%_t
-    window.showCloseButton = 1
-    window.moveable = 1
-
-    -- create a tabbed window inside the main window
-    tabbedWindow = window:createTabbedWindow(Rect(vec2(10, 10), size - 10))
+    tabbedWindow = TradingAPI.CreateTabbedWindow("Factory"%_t)
 
     -- create buy tab
-    buyTab = tabbedWindow:createTab("Buy"%_t, "data/textures/icons/purse.png", "Buy from station"%_t)
+    buyTab = tabbedWindow:createTab("Buy"%_t, "data/textures/icons/purse.png", "Buy from factory"%_t)
     Factory.buildBuyGui(buyTab)
 
     -- create sell tab
-    sellTab = tabbedWindow:createTab("Sell"%_t, "data/textures/icons/coins.png", "Sell to station"%_t)
+    sellTab = tabbedWindow:createTab("Sell"%_t, "data/textures/icons/coins.png", "Sell to factory"%_t)
     Factory.buildSellGui(sellTab)
 
     configTab = tabbedWindow:createTab("Configure"%_t, "data/textures/icons/cog.png", "Factory configuration"%_t)
-    Factory.buildConfigGui(configTab)
+    Factory.buildConfigUI(configTab)
 
     Factory.trader.guiInitialized = true
 
     Factory.requestGoods()
 end
 
-function Factory.buildConfigGui(tab)
-    local vsplit = UIVerticalMultiSplitter(Rect(tab.size), 10, 5, 2)
+function Factory.buildConfigUI(tab)
+    local hsplit = UIHorizontalSplitter(Rect(tab.size), 10, 5, 0.65)
+    local vsplit = UIVerticalMultiSplitter(hsplit.top, 10, 0, 2)
     local lister = UIVerticalLister(vsplit:partition(0), 5, 0)
 
     marginLabel = tab:createLabel(Rect(), "Buy/Sell price margin %"%_t, 12)
@@ -401,6 +496,7 @@ function Factory.buildConfigGui(tab)
     lister:placeElementTop(marginSlider)
     marginSlider:setValueNoCallback(0)
     marginSlider.unit = "%"
+    marginSlider.tooltip = "Sets the price margin of goods bought and sold by this station. Low prices attract more buyers, high prices attract more sellers."%_t
 
     lister:nextRect(15)
 
@@ -425,6 +521,9 @@ function Factory.buildConfigGui(tab)
     lister:placeElementTop(activelySellCheckBox)
     activelySellCheckBox:setCheckedNoCallback(true)
     activelySellCheckBox.tooltip = "If checked, the station will request traders that will buy its goods when it's full."%_t
+
+    lister:nextRect(10)
+
 
     -- delivery UI
     local lister = UIVerticalLister(vsplit:partition(1), 8, 0)
@@ -514,6 +613,45 @@ function Factory.buildConfigGui(tab)
         end
     end
 
+
+    -- upgrade UI
+    local vsplit = UIVerticalMultiSplitter(hsplit.bottom, 10, 0, 2)
+    local lister = UIVerticalLister(vsplit:partition(0), 15, 0)
+
+    upgradePriceLabel = tab:createLabel(Rect(), "", 14)
+    lister:placeElementTop(upgradePriceLabel)
+
+    upgradeButton = tab:createButton(Rect(), "Upgrade"%_t, "onUpgradeFactoryButtonPressed")
+    lister:placeElementTop(upgradeButton)
+
+    -- error label for production problems
+    productionErrorSign = UICollection()
+
+    local hsplit = UIHorizontalSplitter(Rect(tab.size), 10, 0, 0.9)
+    hsplit.bottomSize = 50
+    local frame = tab:createFrame(hsplit.bottom)
+
+    hsplit:setPadding(15, 15, 15, 15)
+
+    local label = tab:createLabel(hsplit.bottom, "Station can't produce because ingredients are missing!", 14)
+    label.color = ColorRGB(1, 1, 0)
+    label.centered = true
+
+    local vsplit = UIVerticalSplitter(hsplit.bottom, 0, 0, 0.5)
+    vsplit:setLeftQuadratic()
+
+    local icon = tab:createPicture(vsplit.left, "data/textures/icons/hazard-sign.png")
+    icon.isIcon = true
+    icon.color = ColorRGB(1, 1, 0)
+    icon.lower = icon.lower - vec2(5, 5)
+    icon.upper = icon.upper + vec2(5, 5)
+
+    productionErrorSign:insert(label)
+    productionErrorSign:insert(icon)
+    productionErrorSign:insert(frame)
+    productionErrorSign.label = label
+
+    productionErrorSign:hide()
 end
 
 function Factory.sendConfig()
@@ -648,8 +786,11 @@ end
 -- this function gets called every time the window is shown on the client, ie. when a player presses F and if interactionPossible() returned 1
 function Factory.onShowWindow()
 
+    local station = Entity()
+    local player = Player()
+
     if buyTab then
-        if #Factory.trader.soldGoods == 0 then
+        if #Factory.trader.soldGoods == 0 or player.craftIndex == station.index then
             tabbedWindow:deactivateTab(buyTab)
         else
             tabbedWindow:activateTab(buyTab)
@@ -657,7 +798,7 @@ function Factory.onShowWindow()
     end
 
     if sellTab then
-        if #Factory.trader.boughtGoods == 0 then
+        if #Factory.trader.boughtGoods == 0 or player.craftIndex == station.index then
             tabbedWindow:deactivateTab(sellTab)
         else
             tabbedWindow:activateTab(sellTab)
@@ -665,11 +806,11 @@ function Factory.onShowWindow()
     end
 
     if configTab then
-        local player = Player()
         local faction = Faction()
 
         if player.index == faction.index or player.allianceIndex == faction.index then
             tabbedWindow:activateTab(configTab)
+            Factory.refreshConfigUI()
             Factory.refreshConfigCombos()
             Factory.refreshConfigErrors()
 
@@ -682,6 +823,25 @@ function Factory.onShowWindow()
 
     Factory.requestGoods()
 
+end
+
+function Factory.refreshConfigUI()
+    if not production then return end
+
+    if factorySize < 5 then
+
+        local price = createMonetaryString(getFactoryUpgradeCost(production, factorySize + 1))
+        upgradePriceLabel.caption = "Upgrade Price: ${price} Cr"%_t % {price = price}
+
+        upgradeButton.visible = true
+        upgradePriceLabel.visible = true
+
+        upgradeButton.tooltip = "Upgrade to allow up to ${amount} parallel productions."%_t % {amount = factorySize + 2}
+    else
+        upgradePriceLabel.visible = false
+        upgradeButton.visible = true
+        upgradeButton.active = false
+    end
 end
 
 function Factory.refreshConfigCombos()
@@ -766,13 +926,6 @@ function Factory.refreshConfigCombos()
 
 end
 
-function Factory.onMarginSliderChanged() Factory.sendConfig() end
-function Factory.onAllowBuyChecked() Factory.sendConfig() end
-function Factory.onAllowSellChecked() Factory.sendConfig() end
-function Factory.onActivelyRequestChecked() Factory.sendConfig() end
-function Factory.onActivelySellChecked() Factory.sendConfig() end
-function Factory.onDeliveringStationsChanged() Factory.sendConfig() end
-
 function Factory.refreshConfigErrors()
     if not Factory.trader.guiInitialized then return end
 
@@ -791,12 +944,58 @@ function Factory.refreshConfigErrors()
 
     for index, error in pairs(deliveringStationsErrors) do
         if index and error then
-            print (error)
             deliveringStationsErrorLabels[index].caption = GetLocalizedString(error)
         end
     end
+
+    if not productionError or productionError == "" then
+        productionErrorSign:hide()
+    else
+        productionErrorSign:show()
+        productionErrorSign.label.caption = productionError or ""
+    end
 end
 
+
+function Factory.onMarginSliderChanged() Factory.sendConfig() end
+function Factory.onAllowBuyChecked() Factory.sendConfig() end
+function Factory.onAllowSellChecked() Factory.sendConfig() end
+function Factory.onActivelyRequestChecked() Factory.sendConfig() end
+function Factory.onActivelySellChecked() Factory.sendConfig() end
+function Factory.onDeliveringStationsChanged() Factory.sendConfig() end
+
+function Factory.onUpgradeFactoryButtonPressed()
+    if onClient() then
+        invokeServerFunction("onUpgradeFactoryButtonPressed")
+        return
+    end
+
+    local buyer, _, player = getInteractingFaction(callingPlayer, AlliancePrivilege.SpendResources, AlliancePrivilege.ManageStations)
+    if not buyer then return end
+
+    if factorySize >= 5 then
+        player:sendChatMessage("Server"%_t, ChatMessageType.Error, "This factory is already at its highest level."%_t)
+        return
+    end
+
+    local price = getFactoryUpgradeCost(production, factorySize + 1)
+
+    local canPay, msg, args = buyer:canPay(price)
+    if not canPay then -- if there was an error, print it
+        player:sendChatMessage(station.title, 1, msg, unpack(args))
+        return
+    end
+
+    buyer:pay(price)
+
+    local newSize = factorySize + 1
+    factorySize = newSize
+    Factory.maxNumProductions = factorySize + 1
+    Factory.updateTitle()
+
+    Factory.sync()
+    invokeClientFunction(player, "refreshConfigUI")
+end
 
 -- this function gets called every time the window is closed on the client
 --function onCloseWindow()
@@ -902,12 +1101,14 @@ function Factory.updateServer(timeStep)
     Factory.updateOrganizeGoodsBulletins(timeStep)
     Factory.updateDeliveryBulletins(timeStep)
 
-    if Owner().isPlayer then
-        Factory.sendShuttleErrors()
-    end
+    Factory.sendShuttleErrors()
+    Factory.sendProductionError()
 end
 
 function Factory.sendShuttleErrors()
+
+    if not Owner().isPlayer then return end
+
     local messages = {}
     local send = false
 
@@ -950,6 +1151,36 @@ end
 function Factory.receiveShuttleErrors(delivered, delivering)
     deliveredStationsErrors = delivered
     deliveringStationsErrors = delivering
+
+    Factory.refreshConfigErrors()
+end
+
+function Factory.sendProductionError()
+
+    if not Owner().isPlayer then return end
+
+    local send = false
+
+    if productionError ~= newProductionError then
+        send = true
+    end
+
+    productionError = newProductionError
+
+    if send and productionError then
+        local player = Player()
+        local x, y = Sector():getCoordinates()
+        local px, py = player:getSectorCoordinates()
+
+        if x == px and y == py then
+            invokeClientFunction(Player(), "receiveProductionError", productionError)
+        end
+    end
+
+end
+
+function Factory.receiveProductionError(error)
+    productionError = error or ""
 
     Factory.refreshConfigErrors()
 end
@@ -1308,35 +1539,57 @@ function Factory.requestTraders(timeStep)
     -- this decreases the time until the factory generates profit
     if Factory.trader.activelySell then
         for _, result in pairs(production.results) do
-            Factory.checkSpawnBuyer(self, result, immediate)
+            Factory.trySpawnBuyer(self, result, immediate)
         end
 
         for _, garbage in pairs(production.garbages) do
-            Factory.checkSpawnBuyer(self, garbage, immediate)
+            Factory.trySpawnBuyer(self, garbage, immediate)
         end
     end
 
     -- then call for ingredients
     if Factory.trader.activelyRequest then
         for _, ingredient in pairs(production.ingredients) do
-            local have = Factory.getNumGoods(ingredient.name)
-            if have < ingredient.amount then
-                local maximum = Factory.getMaxGoods(ingredient.name)
-
-                maximum = math.min(maximum, 500)
-
-                local amount = maximum - have
-                if immediate then amount = round(amount * 0.3) end
-
-                TradingUtility.spawnSeller(self.id, getScriptPath(), ingredient.name, amount, Factory, immediate)
-                Factory.traderRequestCooldown = 120
-                return
-            end
+            Factory.trySpawnSeller(self, ingredient, immediate)
         end
     end
 end
 
-function Factory.checkSpawnBuyer(self, good, immediate)
+function Factory.trySpawnSeller(self, good, immediate)
+    if Factory.traderRequestCooldown > 0 then return end
+
+    -- we only have to check buy price factor since sell price factor is directly coupled to buy price factor
+    -- high prices for goods make it more likely for sellers to show up since they earn more money
+    local probability = lerp(Factory.trader.buyPriceFactor, 0.5, 1.5, 0.3, 1.0)
+    if not random():test(probability) then
+        Factory.traderRequestCooldown = 90
+        return
+    end
+
+    local have = Factory.getNumGoods(good.name)
+    if have < good.amount then
+        local maximum = Factory.getMaxGoods(good.name)
+
+        maximum = math.min(maximum, 500)
+
+        local amount = maximum - have
+        if immediate then amount = round(amount * 0.3) end
+
+        TradingUtility.spawnSeller(self.id, getScriptPath(), good.name, amount, Factory, immediate)
+        Factory.traderRequestCooldown = 90
+    end
+end
+
+function Factory.trySpawnBuyer(self, good, immediate)
+    if Factory.traderRequestCooldown > 0 then return end
+
+    -- low prices for goods make it more likely for buyers to show up since they can save money here
+    local probability = lerp(Factory.trader.buyPriceFactor, 0.5, 1.5, 1.0, 0.3)
+    if not random():test(probability) then
+        Factory.traderRequestCooldown = 90
+        return
+    end
+
     local newAmount = Factory.getNumGoods(good.name) + good.amount
     local maxGoods = Factory.getMaxGoods(good.name)
 
@@ -1344,10 +1597,10 @@ function Factory.checkSpawnBuyer(self, good, immediate)
 
     -- print("newAmount: " .. newAmount .. ", maxGoods: " .. maxGoods .. ", value: " .. value)
 
+    -- spawn a trader when stocks are almost full, or when the value of the produced stocks exceeds 100.000k
     if newAmount > maxGoods * 0.8 or (value > 100 * 1000 and random():test(0.3)) then
         TradingUtility.spawnBuyer(self.id, getScriptPath(), good.name, Factory, immediate)
-        Factory.traderRequestCooldown = 120
-        return
+        Factory.traderRequestCooldown = 90
     end
 end
 
@@ -1364,25 +1617,24 @@ function Factory.updateProduction(timeStep)
         -- print("can't produce as there are no more slots free for production")
     end
 
-    -- if math.random() < 0.5 then
-    --     canProduce = false
-    --     -- print("can't produce due to random not producing")
-    -- end
-
     -- only start if there are actually enough ingredients for producing
     for i, ingredient in pairs(production.ingredients) do
         if ingredient.optional == 0 and Factory.getNumGoods(ingredient.name) < ingredient.amount then
             canProduce = false
+            newProductionError = "Factory can't produce because ingredients are missing!"%_T
             -- print("can't produce due to missing ingredients: " .. ingredient.amount .. " " .. ingredient.name .. ", have: " .. Factory.getNumGoods(ingredient.name))
             break
         end
     end
 
+    local station = Entity()
     for i, garbage in pairs(production.garbages) do
         local newAmount = Factory.getNumGoods(garbage.name) + garbage.amount
+        local size = Factory.getGoodSize(garbage.name)
 
-        if newAmount > Factory.getMaxStock(Factory.getGoodSize(garbage.name)) then
+        if newAmount > Factory.getMaxStock(size) or station.freeCargoSpace < garbage.amount * size then
             canProduce = false
+            newProductionError = "Factory can't produce because there is not enough cargo space for products!"%_T
             -- print("can't produce due to missing room for garbage")
             break
         end
@@ -1390,9 +1642,12 @@ function Factory.updateProduction(timeStep)
 
     for _, result in pairs(production.results) do
         local newAmount = Factory.getNumGoods(result.name) + result.amount
-        if newAmount > Factory.getMaxStock(Factory.getGoodSize(result.name)) then
-            -- print("can't produce due to missing room for result")
+        local size = Factory.getGoodSize(result.name)
+
+        if newAmount > Factory.getMaxStock(size) or station.freeCargoSpace < result.amount * size then
             canProduce = false
+            newProductionError = "Factory can't produce because there is not enough cargo space for products!"%_T
+            -- print("can't produce due to missing room for result")
             break
         end
     end
@@ -1402,6 +1657,7 @@ function Factory.updateProduction(timeStep)
             Factory.decreaseGoods(ingredient.name, ingredient.amount)
         end
 
+        newProductionError = ""
         -- print("start production")
 
         -- start production

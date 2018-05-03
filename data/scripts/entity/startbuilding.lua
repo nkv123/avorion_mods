@@ -11,7 +11,7 @@ StartBuilding = {}
 function StartBuilding.interactionPossible(playerIndex, option)
     local entity = Entity()
 
-    if entity.factionIndex == playerIndex then
+    if checkEntityInteractionPermissions(Entity(), AlliancePrivilege.ModifyCrafts, AlliancePrivilege.SpendResources) then
         return true
     end
 

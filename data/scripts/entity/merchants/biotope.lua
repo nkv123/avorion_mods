@@ -8,4 +8,4 @@ Biotope = require ("consumer")
 
 Biotope.consumerName = "Biotope"%_t
 Biotope.consumerIcon = "data/textures/icons/pixel/biotope.png"
-Biotope.consumedGoods = {"Food", "Food Bar", "Fungus", "Wood", "Glass", "Sheep", "Cattle", "Wheat", "Corn", "Rice", "Vegetable", "Water", "Coal"}
+Biotope.consumedGoods = {"Food", "Food Bar", "Fungus", "Wood", "Glass", "Sheep", "Cattle", "Wheat", "Corn", "Rice", "Vegetable", "Water", "Coal", "Plant"}

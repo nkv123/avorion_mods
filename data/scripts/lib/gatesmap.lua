@@ -158,7 +158,9 @@ function GatesMap:getConnectedSectors(from)
     -- find all sectors that can be considered to have a gate connection
     local sectors = {}
 
-    local range = self.range
+    -- gather sectors in twice the range because they are also used with one indirection
+    -- i.e. to find gates around a gate
+    local range = self.range * 2
 
     for dx = -range, range do
         for dy = -range, range do

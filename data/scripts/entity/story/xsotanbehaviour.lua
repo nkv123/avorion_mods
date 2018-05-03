@@ -1,3 +1,4 @@
+
 if onServer() then
 
 package.path = package.path .. ";data/scripts/lib/?.lua"
@@ -6,6 +7,7 @@ require ("randomext")
 Balancing = require("galaxy")
 
 function initialize()
+    Sector():registerCallback("onTorpedoLaunched", "onSetToAggressive")
     Sector():registerCallback("onStartFiring", "onSetToAggressive")
     Entity():registerCallback("onDestroyed", "onDestroyed")
 end

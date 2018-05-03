@@ -57,7 +57,7 @@ function RepairDock.initialize()
 
             math.randomseed(Sector().seed + Sector().numEntities)
             addConstructionScaffold(station)
-            math.randomseed(os.time())
+            math.randomseed(appTimeMs())
         end
     end
 
@@ -119,24 +119,20 @@ function RepairDock.initUI()
     local rect = lister:nextRect(30)
     local label = window:createLabel(rect.topLeft, "If you choose this station as your reconstruction site, then when you die, your drone will be reconstructed at this station and you will be placed in this sector."%_t, 12)
     label.fontSize = 12
-
+    label.wordBreak = true
 end
 
 -- this function gets called every time the window is shown on the client, ie. when a player presses F and if interactionPossible() returned 1
 function RepairDock.onShowWindow(option)
     if option == 0 then
-        local player = Player()
-        local ship = Entity(player.craftIndex)
-        local faction = Faction(ship.factionIndex)
-
-        if faction.isPlayer then
-            faction = player
-        elseif faction.isAlliance then
-            faction = Alliance()
+        local buyer = Player()
+        local ship = buyer.craft--Entity(player.craftIndex)
+        if ship.factionIndex == buyer.allianceIndex then
+            buyer = buyer.alliance
         end
 
         -- get the plan of the player (or alliance)'s ship template
-        local intact = faction:getShipPlan(ship.name)
+        local intact = buyer:getShipPlan(ship.name)
 
         -- get the plan of the player's ship
         local broken = ship:getPlan()
@@ -144,8 +140,8 @@ function RepairDock.onShowWindow(option)
         -- set to display
         planDisplayer:setPlans(broken, intact)
 
-        uiMoneyCost = RepairDock.getRepairMoneyCost(player, intact, broken, ship.durability / ship.maxDurability)
-        uiResourceCost = RepairDock.getRepairResourcesCost(player, intact, broken, ship.durability / ship.maxDurability)
+        uiMoneyCost = RepairDock.getRepairMoneyCostAndTax(buyer, intact, broken, ship.durability / ship.maxDurability)
+        uiResourceCost = RepairDock.getRepairResourcesCost(buyer, intact, broken, ship.durability / ship.maxDurability)
 
         local damaged = false
 
@@ -228,7 +224,7 @@ function RepairDock.repairCraft()
     local perfectPlan = buyer:getShipPlan(ship.name)
     local damagedPlan = ship:getPlan()
 
-    local requiredMoney = RepairDock.getRepairMoneyCost(buyer, perfectPlan, damagedPlan, ship.durability / ship.maxDurability)
+    local requiredMoney, tax = RepairDock.getRepairMoneyCostAndTax(buyer, perfectPlan, damagedPlan, ship.durability / ship.maxDurability)
     local requiredResources = RepairDock.getRepairResourcesCost(buyer, perfectPlan, damagedPlan, ship.durability / ship.maxDurability)
 
     local canPay, msg, args = buyer:canPay(requiredMoney, unpack(requiredResources))
@@ -238,12 +234,12 @@ function RepairDock.repairCraft()
         return
     end
 
-    receiveTransactionTax(station, requiredMoney * RepairDock.tax)
+    receiveTransactionTax(station, tax)
 
     buyer:pay(requiredMoney, unpack(requiredResources))
 
     perfectPlan:resetDurability()
-    ship:setPlan(perfectPlan)
+    ship:setMovePlan(perfectPlan)
     ship.durability = ship.maxDurability
 
     -- relations of the player to the faction owning the repair dock get better
@@ -308,15 +304,61 @@ function RepairDock.getRepairResourcesCost(orderingFaction, perfectPlan, damaged
 
 end
 
-function RepairDock.getRepairMoneyCost(orderingFaction, perfectPlan, damagedPlan, durabilityPercentage)
+function RepairDock.getRepairMoneyCostAndTax(orderingFaction, perfectPlan, damagedPlan, durabilityPercentage)
 
     local value = perfectPlan:getMoneyValue() - damagedPlan:getMoneyValue();
     value = value + perfectPlan:getMoneyValue() * (1.0 - durabilityPercentage)
     value = value / 2
 
     local fee = RepairDock.getRepairFactor() + GetFee(Faction(), orderingFaction)
+    local price = value * fee
+    local tax = round(price * RepairDock.tax)
 
-    return value * fee
+    if Faction().index == orderingFaction.index then
+        price = price - tax
+        -- don't pay out for the second time
+        tax = 0
+    end
+
+    return price, tax
+end
+
+function RepairDock.getRepairMoneyCostAndTaxTest()
+    local ship = Player(callingPlayer).craft
+    local buyer = Faction(ship.factionIndex)
+
+    if buyer.isPlayer then
+        buyer = Player(buyer.index)
+    elseif buyer.isAlliance then
+        buyer = Alliance(buyer.index)
+    end
+
+    local perfectPlan = buyer:getShipPlan(ship.name)
+    local damagedPlan = ship:getPlan()
+
+    return RepairDock.getRepairMoneyCostAndTax(buyer, perfectPlan, damagedPlan, ship.durability / ship.maxDurability)
+end
+
+function RepairDock.getRepairResourcesCostTest()
+    local ship = Player(callingPlayer).craft
+    local buyer = Faction(ship.factionIndex)
+
+    if buyer.isPlayer then
+        buyer = Player(buyer.index)
+    elseif buyer.isAlliance then
+        buyer = Alliance(buyer.index)
+    end
+
+    local perfectPlan = buyer:getShipPlan(ship.name)
+    local damagedPlan = ship:getPlan()
+
+    local resources = RepairDock.getRepairResourcesCost(buyer, perfectPlan, damagedPlan, ship.durability / ship.maxDurability)
+
+    for i = 1, NumMaterials() do
+        resources[i] = resources[i] or 0
+    end
+
+    return unpack(resources)
 end
 
 function RepairDock.getReconstructionSiteChangePrice()
@@ -324,7 +366,7 @@ function RepairDock.getReconstructionSiteChangePrice()
 
     local d = length(vec2(x, y))
 
-    local factor = 1.0 + (1.0 - math.min(1, d / 450)) * 250
+    local factor = 1.0 + (1.0 - math.min(1, d / 450)) * 125
 
     local price = factor * 100000
 
@@ -337,4 +379,3 @@ end
 function RepairDock.getRepairFactor()
     return 0.75 -- Completely repairing a ship would cost 0.75x the ship's value
 end
-

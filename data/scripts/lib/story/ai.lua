@@ -23,11 +23,12 @@ function AI.addTurrets(boss, numTurrets)
 
     -- create custom plasma turrets
     TurretGenerator.initialize(Seed(150))
-    local turret = TurretGenerator.generate(300, 0, 0, Rarity(RarityType.Common), WeaponType.PlasmaGun)
+
+    local turret = TurretGenerator.generate(300, 0, 0, Rarity(RarityType.Exceptional), WeaponType.PlasmaGun)
     local weapons = {turret:getWeapons()}
     turret:clearWeapons()
     for _, weapon in pairs(weapons) do
-        weapon.damage = 10 / #weapons
+        weapon.damage = 15 / #weapons
         weapon.fireRate = 2
         weapon.reach = 1000
         weapon.pmaximumTime = weapon.reach / weapon.pvelocity
@@ -36,6 +37,8 @@ function AI.addTurrets(boss, numTurrets)
     end
     turret.crew = Crew()
     ShipUtility.addTurretsToCraft(boss, turret, numTurrets, numTurrets)
+
+    ShipUtility.addBossAntiTorpedoEquipment(boss, numTurrets)
 
 end
 

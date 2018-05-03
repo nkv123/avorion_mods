@@ -96,10 +96,14 @@ end
 
 function FighterMerchant.initialize()
     FighterMerchant.shop:initialize("Fighter Merchant"%_t)
+
+    if onClient() and EntityIcon().icon == "" then
+        EntityIcon().icon = "data/textures/icons/pixel/fighter.png"
+    end
 end
 
 function FighterMerchant.initUI()
-    FighterMerchant.shop:initUI("Buy Fighters"%_t, "Fighter Merchant"%_t)
+    FighterMerchant.shop:initUI("Trade Equipment"%_t, "Fighter Merchant"%_t, "Fighters"%_t)
 end
 
 FighterMerchant.shop.ItemWrapper = SellableFighter
