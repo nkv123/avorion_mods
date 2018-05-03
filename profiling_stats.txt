@@ -1,0 +1,1886 @@
+Performance[ void Server::update(float): 50.609 ms; 100% ]
+  [ void Galaxy::update(float): 1.367 ms; 2.7% ]
+    [ void Galaxy::updateSectors(float): 1.35 ms; 2.7% ]
+    [ void Galaxy::updateWormHoleResults(): 0.011 ms; 0% ]
+    [ void Galaxy::updateEntityTransfers(): 0.001 ms; 0% ]
+    [ void Galaxy::updateJumpingEntities(): 0.001 ms; 0% ]
+    [ void Galaxy::handleFinishedScriptPacketCallbacks(): 0.001 ms; 0% ]
+  [ MessageServer update: 0.475 ms; 0.9% ]
+  [ void Server::updateDebugDiagnostics(): 0.192 ms; 0.4% ]
+  [ void Server::updatePlayerCommunicatorAdministration(float): 0.016 ms; 0% ]
+  [ void FactionDatabase::update(float): 0.007 ms; 0% ]
+
+Detailed script memory usage:
+Total memory used by scripts: 106.5MB
+LuaState with 12 namespaces and 12 files loaded: 3.59MB
+  Namespaces:
+    Backup
+    BulletinBoard
+    Consumer
+    CraftOrders
+    CrewBoard
+    EnterCraft
+    ExitCraft
+    MilitaryOutpost
+    RegrowDocks
+    StartBuilding
+    StoryBulletins
+    TransferCrewGoods
+  Files:
+    data/scripts/entity/merchants/militaryoutpost.lua
+    data/scripts/entity/regrowdocks.lua
+    data/scripts/entity/startbuilding.lua
+    data/scripts/entity/entercraft.lua
+    data/scripts/entity/exitcraft.lua
+    data/scripts/entity/crewboard.lua
+    data/scripts/entity/backup.lua
+    data/scripts/entity/bulletinboard.lua
+    data/scripts/entity/story/bulletins.lua
+    data/scripts/entity/craftorders.lua
+    data/scripts/entity/transfercrewgoods.lua
+    data/scripts/entity/merchants/consumer.lua
+
+LuaState with 0 namespaces and 0 files loaded: 3.04MB
+
+LuaState with 11 namespaces and 11 files loaded: 2.34MB
+  Namespaces:
+    Backup
+    BulletinBoard
+    CraftOrders
+    CrewBoard
+    EnterCraft
+    ExitCraft
+    Factory
+    RegrowDocks
+    StartBuilding
+    StoryBulletins
+    TransferCrewGoods
+  Files:
+    data/scripts/entity/merchants/factory.lua
+    data/scripts/entity/regrowdocks.lua
+    data/scripts/entity/startbuilding.lua
+    data/scripts/entity/entercraft.lua
+    data/scripts/entity/exitcraft.lua
+    data/scripts/entity/crewboard.lua
+    data/scripts/entity/backup.lua
+    data/scripts/entity/bulletinboard.lua
+    data/scripts/entity/story/bulletins.lua
+    data/scripts/entity/craftorders.lua
+    data/scripts/entity/transfercrewgoods.lua
+
+LuaState with 0 namespaces and 0 files loaded: 2.31MB
+
+LuaState with 12 namespaces and 12 files loaded: 2.29MB
+  Namespaces:
+    Backup
+    BaseFactory
+    BulletinBoard
+    Consumer
+    CraftOrders
+    CrewBoard
+    EnterCraft
+    ExitCraft
+    RegrowDocks
+    StartBuilding
+    StoryBulletins
+    TransferCrewGoods
+  Files:
+    data/scripts/entity/merchants/basefactory.lua
+    data/scripts/entity/regrowdocks.lua
+    data/scripts/entity/merchants/consumer.lua
+    data/scripts/entity/startbuilding.lua
+    data/scripts/entity/entercraft.lua
+    data/scripts/entity/exitcraft.lua
+    data/scripts/entity/crewboard.lua
+    data/scripts/entity/backup.lua
+    data/scripts/entity/bulletinboard.lua
+    data/scripts/entity/story/bulletins.lua
+    data/scripts/entity/craftorders.lua
+    data/scripts/entity/transfercrewgoods.lua
+
+LuaState with 12 namespaces and 12 files loaded: 2.28MB
+  Namespaces:
+    Backup
+    BaseFactory
+    BulletinBoard
+    Consumer
+    CraftOrders
+    CrewBoard
+    EnterCraft
+    ExitCraft
+    RegrowDocks
+    StartBuilding
+    StoryBulletins
+    TransferCrewGoods
+  Files:
+    data/scripts/entity/merchants/basefactory.lua
+    data/scripts/entity/regrowdocks.lua
+    data/scripts/entity/merchants/consumer.lua
+    data/scripts/entity/startbuilding.lua
+    data/scripts/entity/entercraft.lua
+    data/scripts/entity/exitcraft.lua
+    data/scripts/entity/crewboard.lua
+    data/scripts/entity/backup.lua
+    data/scripts/entity/bulletinboard.lua
+    data/scripts/entity/story/bulletins.lua
+    data/scripts/entity/craftorders.lua
+    data/scripts/entity/transfercrewgoods.lua
+
+LuaState with 0 namespaces and 0 files loaded: 2.27MB
+
+LuaState with 11 namespaces and 11 files loaded: 2.25MB
+  Namespaces:
+    Backup
+    BaseFactory
+    BulletinBoard
+    CraftOrders
+    CrewBoard
+    EnterCraft
+    ExitCraft
+    RegrowDocks
+    StartBuilding
+    StoryBulletins
+    TransferCrewGoods
+  Files:
+    data/scripts/entity/merchants/basefactory.lua
+    data/scripts/entity/regrowdocks.lua
+    data/scripts/entity/startbuilding.lua
+    data/scripts/entity/entercraft.lua
+    data/scripts/entity/exitcraft.lua
+    data/scripts/entity/crewboard.lua
+    data/scripts/entity/backup.lua
+    data/scripts/entity/bulletinboard.lua
+    data/scripts/entity/story/bulletins.lua
+    data/scripts/entity/craftorders.lua
+    data/scripts/entity/transfercrewgoods.lua
+
+LuaState with 12 namespaces and 12 files loaded: 1.99MB
+  Namespaces:
+    Backup
+    BulletinBoard
+    CargoTransportLicenseMerchant
+    CraftOrders
+    CrewBoard
+    EnterCraft
+    ExitCraft
+    RegrowDocks
+    StartBuilding
+    StoryBulletins
+    TradingPost
+    TransferCrewGoods
+  Files:
+    data/scripts/entity/merchants/tradingpost.lua
+    data/scripts/entity/regrowdocks.lua
+    data/scripts/entity/merchants/cargotransportlicensemerchant.lua
+    data/scripts/entity/startbuilding.lua
+    data/scripts/entity/entercraft.lua
+    data/scripts/entity/exitcraft.lua
+    data/scripts/entity/crewboard.lua
+    data/scripts/entity/backup.lua
+    data/scripts/entity/bulletinboard.lua
+    data/scripts/entity/story/bulletins.lua
+    data/scripts/entity/craftorders.lua
+    data/scripts/entity/transfercrewgoods.lua
+
+LuaState with 13 namespaces and 13 files loaded: 1.98MB
+  Namespaces:
+    Backup
+    BulletinBoard
+    Consumer
+    CraftOrders
+    CrewBoard
+    EnterCraft
+    ExitCraft
+    RegrowDocks
+    RepairDock
+    Shipyard
+    StartBuilding
+    StoryBulletins
+    TransferCrewGoods
+  Files:
+    data/scripts/entity/merchants/shipyard.lua
+    data/scripts/entity/regrowdocks.lua
+    data/scripts/entity/startbuilding.lua
+    data/scripts/entity/entercraft.lua
+    data/scripts/entity/exitcraft.lua
+    data/scripts/entity/crewboard.lua
+    data/scripts/entity/backup.lua
+    data/scripts/entity/bulletinboard.lua
+    data/scripts/entity/story/bulletins.lua
+    data/scripts/entity/craftorders.lua
+    data/scripts/entity/transfercrewgoods.lua
+    data/scripts/entity/merchants/repairdock.lua
+    data/scripts/entity/merchants/consumer.lua
+
+LuaState with 12 namespaces and 12 files loaded: 1.97MB
+  Namespaces:
+    Backup
+    BulletinBoard
+    CargoTransportLicenseMerchant
+    CraftOrders
+    CrewBoard
+    EnterCraft
+    ExitCraft
+    RegrowDocks
+    StartBuilding
+    StoryBulletins
+    TradingPost
+    TransferCrewGoods
+  Files:
+    data/scripts/entity/merchants/tradingpost.lua
+    data/scripts/entity/regrowdocks.lua
+    data/scripts/entity/merchants/cargotransportlicensemerchant.lua
+    data/scripts/entity/startbuilding.lua
+    data/scripts/entity/entercraft.lua
+    data/scripts/entity/exitcraft.lua
+    data/scripts/entity/crewboard.lua
+    data/scripts/entity/backup.lua
+    data/scripts/entity/bulletinboard.lua
+    data/scripts/entity/story/bulletins.lua
+    data/scripts/entity/craftorders.lua
+    data/scripts/entity/transfercrewgoods.lua
+
+LuaState with 12 namespaces and 12 files loaded: 1.95MB
+  Namespaces:
+    Backup
+    BulletinBoard
+    CargoTransportLicenseMerchant
+    CraftOrders
+    CrewBoard
+    EnterCraft
+    ExitCraft
+    RegrowDocks
+    StartBuilding
+    StoryBulletins
+    TradingPost
+    TransferCrewGoods
+  Files:
+    data/scripts/entity/merchants/tradingpost.lua
+    data/scripts/entity/regrowdocks.lua
+    data/scripts/entity/merchants/cargotransportlicensemerchant.lua
+    data/scripts/entity/startbuilding.lua
+    data/scripts/entity/entercraft.lua
+    data/scripts/entity/exitcraft.lua
+    data/scripts/entity/crewboard.lua
+    data/scripts/entity/backup.lua
+    data/scripts/entity/bulletinboard.lua
+    data/scripts/entity/story/bulletins.lua
+    data/scripts/entity/craftorders.lua
+    data/scripts/entity/transfercrewgoods.lua
+
+LuaState with 12 namespaces and 12 files loaded: 1.76MB
+  Namespaces:
+    Backup
+    BulletinBoard
+    Consumer
+    CraftOrders
+    CrewBoard
+    EnterCraft
+    ExitCraft
+    RegrowDocks
+    RepairDock
+    StartBuilding
+    StoryBulletins
+    TransferCrewGoods
+  Files:
+    data/scripts/entity/merchants/repairdock.lua
+    data/scripts/entity/regrowdocks.lua
+    data/scripts/entity/startbuilding.lua
+    data/scripts/entity/entercraft.lua
+    data/scripts/entity/exitcraft.lua
+    data/scripts/entity/crewboard.lua
+    data/scripts/entity/backup.lua
+    data/scripts/entity/bulletinboard.lua
+    data/scripts/entity/story/bulletins.lua
+    data/scripts/entity/craftorders.lua
+    data/scripts/entity/transfercrewgoods.lua
+    data/scripts/entity/merchants/consumer.lua
+
+LuaState with 12 namespaces and 12 files loaded: 1.75MB
+  Namespaces:
+    Backup
+    BulletinBoard
+    CraftOrders
+    CrewBoard
+    EnterCraft
+    ExitCraft
+    Factory
+    Insurance
+    RegrowDocks
+    StartBuilding
+    StoryBulletins
+    TransferCrewGoods
+  Files:
+    data/scripts/entity/regrowdocks.lua
+    data/scripts/entity/startbuilding.lua
+    data/scripts/entity/entercraft.lua
+    data/scripts/entity/exitcraft.lua
+    data/scripts/entity/crewboard.lua
+    data/scripts/entity/backup.lua
+    data/scripts/entity/bulletinboard.lua
+    data/scripts/entity/story/bulletins.lua
+    data/scripts/entity/craftorders.lua
+    data/scripts/entity/transfercrewgoods.lua
+    data/scripts/entity/insurance.lua
+    data/scripts/entity/merchants/factory.lua
+
+LuaState with 11 namespaces and 11 files loaded: 1.71MB
+  Namespaces:
+    Backup
+    BulletinBoard
+    CraftOrders
+    CrewBoard
+    EnterCraft
+    ExitCraft
+    RegrowDocks
+    StartBuilding
+    StoryBulletins
+    TransferCrewGoods
+    TurretFactorySeller
+  Files:
+    data/scripts/entity/regrowdocks.lua
+    data/scripts/entity/startbuilding.lua
+    data/scripts/entity/entercraft.lua
+    data/scripts/entity/exitcraft.lua
+    data/scripts/entity/crewboard.lua
+    data/scripts/entity/backup.lua
+    data/scripts/entity/bulletinboard.lua
+    data/scripts/entity/story/bulletins.lua
+    data/scripts/entity/craftorders.lua
+    data/scripts/entity/transfercrewgoods.lua
+    data/scripts/entity/merchants/turretfactoryseller.lua
+
+LuaState with 12 namespaces and 12 files loaded: 1.71MB
+  Namespaces:
+    Backup
+    BulletinBoard
+    CraftOrders
+    CrewBoard
+    EnterCraft
+    ExitCraft
+    Factory
+    Insurance
+    RegrowDocks
+    StartBuilding
+    StoryBulletins
+    TransferCrewGoods
+  Files:
+    data/scripts/entity/regrowdocks.lua
+    data/scripts/entity/startbuilding.lua
+    data/scripts/entity/entercraft.lua
+    data/scripts/entity/exitcraft.lua
+    data/scripts/entity/crewboard.lua
+    data/scripts/entity/backup.lua
+    data/scripts/entity/bulletinboard.lua
+    data/scripts/entity/story/bulletins.lua
+    data/scripts/entity/craftorders.lua
+    data/scripts/entity/transfercrewgoods.lua
+    data/scripts/entity/insurance.lua
+    data/scripts/entity/merchants/factory.lua
+
+LuaState with 12 namespaces and 12 files loaded: 1.71MB
+  Namespaces:
+    Backup
+    BulletinBoard
+    CraftOrders
+    CrewBoard
+    EnterCraft
+    ExitCraft
+    Factory
+    Insurance
+    RegrowDocks
+    StartBuilding
+    StoryBulletins
+    TransferCrewGoods
+  Files:
+    data/scripts/entity/regrowdocks.lua
+    data/scripts/entity/startbuilding.lua
+    data/scripts/entity/entercraft.lua
+    data/scripts/entity/exitcraft.lua
+    data/scripts/entity/crewboard.lua
+    data/scripts/entity/backup.lua
+    data/scripts/entity/bulletinboard.lua
+    data/scripts/entity/story/bulletins.lua
+    data/scripts/entity/craftorders.lua
+    data/scripts/entity/transfercrewgoods.lua
+    data/scripts/entity/insurance.lua
+    data/scripts/entity/merchants/factory.lua
+
+LuaState with 11 namespaces and 11 files loaded: 1.67MB
+  Namespaces:
+    Backup
+    BulletinBoard
+    CraftOrders
+    CrewBoard
+    EnterCraft
+    ExitCraft
+    Factory
+    RegrowDocks
+    StartBuilding
+    StoryBulletins
+    TransferCrewGoods
+  Files:
+    data/scripts/entity/crewboard.lua
+    data/scripts/entity/regrowdocks.lua
+    data/scripts/entity/startbuilding.lua
+    data/scripts/entity/entercraft.lua
+    data/scripts/entity/exitcraft.lua
+    data/scripts/entity/backup.lua
+    data/scripts/entity/bulletinboard.lua
+    data/scripts/entity/story/bulletins.lua
+    data/scripts/entity/craftorders.lua
+    data/scripts/entity/transfercrewgoods.lua
+    data/scripts/entity/merchants/factory.lua
+
+LuaState with 11 namespaces and 11 files loaded: 1.65MB
+  Namespaces:
+    Backup
+    BulletinBoard
+    CraftOrders
+    CrewBoard
+    EnterCraft
+    ExitCraft
+    Factory
+    RegrowDocks
+    StartBuilding
+    StoryBulletins
+    TransferCrewGoods
+  Files:
+    data/scripts/entity/merchants/factory.lua
+    data/scripts/entity/regrowdocks.lua
+    data/scripts/entity/startbuilding.lua
+    data/scripts/entity/entercraft.lua
+    data/scripts/entity/exitcraft.lua
+    data/scripts/entity/crewboard.lua
+    data/scripts/entity/backup.lua
+    data/scripts/entity/bulletinboard.lua
+    data/scripts/entity/story/bulletins.lua
+    data/scripts/entity/craftorders.lua
+    data/scripts/entity/transfercrewgoods.lua
+
+LuaState with 15 namespaces and 15 files loaded: 1.6MB
+  Namespaces:
+    Backup
+    BulletinBoard
+    Consumer
+    CraftOrders
+    CrewBoard
+    EnterCraft
+    EquipmentDock
+    ExitCraft
+    FighterMerchant
+    RegrowDocks
+    StartBuilding
+    StoryBulletins
+    TransferCrewGoods
+    TurretMerchant
+    UtilityMerchant
+  Files:
+    data/scripts/entity/merchants/equipmentdock.lua
+    data/scripts/entity/regrowdocks.lua
+    data/scripts/entity/startbuilding.lua
+    data/scripts/entity/entercraft.lua
+    data/scripts/entity/exitcraft.lua
+    data/scripts/entity/crewboard.lua
+    data/scripts/entity/backup.lua
+    data/scripts/entity/bulletinboard.lua
+    data/scripts/entity/story/bulletins.lua
+    data/scripts/entity/craftorders.lua
+    data/scripts/entity/transfercrewgoods.lua
+    data/scripts/entity/merchants/turretmerchant.lua
+    data/scripts/entity/merchants/fightermerchant.lua
+    data/scripts/entity/merchants/utilitymerchant.lua
+    data/scripts/entity/merchants/consumer.lua
+
+LuaState with 11 namespaces and 11 files loaded: 1.58MB
+  Namespaces:
+    Backup
+    BulletinBoard
+    CraftOrders
+    CrewBoard
+    EnterCraft
+    ExitCraft
+    Factory
+    RegrowDocks
+    StartBuilding
+    StoryBulletins
+    TransferCrewGoods
+  Files:
+    data/scripts/entity/merchants/factory.lua
+    data/scripts/entity/regrowdocks.lua
+    data/scripts/entity/startbuilding.lua
+    data/scripts/entity/entercraft.lua
+    data/scripts/entity/exitcraft.lua
+    data/scripts/entity/crewboard.lua
+    data/scripts/entity/backup.lua
+    data/scripts/entity/bulletinboard.lua
+    data/scripts/entity/story/bulletins.lua
+    data/scripts/entity/craftorders.lua
+    data/scripts/entity/transfercrewgoods.lua
+
+LuaState with 12 namespaces and 12 files loaded: 1.56MB
+  Namespaces:
+    Backup
+    BaseFactory
+    BulletinBoard
+    Consumer
+    CraftOrders
+    CrewBoard
+    EnterCraft
+    ExitCraft
+    RegrowDocks
+    StartBuilding
+    StoryBulletins
+    TransferCrewGoods
+  Files:
+    data/scripts/entity/merchants/basefactory.lua
+    data/scripts/entity/regrowdocks.lua
+    data/scripts/entity/merchants/consumer.lua
+    data/scripts/entity/startbuilding.lua
+    data/scripts/entity/entercraft.lua
+    data/scripts/entity/exitcraft.lua
+    data/scripts/entity/crewboard.lua
+    data/scripts/entity/backup.lua
+    data/scripts/entity/bulletinboard.lua
+    data/scripts/entity/story/bulletins.lua
+    data/scripts/entity/craftorders.lua
+    data/scripts/entity/transfercrewgoods.lua
+
+LuaState with 11 namespaces and 11 files loaded: 1.53MB
+  Namespaces:
+    Backup
+    BulletinBoard
+    CraftOrders
+    CrewBoard
+    EnterCraft
+    ExitCraft
+    Factory
+    RegrowDocks
+    StartBuilding
+    StoryBulletins
+    TransferCrewGoods
+  Files:
+    data/scripts/entity/merchants/factory.lua
+    data/scripts/entity/regrowdocks.lua
+    data/scripts/entity/startbuilding.lua
+    data/scripts/entity/entercraft.lua
+    data/scripts/entity/exitcraft.lua
+    data/scripts/entity/crewboard.lua
+    data/scripts/entity/backup.lua
+    data/scripts/entity/bulletinboard.lua
+    data/scripts/entity/story/bulletins.lua
+    data/scripts/entity/craftorders.lua
+    data/scripts/entity/transfercrewgoods.lua
+
+LuaState with 11 namespaces and 11 files loaded: 1.53MB
+  Namespaces:
+    Backup
+    BaseFactory
+    BulletinBoard
+    CraftOrders
+    CrewBoard
+    EnterCraft
+    ExitCraft
+    RegrowDocks
+    StartBuilding
+    StoryBulletins
+    TransferCrewGoods
+  Files:
+    data/scripts/entity/merchants/basefactory.lua
+    data/scripts/entity/regrowdocks.lua
+    data/scripts/entity/startbuilding.lua
+    data/scripts/entity/entercraft.lua
+    data/scripts/entity/exitcraft.lua
+    data/scripts/entity/crewboard.lua
+    data/scripts/entity/backup.lua
+    data/scripts/entity/bulletinboard.lua
+    data/scripts/entity/story/bulletins.lua
+    data/scripts/entity/craftorders.lua
+    data/scripts/entity/transfercrewgoods.lua
+
+LuaState with 11 namespaces and 11 files loaded: 1.52MB
+  Namespaces:
+    Backup
+    BulletinBoard
+    CraftOrders
+    CrewBoard
+    EnterCraft
+    ExitCraft
+    Factory
+    RegrowDocks
+    StartBuilding
+    StoryBulletins
+    TransferCrewGoods
+  Files:
+    data/scripts/entity/merchants/factory.lua
+    data/scripts/entity/regrowdocks.lua
+    data/scripts/entity/startbuilding.lua
+    data/scripts/entity/entercraft.lua
+    data/scripts/entity/exitcraft.lua
+    data/scripts/entity/crewboard.lua
+    data/scripts/entity/backup.lua
+    data/scripts/entity/bulletinboard.lua
+    data/scripts/entity/story/bulletins.lua
+    data/scripts/entity/craftorders.lua
+    data/scripts/entity/transfercrewgoods.lua
+
+LuaState with 11 namespaces and 11 files loaded: 1.5MB
+  Namespaces:
+    Backup
+    BulletinBoard
+    CraftOrders
+    CrewBoard
+    EnterCraft
+    ExitCraft
+    RegrowDocks
+    ResourceDepot
+    StartBuilding
+    StoryBulletins
+    TransferCrewGoods
+  Files:
+    data/scripts/entity/merchants/resourcetrader.lua
+    data/scripts/entity/regrowdocks.lua
+    data/scripts/entity/startbuilding.lua
+    data/scripts/entity/entercraft.lua
+    data/scripts/entity/exitcraft.lua
+    data/scripts/entity/crewboard.lua
+    data/scripts/entity/backup.lua
+    data/scripts/entity/bulletinboard.lua
+    data/scripts/entity/story/bulletins.lua
+    data/scripts/entity/craftorders.lua
+    data/scripts/entity/transfercrewgoods.lua
+
+LuaState with 10 namespaces and 10 files loaded: 1.38MB
+  Namespaces:
+    Backup
+    BulletinBoard
+    CraftOrders
+    CrewBoard
+    EnterCraft
+    ExitCraft
+    RegrowDocks
+    StartBuilding
+    StoryBulletins
+    TransferCrewGoods
+  Files:
+    data/scripts/entity/regrowdocks.lua
+    data/scripts/entity/startbuilding.lua
+    data/scripts/entity/entercraft.lua
+    data/scripts/entity/exitcraft.lua
+    data/scripts/entity/crewboard.lua
+    data/scripts/entity/backup.lua
+    data/scripts/entity/bulletinboard.lua
+    data/scripts/entity/story/bulletins.lua
+    data/scripts/entity/craftorders.lua
+    data/scripts/entity/transfercrewgoods.lua
+
+LuaState with 11 namespaces and 11 files loaded: 1.1MB
+  Namespaces:
+    Backup
+    BulletinBoard
+    CraftOrders
+    CrewBoard
+    EnterCraft
+    ExitCraft
+    Habitat
+    RegrowDocks
+    StartBuilding
+    StoryBulletins
+    TransferCrewGoods
+  Files:
+    data/scripts/entity/merchants/habitat.lua
+    data/scripts/entity/regrowdocks.lua
+    data/scripts/entity/startbuilding.lua
+    data/scripts/entity/entercraft.lua
+    data/scripts/entity/exitcraft.lua
+    data/scripts/entity/crewboard.lua
+    data/scripts/entity/backup.lua
+    data/scripts/entity/bulletinboard.lua
+    data/scripts/entity/story/bulletins.lua
+    data/scripts/entity/craftorders.lua
+    data/scripts/entity/transfercrewgoods.lua
+
+LuaState with 0 namespaces and 1 files loaded: 1.09MB
+  Files:
+    data/scripts/systems/tradingoverview.lua
+
+LuaState with 6 namespaces and 6 files loaded: 1.01MB
+  Namespaces:
+    EventScheduler
+    HeadHunter
+    SpawnAI
+    SpawnAdventurer
+    SpawnGuardian
+    SpawnSwoks
+  Files:
+    data/scripts/player/headhunter.lua
+    data/scripts/player/eventscheduler.lua
+    data/scripts/player/story/spawnswoks.lua
+    data/scripts/player/story/spawnai.lua
+    data/scripts/player/story/spawnguardian.lua
+    data/scripts/player/story/spawnadventurer.lua
+
+LuaState with 7 namespaces and 7 files loaded: 1MB
+  Namespaces:
+    InitFactionWar
+    PassingShips
+    RelationChanges
+    RespawnResourceAsteroids
+    SectorEvents
+    SpawnPersecutors
+    Traders
+  Files:
+    data/scripts/sector/relationchanges.lua
+    data/scripts/sector/spawnpersecutors.lua
+    data/scripts/sector/eventscheduler.lua
+    data/scripts/sector/respawnresourceasteroids.lua
+    data/scripts/sector/passingships.lua
+    data/scripts/sector/traders.lua
+    data/scripts/sector/factionwar/initfactionwar.lua
+
+LuaState with 0 namespaces and 1 files loaded: 992.66kB
+  Files:
+    data/scripts/player/fakedistresssignal.lua
+
+LuaState with 6 namespaces and 6 files loaded: 987.9kB
+  Namespaces:
+    InitFactionWar
+    PassingShips
+    RelationChanges
+    SectorEvents
+    SpawnPersecutors
+    Traders
+  Files:
+    data/scripts/sector/relationchanges.lua
+    data/scripts/sector/spawnpersecutors.lua
+    data/scripts/sector/eventscheduler.lua
+    data/scripts/sector/passingships.lua
+    data/scripts/sector/traders.lua
+    data/scripts/sector/factionwar/initfactionwar.lua
+
+LuaState with 7 namespaces and 7 files loaded: 968.55kB
+  Namespaces:
+    InitFactionWar
+    PassingShips
+    RelationChanges
+    RespawnResourceAsteroids
+    SectorEvents
+    SpawnPersecutors
+    Traders
+  Files:
+    data/scripts/sector/relationchanges.lua
+    data/scripts/sector/spawnpersecutors.lua
+    data/scripts/sector/eventscheduler.lua
+    data/scripts/sector/respawnresourceasteroids.lua
+    data/scripts/sector/passingships.lua
+    data/scripts/sector/traders.lua
+    data/scripts/sector/factionwar/initfactionwar.lua
+
+LuaState with 0 namespaces and 1 files loaded: 922.98kB
+  Files:
+    data/scripts/entity/merchants/turretfactory.lua
+
+LuaState with 0 namespaces and 1 files loaded: 757.64kB
+  Files:
+    data/scripts/systems/tradingoverview.lua
+
+LuaState with 0 namespaces and 1 files loaded: 705.18kB
+  Files:
+    data/scripts/systems/tradingoverview.lua
+
+LuaState with 6 namespaces and 6 files loaded: 685.52kB
+  Namespaces:
+    InitFactionWar
+    PassingShips
+    RelationChanges
+    SectorEvents
+    SpawnPersecutors
+    Traders
+  Files:
+    data/scripts/sector/relationchanges.lua
+    data/scripts/sector/spawnpersecutors.lua
+    data/scripts/sector/eventscheduler.lua
+    data/scripts/sector/passingships.lua
+    data/scripts/sector/traders.lua
+    data/scripts/sector/factionwar/initfactionwar.lua
+
+LuaState with 6 namespaces and 6 files loaded: 685.25kB
+  Namespaces:
+    InitFactionWar
+    PassingShips
+    RelationChanges
+    SectorEvents
+    SpawnPersecutors
+    Traders
+  Files:
+    data/scripts/sector/relationchanges.lua
+    data/scripts/sector/spawnpersecutors.lua
+    data/scripts/sector/eventscheduler.lua
+    data/scripts/sector/passingships.lua
+    data/scripts/sector/traders.lua
+    data/scripts/sector/factionwar/initfactionwar.lua
+
+LuaState with 6 namespaces and 6 files loaded: 685.25kB
+  Namespaces:
+    InitFactionWar
+    PassingShips
+    RelationChanges
+    SectorEvents
+    SpawnPersecutors
+    Traders
+  Files:
+    data/scripts/sector/relationchanges.lua
+    data/scripts/sector/spawnpersecutors.lua
+    data/scripts/sector/eventscheduler.lua
+    data/scripts/sector/passingships.lua
+    data/scripts/sector/traders.lua
+    data/scripts/sector/factionwar/initfactionwar.lua
+
+LuaState with 0 namespaces and 1 files loaded: 683.44kB
+  Files:
+    data/scripts/systems/tradingoverview.lua
+
+LuaState with 6 namespaces and 6 files loaded: 682.34kB
+  Namespaces:
+    InitFactionWar
+    PassingShips
+    RelationChanges
+    SectorEvents
+    SpawnPersecutors
+    Traders
+  Files:
+    data/scripts/sector/relationchanges.lua
+    data/scripts/sector/spawnpersecutors.lua
+    data/scripts/sector/eventscheduler.lua
+    data/scripts/sector/passingships.lua
+    data/scripts/sector/traders.lua
+    data/scripts/sector/factionwar/initfactionwar.lua
+
+LuaState with 10 namespaces and 10 files loaded: 674kB
+  Namespaces:
+    CivilShip
+    CraftOrders
+    CrewTransport
+    EnterCraft
+    ExitCraft
+    Icon
+    InviteToGroup
+    StartBuilding
+    StoryHints
+    TransferCrewGoods
+  Files:
+    data/scripts/entity/civilship.lua
+    data/scripts/entity/dialogs/storyhints.lua
+    data/scripts/entity/icon.lua
+    data/scripts/entity/startbuilding.lua
+    data/scripts/entity/entercraft.lua
+    data/scripts/entity/exitcraft.lua
+    data/scripts/entity/invitetogroup.lua
+    data/scripts/entity/craftorders.lua
+    data/scripts/entity/transfercrewgoods.lua
+    data/scripts/entity/crewtransport.lua
+
+LuaState with 10 namespaces and 10 files loaded: 662.73kB
+  Namespaces:
+    CivilShip
+    CraftOrders
+    EnterCraft
+    ExitCraft
+    Icon
+    InviteToGroup
+    PassSector
+    StartBuilding
+    StoryHints
+    TransferCrewGoods
+  Files:
+    data/scripts/entity/civilship.lua
+    data/scripts/entity/dialogs/storyhints.lua
+    data/scripts/entity/icon.lua
+    data/scripts/entity/startbuilding.lua
+    data/scripts/entity/entercraft.lua
+    data/scripts/entity/exitcraft.lua
+    data/scripts/entity/invitetogroup.lua
+    data/scripts/entity/craftorders.lua
+    data/scripts/entity/transfercrewgoods.lua
+    data/scripts/entity/ai/passsector.lua
+
+LuaState with 10 namespaces and 10 files loaded: 661.13kB
+  Namespaces:
+    CivilShip
+    CraftOrders
+    CrewTransport
+    EnterCraft
+    ExitCraft
+    Icon
+    InviteToGroup
+    StartBuilding
+    StoryHints
+    TransferCrewGoods
+  Files:
+    data/scripts/entity/civilship.lua
+    data/scripts/entity/dialogs/storyhints.lua
+    data/scripts/entity/icon.lua
+    data/scripts/entity/startbuilding.lua
+    data/scripts/entity/entercraft.lua
+    data/scripts/entity/exitcraft.lua
+    data/scripts/entity/invitetogroup.lua
+    data/scripts/entity/craftorders.lua
+    data/scripts/entity/transfercrewgoods.lua
+    data/scripts/entity/crewtransport.lua
+
+LuaState with 10 namespaces and 10 files loaded: 660.62kB
+  Namespaces:
+    CivilShip
+    CraftOrders
+    EnterCraft
+    ExitCraft
+    Icon
+    InviteToGroup
+    PassSector
+    StartBuilding
+    StoryHints
+    TransferCrewGoods
+  Files:
+    data/scripts/entity/civilship.lua
+    data/scripts/entity/dialogs/storyhints.lua
+    data/scripts/entity/icon.lua
+    data/scripts/entity/startbuilding.lua
+    data/scripts/entity/entercraft.lua
+    data/scripts/entity/exitcraft.lua
+    data/scripts/entity/invitetogroup.lua
+    data/scripts/entity/craftorders.lua
+    data/scripts/entity/transfercrewgoods.lua
+    data/scripts/entity/ai/passsector.lua
+
+LuaState with 10 namespaces and 10 files loaded: 658.94kB
+  Namespaces:
+    CivilShip
+    CraftOrders
+    EnterCraft
+    ExitCraft
+    Icon
+    InviteToGroup
+    PassSector
+    StartBuilding
+    StoryHints
+    TransferCrewGoods
+  Files:
+    data/scripts/entity/civilship.lua
+    data/scripts/entity/dialogs/storyhints.lua
+    data/scripts/entity/icon.lua
+    data/scripts/entity/startbuilding.lua
+    data/scripts/entity/entercraft.lua
+    data/scripts/entity/exitcraft.lua
+    data/scripts/entity/invitetogroup.lua
+    data/scripts/entity/craftorders.lua
+    data/scripts/entity/transfercrewgoods.lua
+    data/scripts/entity/ai/passsector.lua
+
+LuaState with 10 namespaces and 10 files loaded: 658.94kB
+  Namespaces:
+    CivilShip
+    CraftOrders
+    EnterCraft
+    ExitCraft
+    Icon
+    InviteToGroup
+    PassSector
+    StartBuilding
+    StoryHints
+    TransferCrewGoods
+  Files:
+    data/scripts/entity/civilship.lua
+    data/scripts/entity/dialogs/storyhints.lua
+    data/scripts/entity/icon.lua
+    data/scripts/entity/startbuilding.lua
+    data/scripts/entity/entercraft.lua
+    data/scripts/entity/exitcraft.lua
+    data/scripts/entity/invitetogroup.lua
+    data/scripts/entity/craftorders.lua
+    data/scripts/entity/transfercrewgoods.lua
+    data/scripts/entity/ai/passsector.lua
+
+LuaState with 10 namespaces and 10 files loaded: 657.46kB
+  Namespaces:
+    CivilShip
+    CraftOrders
+    EnterCraft
+    ExitCraft
+    Icon
+    InviteToGroup
+    PassSector
+    StartBuilding
+    StoryHints
+    TransferCrewGoods
+  Files:
+    data/scripts/entity/civilship.lua
+    data/scripts/entity/dialogs/storyhints.lua
+    data/scripts/entity/icon.lua
+    data/scripts/entity/startbuilding.lua
+    data/scripts/entity/entercraft.lua
+    data/scripts/entity/exitcraft.lua
+    data/scripts/entity/invitetogroup.lua
+    data/scripts/entity/craftorders.lua
+    data/scripts/entity/transfercrewgoods.lua
+    data/scripts/entity/ai/passsector.lua
+
+LuaState with 10 namespaces and 10 files loaded: 656.84kB
+  Namespaces:
+    CivilShip
+    CraftOrders
+    EnterCraft
+    ExitCraft
+    Icon
+    InviteToGroup
+    PassSector
+    StartBuilding
+    StoryHints
+    TransferCrewGoods
+  Files:
+    data/scripts/entity/civilship.lua
+    data/scripts/entity/dialogs/storyhints.lua
+    data/scripts/entity/icon.lua
+    data/scripts/entity/startbuilding.lua
+    data/scripts/entity/entercraft.lua
+    data/scripts/entity/exitcraft.lua
+    data/scripts/entity/invitetogroup.lua
+    data/scripts/entity/craftorders.lua
+    data/scripts/entity/transfercrewgoods.lua
+    data/scripts/entity/ai/passsector.lua
+
+LuaState with 10 namespaces and 10 files loaded: 656.16kB
+  Namespaces:
+    CivilShip
+    CraftOrders
+    EnterCraft
+    ExitCraft
+    Icon
+    InviteToGroup
+    PassSector
+    StartBuilding
+    StoryHints
+    TransferCrewGoods
+  Files:
+    data/scripts/entity/civilship.lua
+    data/scripts/entity/dialogs/storyhints.lua
+    data/scripts/entity/icon.lua
+    data/scripts/entity/startbuilding.lua
+    data/scripts/entity/entercraft.lua
+    data/scripts/entity/exitcraft.lua
+    data/scripts/entity/invitetogroup.lua
+    data/scripts/entity/craftorders.lua
+    data/scripts/entity/transfercrewgoods.lua
+    data/scripts/entity/ai/passsector.lua
+
+LuaState with 10 namespaces and 10 files loaded: 656.16kB
+  Namespaces:
+    CivilShip
+    CraftOrders
+    EnterCraft
+    ExitCraft
+    Icon
+    InviteToGroup
+    PassSector
+    StartBuilding
+    StoryHints
+    TransferCrewGoods
+  Files:
+    data/scripts/entity/civilship.lua
+    data/scripts/entity/dialogs/storyhints.lua
+    data/scripts/entity/icon.lua
+    data/scripts/entity/startbuilding.lua
+    data/scripts/entity/entercraft.lua
+    data/scripts/entity/exitcraft.lua
+    data/scripts/entity/invitetogroup.lua
+    data/scripts/entity/craftorders.lua
+    data/scripts/entity/transfercrewgoods.lua
+    data/scripts/entity/ai/passsector.lua
+
+LuaState with 10 namespaces and 10 files loaded: 656.13kB
+  Namespaces:
+    CivilShip
+    CraftOrders
+    EnterCraft
+    ExitCraft
+    Icon
+    InviteToGroup
+    PassSector
+    StartBuilding
+    StoryHints
+    TransferCrewGoods
+  Files:
+    data/scripts/entity/civilship.lua
+    data/scripts/entity/dialogs/storyhints.lua
+    data/scripts/entity/icon.lua
+    data/scripts/entity/startbuilding.lua
+    data/scripts/entity/entercraft.lua
+    data/scripts/entity/exitcraft.lua
+    data/scripts/entity/invitetogroup.lua
+    data/scripts/entity/craftorders.lua
+    data/scripts/entity/transfercrewgoods.lua
+    data/scripts/entity/ai/passsector.lua
+
+LuaState with 10 namespaces and 10 files loaded: 654.34kB
+  Namespaces:
+    CivilShip
+    CraftOrders
+    EnterCraft
+    ExitCraft
+    Icon
+    InviteToGroup
+    PassSector
+    StartBuilding
+    StoryHints
+    TransferCrewGoods
+  Files:
+    data/scripts/entity/civilship.lua
+    data/scripts/entity/dialogs/storyhints.lua
+    data/scripts/entity/icon.lua
+    data/scripts/entity/startbuilding.lua
+    data/scripts/entity/entercraft.lua
+    data/scripts/entity/exitcraft.lua
+    data/scripts/entity/invitetogroup.lua
+    data/scripts/entity/craftorders.lua
+    data/scripts/entity/transfercrewgoods.lua
+    data/scripts/entity/ai/passsector.lua
+
+LuaState with 8 namespaces and 8 files loaded: 649.15kB
+  Namespaces:
+    AIMine
+    CraftOrders
+    EnterCraft
+    ExitCraft
+    Insurance
+    InviteToGroup
+    StartBuilding
+    TransferCrewGoods
+  Files:
+    data/scripts/entity/startbuilding.lua
+    data/scripts/entity/entercraft.lua
+    data/scripts/entity/exitcraft.lua
+    data/scripts/entity/invitetogroup.lua
+    data/scripts/entity/craftorders.lua
+    data/scripts/entity/transfercrewgoods.lua
+    data/scripts/entity/insurance.lua
+    data/scripts/entity/ai/mine.lua
+
+LuaState with 9 namespaces and 9 files loaded: 645.89kB
+  Namespaces:
+    CivilShip
+    CraftOrders
+    EnterCraft
+    ExitCraft
+    Icon
+    InviteToGroup
+    StartBuilding
+    StoryHints
+    TransferCrewGoods
+  Files:
+    data/scripts/entity/civilship.lua
+    data/scripts/entity/dialogs/storyhints.lua
+    data/scripts/entity/icon.lua
+    data/scripts/entity/startbuilding.lua
+    data/scripts/entity/entercraft.lua
+    data/scripts/entity/exitcraft.lua
+    data/scripts/entity/invitetogroup.lua
+    data/scripts/entity/craftorders.lua
+    data/scripts/entity/transfercrewgoods.lua
+
+LuaState with 6 namespaces and 6 files loaded: 641.05kB
+  Namespaces:
+    InitFactionWar
+    PassingShips
+    RelationChanges
+    SectorEvents
+    SpawnPersecutors
+    Traders
+  Files:
+    data/scripts/sector/relationchanges.lua
+    data/scripts/sector/spawnpersecutors.lua
+    data/scripts/sector/eventscheduler.lua
+    data/scripts/sector/passingships.lua
+    data/scripts/sector/traders.lua
+    data/scripts/sector/factionwar/initfactionwar.lua
+
+LuaState with 10 namespaces and 10 files loaded: 636.94kB
+  Namespaces:
+    CivilShip
+    CraftOrders
+    EnterCraft
+    ExitCraft
+    Icon
+    InviteToGroup
+    PassSector
+    StartBuilding
+    StoryHints
+    TransferCrewGoods
+  Files:
+    data/scripts/entity/civilship.lua
+    data/scripts/entity/dialogs/storyhints.lua
+    data/scripts/entity/icon.lua
+    data/scripts/entity/startbuilding.lua
+    data/scripts/entity/entercraft.lua
+    data/scripts/entity/exitcraft.lua
+    data/scripts/entity/invitetogroup.lua
+    data/scripts/entity/craftorders.lua
+    data/scripts/entity/transfercrewgoods.lua
+    data/scripts/entity/ai/passsector.lua
+
+LuaState with 10 namespaces and 10 files loaded: 636.92kB
+  Namespaces:
+    CivilShip
+    CraftOrders
+    EnterCraft
+    ExitCraft
+    Icon
+    InviteToGroup
+    PassSector
+    StartBuilding
+    StoryHints
+    TransferCrewGoods
+  Files:
+    data/scripts/entity/civilship.lua
+    data/scripts/entity/dialogs/storyhints.lua
+    data/scripts/entity/icon.lua
+    data/scripts/entity/startbuilding.lua
+    data/scripts/entity/entercraft.lua
+    data/scripts/entity/exitcraft.lua
+    data/scripts/entity/invitetogroup.lua
+    data/scripts/entity/craftorders.lua
+    data/scripts/entity/transfercrewgoods.lua
+    data/scripts/entity/ai/passsector.lua
+
+LuaState with 9 namespaces and 9 files loaded: 635.16kB
+  Namespaces:
+    CivilShip
+    CraftOrders
+    EnterCraft
+    ExitCraft
+    Icon
+    InviteToGroup
+    StartBuilding
+    StoryHints
+    TransferCrewGoods
+  Files:
+    data/scripts/entity/civilship.lua
+    data/scripts/entity/dialogs/storyhints.lua
+    data/scripts/entity/icon.lua
+    data/scripts/entity/startbuilding.lua
+    data/scripts/entity/entercraft.lua
+    data/scripts/entity/exitcraft.lua
+    data/scripts/entity/invitetogroup.lua
+    data/scripts/entity/craftorders.lua
+    data/scripts/entity/transfercrewgoods.lua
+
+LuaState with 9 namespaces and 9 files loaded: 633.92kB
+  Namespaces:
+    CivilShip
+    CraftOrders
+    EnterCraft
+    ExitCraft
+    InviteToGroup
+    StartBuilding
+    StoryHints
+    TransferCrewGoods
+    TurretMerchant
+  Files:
+    data/scripts/entity/startbuilding.lua
+    data/scripts/entity/entercraft.lua
+    data/scripts/entity/exitcraft.lua
+    data/scripts/entity/invitetogroup.lua
+    data/scripts/entity/craftorders.lua
+    data/scripts/entity/transfercrewgoods.lua
+    data/scripts/entity/civilship.lua
+    data/scripts/entity/dialogs/storyhints.lua
+    data/scripts/entity/merchants/turretmerchant.lua
+
+LuaState with 9 namespaces and 9 files loaded: 628.17kB
+  Namespaces:
+    AIPatrol
+    AntiSmuggle
+    CraftOrders
+    EnterCraft
+    ExitCraft
+    Icon
+    InviteToGroup
+    StartBuilding
+    TransferCrewGoods
+  Files:
+    data/scripts/entity/startbuilding.lua
+    data/scripts/entity/entercraft.lua
+    data/scripts/entity/exitcraft.lua
+    data/scripts/entity/invitetogroup.lua
+    data/scripts/entity/craftorders.lua
+    data/scripts/entity/transfercrewgoods.lua
+    data/scripts/entity/ai/patrol.lua
+    data/scripts/entity/antismuggle.lua
+    data/scripts/entity/icon.lua
+
+LuaState with 9 namespaces and 9 files loaded: 627.52kB
+  Namespaces:
+    AIPatrol
+    AntiSmuggle
+    CraftOrders
+    EnterCraft
+    ExitCraft
+    Icon
+    InviteToGroup
+    StartBuilding
+    TransferCrewGoods
+  Files:
+    data/scripts/entity/startbuilding.lua
+    data/scripts/entity/entercraft.lua
+    data/scripts/entity/exitcraft.lua
+    data/scripts/entity/invitetogroup.lua
+    data/scripts/entity/craftorders.lua
+    data/scripts/entity/transfercrewgoods.lua
+    data/scripts/entity/ai/patrol.lua
+    data/scripts/entity/antismuggle.lua
+    data/scripts/entity/icon.lua
+
+LuaState with 9 namespaces and 9 files loaded: 625.3kB
+  Namespaces:
+    AIPatrol
+    AntiSmuggle
+    CraftOrders
+    EnterCraft
+    ExitCraft
+    Icon
+    InviteToGroup
+    StartBuilding
+    TransferCrewGoods
+  Files:
+    data/scripts/entity/startbuilding.lua
+    data/scripts/entity/entercraft.lua
+    data/scripts/entity/exitcraft.lua
+    data/scripts/entity/invitetogroup.lua
+    data/scripts/entity/craftorders.lua
+    data/scripts/entity/transfercrewgoods.lua
+    data/scripts/entity/ai/patrol.lua
+    data/scripts/entity/antismuggle.lua
+    data/scripts/entity/icon.lua
+
+LuaState with 9 namespaces and 9 files loaded: 624.18kB
+  Namespaces:
+    AIPatrol
+    AntiSmuggle
+    CraftOrders
+    EnterCraft
+    ExitCraft
+    Icon
+    InviteToGroup
+    StartBuilding
+    TransferCrewGoods
+  Files:
+    data/scripts/entity/startbuilding.lua
+    data/scripts/entity/entercraft.lua
+    data/scripts/entity/exitcraft.lua
+    data/scripts/entity/invitetogroup.lua
+    data/scripts/entity/craftorders.lua
+    data/scripts/entity/transfercrewgoods.lua
+    data/scripts/entity/ai/patrol.lua
+    data/scripts/entity/antismuggle.lua
+    data/scripts/entity/icon.lua
+
+LuaState with 9 namespaces and 9 files loaded: 623.6kB
+  Namespaces:
+    AIPatrol
+    AntiSmuggle
+    CraftOrders
+    EnterCraft
+    ExitCraft
+    Icon
+    InviteToGroup
+    StartBuilding
+    TransferCrewGoods
+  Files:
+    data/scripts/entity/startbuilding.lua
+    data/scripts/entity/entercraft.lua
+    data/scripts/entity/exitcraft.lua
+    data/scripts/entity/invitetogroup.lua
+    data/scripts/entity/craftorders.lua
+    data/scripts/entity/transfercrewgoods.lua
+    data/scripts/entity/ai/patrol.lua
+    data/scripts/entity/antismuggle.lua
+    data/scripts/entity/icon.lua
+
+LuaState with 9 namespaces and 9 files loaded: 623.6kB
+  Namespaces:
+    AIPatrol
+    AntiSmuggle
+    CraftOrders
+    EnterCraft
+    ExitCraft
+    Icon
+    InviteToGroup
+    StartBuilding
+    TransferCrewGoods
+  Files:
+    data/scripts/entity/startbuilding.lua
+    data/scripts/entity/entercraft.lua
+    data/scripts/entity/exitcraft.lua
+    data/scripts/entity/invitetogroup.lua
+    data/scripts/entity/craftorders.lua
+    data/scripts/entity/transfercrewgoods.lua
+    data/scripts/entity/ai/patrol.lua
+    data/scripts/entity/antismuggle.lua
+    data/scripts/entity/icon.lua
+
+LuaState with 9 namespaces and 9 files loaded: 622.54kB
+  Namespaces:
+    AIPatrol
+    AntiSmuggle
+    CraftOrders
+    EnterCraft
+    ExitCraft
+    Icon
+    InviteToGroup
+    StartBuilding
+    TransferCrewGoods
+  Files:
+    data/scripts/entity/startbuilding.lua
+    data/scripts/entity/entercraft.lua
+    data/scripts/entity/exitcraft.lua
+    data/scripts/entity/invitetogroup.lua
+    data/scripts/entity/craftorders.lua
+    data/scripts/entity/transfercrewgoods.lua
+    data/scripts/entity/ai/patrol.lua
+    data/scripts/entity/antismuggle.lua
+    data/scripts/entity/icon.lua
+
+LuaState with 9 namespaces and 9 files loaded: 618.85kB
+  Namespaces:
+    AIPatrol
+    AntiSmuggle
+    CraftOrders
+    EnterCraft
+    ExitCraft
+    Icon
+    InviteToGroup
+    StartBuilding
+    TransferCrewGoods
+  Files:
+    data/scripts/entity/startbuilding.lua
+    data/scripts/entity/entercraft.lua
+    data/scripts/entity/exitcraft.lua
+    data/scripts/entity/invitetogroup.lua
+    data/scripts/entity/craftorders.lua
+    data/scripts/entity/transfercrewgoods.lua
+    data/scripts/entity/ai/patrol.lua
+    data/scripts/entity/antismuggle.lua
+    data/scripts/entity/icon.lua
+
+LuaState with 9 namespaces and 9 files loaded: 618.33kB
+  Namespaces:
+    AIPatrol
+    AntiSmuggle
+    CraftOrders
+    EnterCraft
+    ExitCraft
+    Icon
+    InviteToGroup
+    StartBuilding
+    TransferCrewGoods
+  Files:
+    data/scripts/entity/startbuilding.lua
+    data/scripts/entity/entercraft.lua
+    data/scripts/entity/exitcraft.lua
+    data/scripts/entity/invitetogroup.lua
+    data/scripts/entity/craftorders.lua
+    data/scripts/entity/transfercrewgoods.lua
+    data/scripts/entity/ai/patrol.lua
+    data/scripts/entity/antismuggle.lua
+    data/scripts/entity/icon.lua
+
+LuaState with 7 namespaces and 7 files loaded: 605.41kB
+  Namespaces:
+    CraftOrders
+    EnterCraft
+    ExitCraft
+    Insurance
+    InviteToGroup
+    StartBuilding
+    TransferCrewGoods
+  Files:
+    data/scripts/entity/startbuilding.lua
+    data/scripts/entity/entercraft.lua
+    data/scripts/entity/exitcraft.lua
+    data/scripts/entity/invitetogroup.lua
+    data/scripts/entity/craftorders.lua
+    data/scripts/entity/transfercrewgoods.lua
+    data/scripts/entity/insurance.lua
+
+LuaState with 7 namespaces and 7 files loaded: 602.98kB
+  Namespaces:
+    CraftOrders
+    EnterCraft
+    ExitCraft
+    Insurance
+    InviteToGroup
+    StartBuilding
+    TransferCrewGoods
+  Files:
+    data/scripts/entity/startbuilding.lua
+    data/scripts/entity/entercraft.lua
+    data/scripts/entity/exitcraft.lua
+    data/scripts/entity/invitetogroup.lua
+    data/scripts/entity/craftorders.lua
+    data/scripts/entity/transfercrewgoods.lua
+    data/scripts/entity/insurance.lua
+
+LuaState with 7 namespaces and 7 files loaded: 602.87kB
+  Namespaces:
+    CraftOrders
+    EnterCraft
+    ExitCraft
+    Insurance
+    InviteToGroup
+    StartBuilding
+    TransferCrewGoods
+  Files:
+    data/scripts/entity/startbuilding.lua
+    data/scripts/entity/entercraft.lua
+    data/scripts/entity/exitcraft.lua
+    data/scripts/entity/invitetogroup.lua
+    data/scripts/entity/craftorders.lua
+    data/scripts/entity/transfercrewgoods.lua
+    data/scripts/entity/insurance.lua
+
+LuaState with 9 namespaces and 9 files loaded: 602.28kB
+  Namespaces:
+    CivilShip
+    CraftOrders
+    EnterCraft
+    ExitCraft
+    Icon
+    InviteToGroup
+    StartBuilding
+    StoryHints
+    TransferCrewGoods
+  Files:
+    data/scripts/entity/startbuilding.lua
+    data/scripts/entity/entercraft.lua
+    data/scripts/entity/exitcraft.lua
+    data/scripts/entity/invitetogroup.lua
+    data/scripts/entity/craftorders.lua
+    data/scripts/entity/transfercrewgoods.lua
+    data/scripts/entity/civilship.lua
+    data/scripts/entity/dialogs/storyhints.lua
+    data/scripts/entity/icon.lua
+
+LuaState with 9 namespaces and 9 files loaded: 596.98kB
+  Namespaces:
+    AIPatrol
+    AntiSmuggle
+    CraftOrders
+    EnterCraft
+    ExitCraft
+    Icon
+    InviteToGroup
+    StartBuilding
+    TransferCrewGoods
+  Files:
+    data/scripts/entity/startbuilding.lua
+    data/scripts/entity/entercraft.lua
+    data/scripts/entity/exitcraft.lua
+    data/scripts/entity/invitetogroup.lua
+    data/scripts/entity/craftorders.lua
+    data/scripts/entity/transfercrewgoods.lua
+    data/scripts/entity/ai/patrol.lua
+    data/scripts/entity/antismuggle.lua
+    data/scripts/entity/icon.lua
+
+LuaState with 9 namespaces and 9 files loaded: 589.7kB
+  Namespaces:
+    AIPatrol
+    AntiSmuggle
+    CraftOrders
+    EnterCraft
+    ExitCraft
+    Icon
+    InviteToGroup
+    StartBuilding
+    TransferCrewGoods
+  Files:
+    data/scripts/entity/startbuilding.lua
+    data/scripts/entity/entercraft.lua
+    data/scripts/entity/exitcraft.lua
+    data/scripts/entity/invitetogroup.lua
+    data/scripts/entity/craftorders.lua
+    data/scripts/entity/transfercrewgoods.lua
+    data/scripts/entity/ai/patrol.lua
+    data/scripts/entity/antismuggle.lua
+    data/scripts/entity/icon.lua
+
+LuaState with 7 namespaces and 7 files loaded: 548.07kB
+  Namespaces:
+    AIMine
+    CraftOrders
+    EnterCraft
+    ExitCraft
+    InviteToGroup
+    StartBuilding
+    TransferCrewGoods
+  Files:
+    data/scripts/entity/startbuilding.lua
+    data/scripts/entity/entercraft.lua
+    data/scripts/entity/exitcraft.lua
+    data/scripts/entity/invitetogroup.lua
+    data/scripts/entity/craftorders.lua
+    data/scripts/entity/transfercrewgoods.lua
+    data/scripts/entity/ai/mine.lua
+
+LuaState with 1 namespaces and 1 files loaded: 457.87kB
+  Namespaces:
+    Gate
+  Files:
+    data/scripts/entity/gate.lua
+
+LuaState with 1 namespaces and 1 files loaded: 456.36kB
+  Namespaces:
+    Gate
+  Files:
+    data/scripts/entity/gate.lua
+
+LuaState with 1 namespaces and 1 files loaded: 456.32kB
+  Namespaces:
+    Gate
+  Files:
+    data/scripts/entity/gate.lua
+
+LuaState with 1 namespaces and 1 files loaded: 455.05kB
+  Namespaces:
+    Gate
+  Files:
+    data/scripts/entity/gate.lua
+
+LuaState with 1 namespaces and 1 files loaded: 454.17kB
+  Namespaces:
+    Gate
+  Files:
+    data/scripts/entity/gate.lua
+
+LuaState with 1 namespaces and 1 files loaded: 453.93kB
+  Namespaces:
+    Gate
+  Files:
+    data/scripts/entity/gate.lua
+
+LuaState with 1 namespaces and 1 files loaded: 453.74kB
+  Namespaces:
+    Gate
+  Files:
+    data/scripts/entity/gate.lua
+
+LuaState with 1 namespaces and 1 files loaded: 453.69kB
+  Namespaces:
+    Gate
+  Files:
+    data/scripts/entity/gate.lua
+
+LuaState with 1 namespaces and 1 files loaded: 453.69kB
+  Namespaces:
+    Gate
+  Files:
+    data/scripts/entity/gate.lua
+
+LuaState with 1 namespaces and 1 files loaded: 445.45kB
+  Namespaces:
+    Gate
+  Files:
+    data/scripts/entity/gate.lua
+
+LuaState with 1 namespaces and 1 files loaded: 445.41kB
+  Namespaces:
+    Gate
+  Files:
+    data/scripts/entity/gate.lua
+
+LuaState with 1 namespaces and 1 files loaded: 444.81kB
+  Namespaces:
+    Gate
+  Files:
+    data/scripts/entity/gate.lua
+
+LuaState with 1 namespaces and 1 files loaded: 442.78kB
+  Namespaces:
+    Gate
+  Files:
+    data/scripts/entity/gate.lua
+
+LuaState with 1 namespaces and 1 files loaded: 442.64kB
+  Namespaces:
+    Gate
+  Files:
+    data/scripts/entity/gate.lua
+
+LuaState with 0 namespaces and 1 files loaded: 374.71kB
+  Files:
+    data/scripts/commands/upgrades.lua
+
+LuaState with 0 namespaces and 1 files loaded: 365.65kB
+  Files:
+    data/scripts/commands/uturrets.lua
+
+LuaState with 0 namespaces and 1 files loaded: 357.63kB
+  Files:
+    data/scripts/server/server.lua
+
+LuaState with 0 namespaces and 0 files loaded: 356.71kB
+
+LuaState with 0 namespaces and 1 files loaded: 329.7kB
+  Files:
+    data/scripts/systems/hyperspacebooster.lua
+
+LuaState with 0 namespaces and 1 files loaded: 329.04kB
+  Files:
+    data/scripts/systems/miningsystem.lua
+
+LuaState with 0 namespaces and 1 files loaded: 328.43kB
+  Files:
+    data/scripts/systems/miningsystem.lua
+
+LuaState with 0 namespaces and 1 files loaded: 328.43kB
+  Files:
+    data/scripts/systems/miningsystem.lua
+
+LuaState with 0 namespaces and 1 files loaded: 328.43kB
+  Files:
+    data/scripts/systems/miningsystem.lua
+
+LuaState with 0 namespaces and 0 files loaded: 326.76kB
+
+LuaState with 0 namespaces and 0 files loaded: 326.71kB
+
+LuaState with 0 namespaces and 0 files loaded: 326.68kB
+
+LuaState with 0 namespaces and 1 files loaded: 314.86kB
+  Files:
+    data/scripts/systems/militarytcs.lua
+
+LuaState with 0 namespaces and 1 files loaded: 314.86kB
+  Files:
+    data/scripts/systems/civiltcs.lua
+
+LuaState with 0 namespaces and 1 files loaded: 314.24kB
+  Files:
+    data/scripts/systems/militarytcs.lua
+
+LuaState with 0 namespaces and 1 files loaded: 314.24kB
+  Files:
+    data/scripts/systems/militarytcs.lua
+
+LuaState with 0 namespaces and 1 files loaded: 314.24kB
+  Files:
+    data/scripts/systems/militarytcs.lua
+
+LuaState with 0 namespaces and 1 files loaded: 314.24kB
+  Files:
+    data/scripts/systems/civiltcs.lua
+
+LuaState with 0 namespaces and 1 files loaded: 314.24kB
+  Files:
+    data/scripts/systems/civiltcs.lua
+
+LuaState with 0 namespaces and 1 files loaded: 310.37kB
+  Files:
+    data/scripts/entity/stash.lua
+
+LuaState with 0 namespaces and 1 files loaded: 307.97kB
+  Files:
+    data/scripts/entity/stash.lua
+
+LuaState with 0 namespaces and 1 files loaded: 307.73kB
+  Files:
+    data/scripts/entity/stash.lua
+
+LuaState with 0 namespaces and 1 files loaded: 304.24kB
+  Files:
+    data/scripts/systems/hyperspacebooster.lua
+
+LuaState with 0 namespaces and 1 files loaded: 298.1kB
+  Files:
+    data/scripts/systems/miningsystem.lua
+
+LuaState with 0 namespaces and 1 files loaded: 297.58kB
+  Files:
+    data/scripts/entity/stash.lua
+
+LuaState with 0 namespaces and 1 files loaded: 287.64kB
+  Files:
+    data/scripts/systems/cargoextension.lua
+
+LuaState with 0 namespaces and 1 files loaded: 287.58kB
+  Files:
+    data/scripts/systems/shieldimpenetrator.lua
+
+LuaState with 0 namespaces and 1 files loaded: 285.41kB
+  Files:
+    data/scripts/systems/energybooster.lua
+
+LuaState with 0 namespaces and 1 files loaded: 283.9kB
+  Files:
+    data/scripts/systems/militarytcs.lua
+
+LuaState with 0 namespaces and 1 files loaded: 283.9kB
+  Files:
+    data/scripts/systems/civiltcs.lua
+
+LuaState with 0 namespaces and 1 files loaded: 283.72kB
+  Files:
+    data/scripts/systems/velocitybypass.lua
+
+LuaState with 0 namespaces and 1 files loaded: 279.61kB
+  Files:
+    data/scripts/commands/turrets.lua
+
+LuaState with 0 namespaces and 1 files loaded: 272.3kB
+  Files:
+    data/scripts/systems/lootrangebooster.lua
+
+LuaState with 0 namespaces and 1 files loaded: 255.31kB
+  Files:
+    data/scripts/systems/scannerbooster.lua
+
+LuaState with 0 namespaces and 1 files loaded: 254.03kB
+  Files:
+    data/scripts/entity/merchants/tradeship.lua
+
+LuaState with 0 namespaces and 1 files loaded: 253.97kB
+  Files:
+    data/scripts/entity/merchants/tradeship.lua
+
+LuaState with 0 namespaces and 1 files loaded: 224.97kB
+  Files:
+    data/scripts/entity/claim.lua
+
+LuaState with 0 namespaces and 1 files loaded: 189.56kB
+  Files:
+    data/scripts/entity/merchants/travellingmerchant.lua
+
+LuaState with 0 namespaces and 1 files loaded: 188.69kB
+  Files:
+    data/scripts/entity/merchants/headquarters.lua
+
+LuaState with 0 namespaces and 1 files loaded: 182.92kB
+  Files:
+    data/scripts/commands/consolelevel.lua
+
+LuaState with 0 namespaces and 1 files loaded: 182.88kB
+  Files:
+    data/scripts/commands/loglevel.lua
+
+LuaState with 0 namespaces and 1 files loaded: 174.97kB
+  Files:
+    data/scripts/commands/addcrew.lua
+
+LuaState with 0 namespaces and 1 files loaded: 174.74kB
+  Files:
+    data/scripts/commands/say.lua
+
+LuaState with 0 namespaces and 1 files loaded: 174.61kB
+  Files:
+    data/scripts/commands/echo.lua
+
+
+
